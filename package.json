@@ -3,22 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 4004",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "graphql": "yarn run graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.40.1",
+    "@vercel/og": "^0.6.2",
+    "axios": "^1.7.2",
+    "classnames": "^2.5.1",
+    "cn": "^0.1.1",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "hls.js": "^1.5.13",
+    "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
