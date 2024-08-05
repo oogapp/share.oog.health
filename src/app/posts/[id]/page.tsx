@@ -16,6 +16,7 @@ export async function generateMetadata(
   let title = `Oog / ${post.title}`
   return {
     title: title,
+    description: post.body,
     openGraph: {
       images: [process.env.NEXT_PUBLIC_OG_URL + "/api/og/post/" + id],
     },
