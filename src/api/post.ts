@@ -10,6 +10,7 @@ query Post($id: ID!) {
       id
   type
   title
+  createdAt
   status
   body
   featured

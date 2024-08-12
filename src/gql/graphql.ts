@@ -3439,6 +3439,7 @@ export type CreatePostInput = {
   learningObjectiveIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   likedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   mediaItemIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  mentionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   pollID?: InputMaybe<Scalars['ID']['input']>;
   postCollectionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   postReportIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -3767,6 +3768,7 @@ export type CreateUserInput = {
   /** The limited roles of the user. Null or Empty array means no limited roles. */
   limitedRoles?: InputMaybe<Array<Scalars['String']['input']>>;
   linkIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  mentionedPostIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   mutedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   notificationIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   notificationTokenIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -9202,6 +9204,8 @@ export type Post = Node & {
   likes?: Maybe<Array<Like>>;
   /** The media items in this post */
   mediaItems?: Maybe<Array<MediaItem>>;
+  /** The users mentioned in this post */
+  mentions?: Maybe<Array<User>>;
   poll?: Maybe<Poll>;
   /** The collections this post is associated with */
   postCollections?: Maybe<Array<PostCollection>>;
@@ -9876,6 +9880,9 @@ export type PostWhereInput = {
   /** media_items edge predicates */
   hasMediaItems?: InputMaybe<Scalars['Boolean']['input']>;
   hasMediaItemsWith?: InputMaybe<Array<MediaItemWhereInput>>;
+  /** mentions edge predicates */
+  hasMentions?: InputMaybe<Scalars['Boolean']['input']>;
+  hasMentionsWith?: InputMaybe<Array<UserWhereInput>>;
   /** poll edge predicates */
   hasPoll?: InputMaybe<Scalars['Boolean']['input']>;
   hasPollWith?: InputMaybe<Array<PollWhereInput>>;
@@ -12905,7 +12912,9 @@ export type ReflectionResult = {
   sentiments?: Maybe<Array<SentimentResult>>;
   shouldEarnCredits?: Maybe<Scalars['Boolean']['output']>;
   tags?: Maybe<Array<PartOfSpeechTag>>;
+  termFrequencies?: Maybe<Scalars['Map']['output']>;
   totalWords?: Maybe<Scalars['Int']['output']>;
+  wordcloudURL?: Maybe<Scalars['String']['output']>;
 };
 
 export type RegistryResult = {
@@ -16375,6 +16384,7 @@ export type UpdatePostInput = {
   addLearningObjectiveIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addLikedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addMediaItemIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  addMentionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addPostCollectionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addPostReportIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addPostTagIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -16402,6 +16412,7 @@ export type UpdatePostInput = {
   clearLearningObjectives?: InputMaybe<Scalars['Boolean']['input']>;
   clearLikedUsers?: InputMaybe<Scalars['Boolean']['input']>;
   clearMediaItems?: InputMaybe<Scalars['Boolean']['input']>;
+  clearMentions?: InputMaybe<Scalars['Boolean']['input']>;
   clearPoll?: InputMaybe<Scalars['Boolean']['input']>;
   clearPostCollections?: InputMaybe<Scalars['Boolean']['input']>;
   clearPostReports?: InputMaybe<Scalars['Boolean']['input']>;
@@ -16436,6 +16447,7 @@ export type UpdatePostInput = {
   removeLearningObjectiveIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeLikedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeMediaItemIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  removeMentionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Remove the poll questions for the post, based on the provided IDs */
   removePollQuestionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removePostCollectionIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -16819,6 +16831,7 @@ export type UpdateUserInput = {
   addLikedCommentIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addLikedPostIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addLinkIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  addMentionedPostIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addMutedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addNotificationIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addNotificationTokenIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -16867,6 +16880,7 @@ export type UpdateUserInput = {
   clearLikedPosts?: InputMaybe<Scalars['Boolean']['input']>;
   clearLimitedRoles?: InputMaybe<Scalars['Boolean']['input']>;
   clearLinks?: InputMaybe<Scalars['Boolean']['input']>;
+  clearMentionedPosts?: InputMaybe<Scalars['Boolean']['input']>;
   clearMutedUsers?: InputMaybe<Scalars['Boolean']['input']>;
   clearNotificationTokens?: InputMaybe<Scalars['Boolean']['input']>;
   clearNotifications?: InputMaybe<Scalars['Boolean']['input']>;
@@ -16951,6 +16965,7 @@ export type UpdateUserInput = {
   removeLikedCommentIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeLikedPostIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeLinkIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  removeMentionedPostIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeMutedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeNotificationIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   removeNotificationTokenIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -17451,6 +17466,8 @@ export type User = Node & {
   limitedRoles?: Maybe<Array<Scalars['String']['output']>>;
   /** The links the user has added */
   links?: Maybe<Array<UserLink>>;
+  /** The posts the user has been mentioned in */
+  mentionedPosts?: Maybe<Array<Post>>;
   /** The users this user has muted */
   mutedUsers?: Maybe<Array<UserMute>>;
   /** The notification tokens for the user */
@@ -18543,6 +18560,9 @@ export type UserWhereInput = {
   /** links edge predicates */
   hasLinks?: InputMaybe<Scalars['Boolean']['input']>;
   hasLinksWith?: InputMaybe<Array<UserLinkWhereInput>>;
+  /** mentioned_posts edge predicates */
+  hasMentionedPosts?: InputMaybe<Scalars['Boolean']['input']>;
+  hasMentionedPostsWith?: InputMaybe<Array<PostWhereInput>>;
   /** muted_users edge predicates */
   hasMutedUsers?: InputMaybe<Scalars['Boolean']['input']>;
   hasMutedUsersWith?: InputMaybe<Array<UserMuteWhereInput>>;
@@ -20093,7 +20113,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post', id: string, type: PostType, title: string, status: PostStatus, body: string, featured: boolean, insightsGeneratedAt?: any | null, commentsDisabled?: boolean | null, creditHours: number, totalComments: number, totalLikes: number, totalBookmarks: number, termsPerMinute: number, topics?: Array<{ __typename?: 'Topic', id: string, name: string }> | null, topicClassifications?: Array<{ __typename?: 'TopicClassification', id: string, modelVersion?: string | null, active: boolean, suggested: boolean, topic: { __typename?: 'Topic', id: string, name: string } }> | null, audiences?: Array<{ __typename?: 'Audience', id: string, name: string }> | null, author?: { __typename?: 'User', id: string, username?: string | null, firstName?: string | null, lastName?: string | null, hasSubmittedDisclosure: boolean, hasDisclosuresNeedingReview: boolean, reflectionsOnAuthoredPostsDisabled: boolean, npiTaxonomyCode?: string | null, npiTaxonomyDescription?: string | null, credential?: string | null, profileImage?: { __typename?: 'Image', url?: string | null } | null } | null, coverImage?: { __typename?: 'Image', id: string, url?: string | null } | null, videos?: Array<{ __typename?: 'Video', id: string, thumbnailURL?: string | null, duration?: number | null, width?: number | null, height?: number | null, hlsURL?: string | null, insightsGeneratedAt?: any | null, discussionPoints?: Array<string> | null, terms?: Array<string> | null, termFrequencies?: any | null, termsPerMinute: number, wordcloud?: string | null, alternatePlaylists: Array<{ __typename?: 'AlternatePlaylist', cdn: string, url: string }> }> | null } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WorkExperience' } | null };
+export type PostQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post', id: string, type: PostType, title: string, createdAt: any, status: PostStatus, body: string, featured: boolean, insightsGeneratedAt?: any | null, commentsDisabled?: boolean | null, creditHours: number, totalComments: number, totalLikes: number, totalBookmarks: number, termsPerMinute: number, topics?: Array<{ __typename?: 'Topic', id: string, name: string }> | null, topicClassifications?: Array<{ __typename?: 'TopicClassification', id: string, modelVersion?: string | null, active: boolean, suggested: boolean, topic: { __typename?: 'Topic', id: string, name: string } }> | null, audiences?: Array<{ __typename?: 'Audience', id: string, name: string }> | null, author?: { __typename?: 'User', id: string, username?: string | null, firstName?: string | null, lastName?: string | null, hasSubmittedDisclosure: boolean, hasDisclosuresNeedingReview: boolean, reflectionsOnAuthoredPostsDisabled: boolean, npiTaxonomyCode?: string | null, npiTaxonomyDescription?: string | null, credential?: string | null, profileImage?: { __typename?: 'Image', url?: string | null } | null } | null, coverImage?: { __typename?: 'Image', id: string, url?: string | null } | null, videos?: Array<{ __typename?: 'Video', id: string, thumbnailURL?: string | null, duration?: number | null, width?: number | null, height?: number | null, hlsURL?: string | null, insightsGeneratedAt?: any | null, discussionPoints?: Array<string> | null, terms?: Array<string> | null, termFrequencies?: any | null, termsPerMinute: number, wordcloud?: string | null, alternatePlaylists: Array<{ __typename?: 'AlternatePlaylist', cdn: string, url: string }> }> | null } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WorkExperience' } | null };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -20124,6 +20144,7 @@ export const PostDocument = new TypedDocumentString(`
       id
       type
       title
+      createdAt
       status
       body
       featured
