@@ -28,7 +28,6 @@ export async function generateMetadata(
 export default async function PostDetail({ params }: { params: { id: string } }) {
 
   let post = await getPost(params.id);
-  let video = post.videos?.[0];
 
   return (
     <div className="relative h-full">
