@@ -57,7 +57,7 @@ export default async function PostDetail({ params }: { params: { id: string } })
           <div className="h-full flex gap-x-2">
             <div className="bg-stiches bg-center bg-repeat-y w-12">&nbsp;</div>
             <div className="flex-1 space-y-4">
-              <div className="line-clamp-3 text-sm">{post.body}</div>
+              <div className="line-clamp-3 text-sm">{(post.body && post.body.trim() != "") ? post.body : post.title}</div>
               {post?.coverImage?.url && <img className="rounded-xl" src={post.coverImage.url + "public"} />}
             </div>
           </div>
