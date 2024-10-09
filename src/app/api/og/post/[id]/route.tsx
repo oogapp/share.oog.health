@@ -9,7 +9,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     let post = await getPost(params.id);
     let video = post.videos?.[0];
     let thumbnailURL = post.coverImage?.url + "public"
-    console.log(thumbnailURL)
+    console.log("thumbnailURL=", thumbnailURL)
 
     return new ImageResponse(
         (
