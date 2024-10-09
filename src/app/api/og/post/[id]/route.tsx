@@ -8,7 +8,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     let post = await getPost(params.id);
     let video = post.videos?.[0];
-    let thumbnailURL = video?.thumbnailURL;
+    let thumbnailURL = post.coverImage?.url + "public"
+    console.log(thumbnailURL)
 
     return new ImageResponse(
         (
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     position: 'relative',
                 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img style={{ height: 600, objectFit: 'cover' }} src={thumbnailURL!} />
+                    <img style={{ height: 400, objectFit: 'cover' }} src={thumbnailURL!} />
                 </div>
 
                 <div style={{ display: 'flex', position: 'absolute', right: 20, bottom: 20 }}>
