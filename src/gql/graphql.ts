@@ -20618,6 +20618,13 @@ export type PostQueryVariables = Exact<{
 
 export type PostQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post', id: string, type: PostType, title: string, createdAt: any, status: PostStatus, body: string, featured: boolean, insightsGeneratedAt?: any | null, commentsDisabled?: boolean | null, creditHours: number, totalComments: number, totalLikes: number, totalBookmarks: number, termsPerMinute: number, topics?: Array<{ __typename?: 'Topic', id: string, name: string }> | null, topicClassifications?: Array<{ __typename?: 'TopicClassification', id: string, modelVersion?: string | null, active: boolean, suggested: boolean, topic: { __typename?: 'Topic', id: string, name: string } }> | null, audiences?: Array<{ __typename?: 'Audience', id: string, name: string }> | null, author?: { __typename?: 'User', id: string, username?: string | null, firstName?: string | null, lastName?: string | null, hasSubmittedDisclosure: boolean, hasDisclosuresNeedingReview: boolean, reflectionsOnAuthoredPostsDisabled: boolean, npiTaxonomyCode?: string | null, npiTaxonomyDescription?: string | null, credential?: string | null, profileImage?: { __typename?: 'Image', url?: string | null } | null } | null, coverImage?: { __typename?: 'Image', id: string, url?: string | null } | null, videos?: Array<{ __typename?: 'Video', id: string, thumbnailURL?: string | null, duration?: number | null, width?: number | null, height?: number | null, hlsURL?: string | null, insightsGeneratedAt?: any | null, discussionPoints?: Array<string> | null, terms?: Array<string> | null, termFrequencies?: any | null, termsPerMinute: number, wordcloud?: string | null, alternatePlaylists: Array<{ __typename?: 'AlternatePlaylist', cdn: string, url: string }> }> | null } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WorkExperience' } | null };
 
+export type UsersQueryVariables = Exact<{
+  where: UserWhereInput;
+}>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'UserConnection', edges?: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, credential?: string | null, npiTaxonomyCode?: string | null, npiTaxonomyDescription?: string | null, profileImage?: { __typename?: 'Image', id: string, url?: string | null, width?: number | null, height?: number | null } | null } | null } | null> | null } };
+
 export type UserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -20718,6 +20725,28 @@ export const PostDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
+export const UsersDocument = new TypedDocumentString(`
+    query Users($where: UserWhereInput!) {
+  users(where: $where) {
+    edges {
+      node {
+        id
+        firstName
+        lastName
+        credential
+        npiTaxonomyCode
+        npiTaxonomyDescription
+        profileImage {
+          id
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<UsersQuery, UsersQueryVariables>;
 export const UserDocument = new TypedDocumentString(`
     query User($id: ID!) {
   node(id: $id) {
