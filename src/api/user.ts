@@ -11,6 +11,15 @@ query User($id: ID!) {
       id
       firstName
       lastName
+      credential
+      npiTaxonomyCode
+      npiTaxonomyDescription
+      profileImage {
+        id
+        url
+        width
+        height
+      }
     }
   }
 }

@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     textAlign: 'left',
                     position: 'relative',
                 }}>
-                <div style={{ display: 'flex', fontSize: 30, color: "#A4F421" }}>
+                <div style={{ display: 'flex', fontSize: 64, color: "#A4F421" }}>
                     {user.firstName} {user.lastName}
                 </div>
 

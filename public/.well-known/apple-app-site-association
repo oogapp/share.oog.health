@@ -1,0 +1,24 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appIDs": [ "JT49JCK2UC.health.oog.app" ],
+             "components": [
+               {
+                  "#": "no_universal_links",
+                  "exclude": true,
+                  "comment": "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
+               },
+               {
+                  "/": "/posts/*",
+                  "comment": "Posts"
+               },
+               {
+                  "/": "/users/*",
+                  "comment": "Profile"
+               }
+             ]
+           }
+       ]
+   }
+}
