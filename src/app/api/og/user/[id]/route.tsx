@@ -34,7 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 {profileImageUrl && (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <img
-                            style={{ width: 350, height: 350, borderRadius: 175, marginTop: 20 }}
+                            style={{ width: 350, height: 350, borderRadius: 175, marginTop: 20, objectFit: 'cover' }}
                             src={profileImageUrl + "preview"}
                             alt="profile"
                         />
