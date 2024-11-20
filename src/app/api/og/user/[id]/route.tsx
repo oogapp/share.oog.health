@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     textAlign: 'left',
                     position: 'relative',
                 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', fontSize: 64, color: "#A4F421" }}>
+                <div style={{ display: 'flex', flexDirection: 'column', fontSize: 64, color: "white" }}>
                     <div style={{ display: 'flex' }}>{user.firstName} {user.lastName} {user.credential}</div>
                     <div style={{ display: 'flex', fontSize: 32 }}>
                         {user?.npiTaxonomyDescription}
