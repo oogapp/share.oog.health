@@ -7,22 +7,30 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "graphql": "yarn run graphql-codegen --config codegen.yml"
+    "codegen": "yarn run graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-query": "^5.40.1",
     "@vercel/og": "^0.6.2",
     "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
     "cn": "^0.1.1",
     "date-fns": "^3.6.0",
     "date-utils": "^1.2.21",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "hls.js": "^1.5.13",
-    "next": "14.2.5",
+    "lucide-react": "^0.460.0",
+    "next": "15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "stream-chat": "^8.45.1",
+    "stream-chat-react": "^12.6.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",

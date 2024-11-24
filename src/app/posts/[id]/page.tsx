@@ -2,32 +2,16 @@ import { getPost } from "@/api/post";
 import Logo from "@/components/Logo";
 import UserAvatar from "@/components/UserAvatar";
 import { formatDistance, parseISO } from "date-fns";
-import type { Metadata, ResolvingMetadata } from 'next';
 
 type Props = {
   params: { id: string }
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const id = params.id
-  let post = await getPost(id);
-  let title = `${post.title}`
-  return {
-    title: title,
-    description: post.body,
-    openGraph: {
-      images: [process.env.NEXT_PUBLIC_OG_URL + "/api/og/post/" + id],
-    },
-  }
-}
-
 
 export default async function PostDetail({ params }: { params: { id: string } }) {
 
-  let post = await getPost(params.id);
+  let id = params.id;
+  let post = await getPost(id);
 
   return (
     <div className="relative h-full">
