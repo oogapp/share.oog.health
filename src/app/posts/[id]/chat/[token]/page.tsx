@@ -1,5 +1,5 @@
 'use client'
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Channel,
     ChannelHeader,
@@ -53,8 +53,8 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
     )
 }
 
-export default function ChatDetail({ params }: { params: Promise<{ token: string }> }) {
-    let { token } = use(params);
+export default function ChatDetail({ params }: { params: { token: string } }) {
+    let { token } = params
     return (
         <div className='h-screen'>
             <AuthenticatedApp channelId={token} userId='8589934649' token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODU4OTkzNDY0OSJ9.QZGPWzOL3ZmF2-tfcYILJMgQpmR_6r8bxhN1Prg3ZfA' />
