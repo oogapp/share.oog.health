@@ -5,6 +5,8 @@ import { parseISO } from "date-fns";
 import Link from "next/link";
 import { use } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default function PostChat({ params }: { params: { id: string } }) {
 
     let chats = use(getChats(params.id))
