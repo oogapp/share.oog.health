@@ -24,26 +24,26 @@ export default function CreateChatButtons() {
                 Chat with...
             </div>
             <div className="grid grid-cols-3 gap-4">
-                <Button disabled={loading} onClick={() => {
+                {/*<Button disabled={loading} onClick={() => {
                     handleCreateChat(ConversationModel.Perplexity)
                 }}>
                     A
-                </Button>
+                </Button>*/}
 
                 <Button disabled={loading} onClick={
                     () => {
                         handleCreateChat(ConversationModel.OpenEvidence)
                     }
                 }>
-                    B
+                    Medical Search
                 </Button>
 
-                <Button disabled={loading} onClick={
+                {/*<Button disabled={loading} onClick={
                     () => {
                         handleCreateChat(ConversationModel.ChatGpt)
                     }}>
                     C
-                </Button>
+                </Button>*/}
             </div>
         </div>
     )

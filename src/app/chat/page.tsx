@@ -14,7 +14,7 @@ function getChatTypeName(model: string) {
         case "Perplexity":
             return "A"
         case "OpenEvidence":
-            return "B"
+            return "Medical Search"
         case "ChatGPT":
             return "C"
         case "Reflection":

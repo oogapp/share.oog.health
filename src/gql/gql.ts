@@ -15,7 +15,7 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessageDocument,
+    "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      opengraphReferences {\n        url\n        title\n        description\n        image\n      }\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessageDocument,
     "\nquery SparkyConversation($id: ID!) {\n  node(id: $id) {\n    ... on SparkyConversation {\n      id\n      token\n      model\n      createdAt\n      messages {\n        body\n      }\n      targetConversation {\n        id\n        token\n      }\n    }\n  }\n}\n": types.SparkyConversationDocument,
     "\nquery SparkyConversations($where: SparkyConversationWhereInput!) {\n  sparkyConversations(where: $where) {\n    edges {\n      node {\n        id\n        token\n        model\n        createdAt\n      \tmessages {\n          body\n        }\n      }\n  \t}\n  }\n}\n": types.SparkyConversationsDocument,
     "\nmutation AdminCreateConversationFromPost($postId: ID!, $configId: ID) {\n  adminCreateConversationFromPost(postId: $postId, configID: $configId) {\n    id\n    token\n  }\n}\n": types.AdminCreateConversationFromPostDocument,
@@ -29,7 +29,7 @@ const documents = {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n"): typeof import('./graphql').SparkyMessageDocument;
+export function graphql(source: "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      opengraphReferences {\n        url\n        title\n        description\n        image\n      }\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n"): typeof import('./graphql').SparkyMessageDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

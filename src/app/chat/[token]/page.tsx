@@ -7,7 +7,7 @@ import {
     DrawerContent
 } from "@/components/ui/drawer";
 import { Label } from '@/components/ui/label';
-import { OpenEvidenceReference, SparkyConversation } from '@/gql/graphql';
+import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
@@ -24,27 +24,31 @@ import 'stream-chat-react/dist/css/v2/index.css';
 
 
 const customRenderText = (text: string) => {
-
-    console.log("before=", text)
-
+    console.log("text=", text)
     text = text.replaceAll("\\_", '');
-
     text = text.replaceAll(/\[\[/g, '[');
-    // now remove the last close square bracket, which follows a closed parenthesis
     text = text.replaceAll(")]", ")")
-
-    console.log("after=", text)
-
-
-
     return renderText(text)
 };
+
+const perplexityCustomRenderText = (text: string) => {
+
+    console.log(text)
+
+    // write [1] to [1](https://admin.oog.health/citations/193273530232/1)
+    text = text.replaceAll(/\[(\d+)\]/g, '[$1](https://admin.oog.health/citations/193273530232/$1)');
+
+    return renderText(text)
+}
+
 
 function AuthenticatedApp({ userId, token, channelId }: { userId: string, token: string, channelId: string }) {
 
     const [chat, setChat] = useState<SparkyConversation | null>(null);
     const [showAnimation, setShowAnimation] = useState(false)
     const [citation, setCitation] = useState<OpenEvidenceReference | null>(null)
+    const [ogCitation, setOgCitation] = useState<OpenGraphReference | null>(null)
+    const [showOgCitation, setShowOgCitation] = useState(false)
     const [showCitation, setShowCitation] = useState(false)
 
     useEffect(() => {
@@ -59,11 +63,22 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
 
     async function handleCitation(id: string, key: number) {
         let message = await getMessage(id);
-        if (message) {
-            let citation = message.references?.find((ref: OpenEvidenceReference) => ref.citationKey == key);
-            if (citation) {
-                setCitation(citation)
-                setShowCitation(true)
+        if (chat?.model == "OpenEvidence") {
+            if (message) {
+                let citation = message.references?.find((ref: OpenEvidenceReference) => ref.citationKey == key);
+                if (citation) {
+                    setCitation(citation)
+                    setShowCitation(true)
+                }
+            }
+        }
+        if (chat?.model == "Perplexity") {
+            if (message) {
+                let citation = message.opengraphReferences?.[key - 1]
+                if (citation) {
+                    setOgCitation(citation)
+                    setShowOgCitation(true)
+                }
             }
         }
     }
