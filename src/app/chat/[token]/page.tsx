@@ -62,7 +62,7 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
     if (!client) return <div>loading...</div>
 
     return (
-        <>
+        <div className='h-dvh'>
             {showAnimation && <Congrats />}
 
             <Chat client={client} initialNavOpen={false} theme='str-chat__theme-dark'>
@@ -77,7 +77,7 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
                     <Thread />
                 </Channel>}
             </Chat>
-        </>
+        </div>
     )
 }
 
@@ -85,7 +85,7 @@ export default function ChatDetail({ params }: { params: { token: string } }) {
     let { token } = params
 
     return (
-        <div className='h-screen'>
+        <div className='h-dvh'>
             <AuthenticatedApp
                 channelId={token}
                 userId='8589934649'

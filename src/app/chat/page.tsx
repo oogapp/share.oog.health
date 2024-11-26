@@ -8,6 +8,19 @@ import { use } from "react";
 
 export const dynamic = "force-dynamic";
 
+function getChatTypeName(model: string) {
+    switch (model) {
+        case "Perplexity":
+            return "A"
+        case "OpenEvidence":
+            return "B"
+        case "ChatGpt":
+            return "C"
+        case "Reflection":
+            return "Reflection"
+    }
+}
+
 export default function PostChat({ params }: { params: { id: string } }) {
 
     let chats = use(getChats())
@@ -21,7 +34,7 @@ export default function PostChat({ params }: { params: { id: string } }) {
             </div>
 
             <div className="p-1">
-                <div className="font-bold text-white">Previous Chats</div>
+                <div className="font-bold text-white px-1">Previous Chats</div>
 
                 {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">No chats yet</div>}
 
@@ -32,19 +45,25 @@ export default function PostChat({ params }: { params: { id: string } }) {
                         let dateHuman = parseISO(chat.createdAt).toLocaleString()
                         let model = chat?.model
 
+                        if (lastMessage == null || lastMessage == "") {
+                            lastMessage = "No messages yet"
+                        }
+
                         return (
                             <Link href={`/chat/${chat.token}`} className="text-white text-sm block p-1 my-3 relative" key={chat.id}>
                                 <div>
                                     <div className="text-gray-400">{dateHuman}</div>
-                                    <div className="line-clamp-3">{lastMessage}</div>
+                                    <div className={cn("line-clamp-3", {
+                                        "text-gray-300": lastMessage == "No messages yet"
+                                    })}>{lastMessage}</div>
                                 </div>
-                                <div className={cn("absolute right-0 top-0 p-0.5 text-black rounded-md text-xs", {
-                                    "bg-blue-500 text-white": model == "Perplexity",
-                                    "bg-indigo-500 text-white": model == "OpenEvidence",
-                                    "bg-orange-500 text-white": model == "ChatGpt",
-                                    "bg-green-600 text-white": model == "Reflection",
+                                <div className={cn("absolute right-0 top-0 p-0.5 px-2 text-black rounded-md text-xs", {
+                                    "bg-blue-700 text-white": model == "Perplexity",
+                                    "bg-blue-600 text-white": model == "OpenEvidence",
+                                    "bg-blue-500 text-white": model == "ChatGpt",
+                                    "bg-blue-400 text-white": model == "Reflection",
                                 })}>
-                                    {model}
+                                    {getChatTypeName(model!)}
                                 </div>
                             </Link>
                         )

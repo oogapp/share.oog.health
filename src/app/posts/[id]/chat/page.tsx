@@ -6,6 +6,16 @@ import Link from "next/link";
 import { use } from "react";
 
 export const dynamic = "force-dynamic";
+function getChatTypeName(mode: String) {
+    switch (mode) {
+        case "A":
+            return "Perplexity"
+        case "B":
+            return "OpenEvidence"
+        case "C":
+            return "ChatGpt"
+    }
+}
 
 export default function PostChat({ params }: { params: { id: string } }) {
 

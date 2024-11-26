@@ -27,7 +27,7 @@ export default function CreateChatButtons() {
                 <Button disabled={loading} onClick={() => {
                     handleCreateChat(ConversationModel.Perplexity)
                 }}>
-                    Perplexity
+                    A
                 </Button>
 
                 <Button disabled={loading} onClick={
@@ -35,14 +35,14 @@ export default function CreateChatButtons() {
                         handleCreateChat(ConversationModel.OpenEvidence)
                     }
                 }>
-                    OpenEvidence
+                    B
                 </Button>
 
                 <Button disabled={loading} onClick={
                     () => {
                         handleCreateChat(ConversationModel.ChatGpt)
                     }}>
-                    ChatGPT
+                    C
                 </Button>
             </div>
         </div>
