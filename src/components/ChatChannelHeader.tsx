@@ -3,7 +3,7 @@ import { SparkyConversation } from "@/gql/graphql";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DefaultStreamChatGenerics, useChannelPreviewInfo, useChannelStateContext } from "stream-chat-react";
 import { Button } from "./ui/button";
 
@@ -24,13 +24,14 @@ function getChatTypeName(model: string) {
 
 export default function ChatChannelHeader({ conversation }: { conversation: SparkyConversation }) {
 
-    const { channel, watcher_count } = useChannelStateContext<DefaultStreamChatGenerics>('ChannelHeader');
+    const { channel, messages } = useChannelStateContext<DefaultStreamChatGenerics>('ChannelHeader');
     const { displayImage, displayTitle, groupChannelDisplayInfo } = useChannelPreviewInfo({
         channel,
     });
 
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [totalMessages, setTotalMessages] = useState(0);
 
     async function handleCreateChat() {
         setLoading(true);
@@ -39,7 +40,13 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
         router.push(`/chat/${token}`);
     }
 
-    const title = getChatTypeName(conversation.model!);
+    const title = getChatTypeName(conversation?.model!);
+
+    useEffect(() => {
+        if (messages) {
+            setTotalMessages(messages.length)
+        }
+    }, [messages])
 
 
     return (
@@ -53,7 +60,7 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
             <div className="font-bold">{title}</div>
             <div className="ml-auto">
-                {conversation.model != "Reflection" && <Button disabled={loading} onClick={handleCreateChat}>
+                {(conversation?.model != "Reflection" && totalMessages > 0) && <Button disabled={loading} onClick={handleCreateChat}>
                     Earn CE
                 </Button>}
             </div>
