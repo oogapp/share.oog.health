@@ -30,12 +30,12 @@ export default function PostChat({ params }: { params: { id: string } }) {
     return (
         <div className="space-y-4">
 
-            <div className="p-1">
+            <div className="px-2 py-1">
                 <CreateChatButtons />
             </div>
 
             <div className="py-1">
-                <div className="font-bold text-white px-1">Previous Chats</div>
+                <div className="font-bold text-white px-2">Previous Chats</div>
 
                 {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">No chats yet</div>}
 
@@ -52,7 +52,7 @@ export default function PostChat({ params }: { params: { id: string } }) {
 
                         return (
                             <Link href={`/chat/${chat.token}`} className="text-white flex text-sm block py-3 relative" key={chat.id}>
-                                <div>
+                                <div className="px-2">
                                     <div className="flex items-center gap-x-2">
                                         <div className="text-gray-400">{dateHuman}</div>
                                         <div className={cn("", {
