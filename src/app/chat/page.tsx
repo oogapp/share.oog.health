@@ -3,6 +3,7 @@ import CreateChatButtons from "@/components/CreateChatButtons";
 import { SparkyConversation } from "@/gql/graphql";
 import { cn } from "@/lib/utils";
 import { parseISO } from "date-fns";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
 
@@ -14,7 +15,7 @@ function getChatTypeName(model: string) {
             return "A"
         case "OpenEvidence":
             return "B"
-        case "ChatGpt":
+        case "ChatGPT":
             return "C"
         case "Reflection":
             return "Reflection"
@@ -33,12 +34,12 @@ export default function PostChat({ params }: { params: { id: string } }) {
                 <CreateChatButtons />
             </div>
 
-            <div className="p-1">
+            <div className="py-1">
                 <div className="font-bold text-white px-1">Previous Chats</div>
 
                 {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">No chats yet</div>}
 
-                <div className="divide-y-1 divide-gray-400">
+                <div className="divide-y divide-gray-600">
                     {chats?.map((chat: SparkyConversation) => {
 
                         let lastMessage = chat?.messages![chat.messages!.length - 1]?.body
@@ -50,20 +51,25 @@ export default function PostChat({ params }: { params: { id: string } }) {
                         }
 
                         return (
-                            <Link href={`/chat/${chat.token}`} className="text-white text-sm block p-1 my-3 relative" key={chat.id}>
+                            <Link href={`/chat/${chat.token}`} className="text-white flex text-sm block py-3 relative" key={chat.id}>
                                 <div>
-                                    <div className="text-gray-400">{dateHuman}</div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="text-gray-400">{dateHuman}</div>
+                                        <div className={cn("", {
+                                            "text-blue-200 bg-blue-900 rounded-md px-1": model == "Perplexity",
+                                            "text-blue-300 bg-blue-900 rounded-md px-1": model == "OpenEvidence",
+                                            "text-blue-100 bg-blue-900 rounded-md px-1": model == "ChatGPT",
+                                            "text-blue-50 bg-blue-900 rounded-md px-1": model == "Reflection",
+                                        })}>
+                                            {getChatTypeName(model!)}
+                                        </div>
+                                    </div>
                                     <div className={cn("line-clamp-3", {
                                         "text-gray-300": lastMessage == "No messages yet"
                                     })}>{lastMessage}</div>
                                 </div>
-                                <div className={cn("absolute right-0 top-0 p-0.5 px-2 text-black rounded-md text-xs", {
-                                    "bg-blue-700 text-white": model == "Perplexity",
-                                    "bg-blue-600 text-white": model == "OpenEvidence",
-                                    "bg-blue-500 text-white": model == "ChatGpt",
-                                    "bg-blue-400 text-white": model == "Reflection",
-                                })}>
-                                    {getChatTypeName(model!)}
+                                <div className="ml-auto flex items-center justify-center">
+                                    <ChevronRight className="w-6 h-6" />
                                 </div>
                             </Link>
                         )
