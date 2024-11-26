@@ -17,9 +17,28 @@ import {
     MessageList,
     Thread,
     Window,
+    renderText,
     useCreateChatClient
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
+
+
+const customRenderText = (text: string) => {
+
+    console.log("before=", text)
+
+    text = text.replaceAll("\\_", '');
+
+    text = text.replaceAll(/\[\[/g, '[');
+    // now remove the last close square bracket, which follows a closed parenthesis
+    text = text.replaceAll(")]", ")")
+
+    console.log("after=", text)
+
+
+
+    return renderText(text)
+};
 
 function AuthenticatedApp({ userId, token, channelId }: { userId: string, token: string, channelId: string }) {
 
@@ -142,7 +161,10 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
                         <div>
                             <ChatChannelHeader conversation={chat!} />
                         </div>
-                        <MessageList />
+                        <MessageList
+                            // @ts-ignore
+                            renderText={customRenderText}
+                        />
                         <MessageInput grow />
                     </Window>
                     <Thread />

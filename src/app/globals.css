@@ -86,3 +86,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.str-chat__message-url-link {
+  @apply rounded-md bg-blue-600 !text-white mr-1 px-2 text-xs;
+}
