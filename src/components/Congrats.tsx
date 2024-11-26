@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
-    DrawerContent
+    DrawerContentWithoutOverlay
 } from "@/components/ui/drawer";
 import * as animationData from '@/lib/ce-earned-pillow.json';
 import Link from 'next/link';
@@ -27,7 +27,7 @@ export default function Congrats() {
 
 
             <Drawer open={showAnimation}>
-                <DrawerContent>
+                <DrawerContentWithoutOverlay>
                     <div className="p-5 flex flex-col space-y-8">
                         <h1 className="text-2xl font-bold text-center">Congratulations!</h1>
                         <div className="space-y-4 text-center flex flex-col">
@@ -39,7 +39,7 @@ export default function Congrats() {
                             </Button>
                         </div>
                     </div>
-                </DrawerContent>
+                </DrawerContentWithoutOverlay>
             </Drawer>
         </div>
     )

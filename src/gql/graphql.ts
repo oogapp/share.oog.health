@@ -21490,6 +21490,13 @@ export type WorkExperienceWhereInput = {
   titleNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type SparkyMessageQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SparkyMessageQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage', references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
+
 export type SparkyConversationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -21554,7 +21561,7 @@ export class TypedDocumentString<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
 
-  constructor(private value: string, public __meta__?: Record<string, any>) {
+  constructor(private value: string, public __meta__?: Record<string, any> | undefined) {
     super(value);
   }
 
@@ -21563,6 +21570,28 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const SparkyMessageDocument = new TypedDocumentString(`
+    query SparkyMessage($id: ID!) {
+  node(id: $id) {
+    ... on SparkyMessage {
+      references {
+        citationKey
+        sourceTexts
+        referenceText
+        referenceDetail {
+          doi
+          url
+          title
+          journalName
+          authorsString
+          publicationDate
+          publicationInfoString
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SparkyMessageQuery, SparkyMessageQueryVariables>;
 export const SparkyConversationDocument = new TypedDocumentString(`
     query SparkyConversation($id: ID!) {
   node(id: $id) {

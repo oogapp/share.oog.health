@@ -1,9 +1,33 @@
 'use server'
 import { graphql } from "@/gql";
-import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput } from "@/gql/graphql";
+import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery } from "@/gql/graphql";
 import { GraphQLClient } from "graphql-request";
 import { cookies } from "next/headers";
 import { cache } from "react";
+
+const GetMessage = graphql(`
+  query SparkyMessage($id: ID!) {
+  node(id: $id) {
+    ... on SparkyMessage {
+      references {
+        citationKey
+        sourceTexts
+        referenceText
+        referenceDetail {
+          doi
+          url
+          title
+          journalName
+          authorsString
+          publicationDate
+          publicationInfoString
+        }
+      }
+    }
+  }
+}
+`)
+
 
 const GetConversation = graphql(`
 query SparkyConversation($id: ID!) {
@@ -99,6 +123,12 @@ async function adminCreateChatFromConversation(conversationId: string): Promise<
     return resp.adminCreateConversationFromConversation.token!
 }
 
+async function getMessage(id: string): Promise<SparkyMessage> {
+    let resp:SparkyMessageQuery = await client.request(GetMessage.toString(), {
+        id: id
+    });
+    return resp.node as SparkyMessage;
+}
 
 async function getChats(postId?:string): Promise<SparkyConversation[]> {
   const _cookies = cookies()
@@ -129,5 +159,5 @@ async function getChatByToken(token: string): Promise<SparkyConversation> {
 }
 
 const getChatsCached = cache(getChats);
-export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats };
+export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage };
 
