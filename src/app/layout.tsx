@@ -16,6 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
+      <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+      <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+      <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
       <body className="h-full bg-black">
         <ThemeProvider
           attribute="class"
