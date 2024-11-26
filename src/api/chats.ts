@@ -9,12 +9,6 @@ const GetMessage = graphql(`
   query SparkyMessage($id: ID!) {
   node(id: $id) {
     ... on SparkyMessage {
-      opengraphReferences {
-        url
-        title
-        description
-        image
-      }
       references {
         citationKey
         sourceTexts
