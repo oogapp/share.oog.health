@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -14,9 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="h-full bg-black">
-        <div className="max-w-lg mx-auto relative h-full">{children}</div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="max-w-lg mx-auto relative h-full">{children}</div>
+        </ThemeProvider>
       </body>
     </html>
   );

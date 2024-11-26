@@ -3663,6 +3663,7 @@ export type CreateSparkyConversationInput = {
   scoreIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** The entity this conversation was started from. Used to determine which entity to link to when displaying the conversation. */
   startedFrom?: InputMaybe<SparkyConversationStartedFrom>;
+  targetConversationID?: InputMaybe<Scalars['ID']['input']>;
   tenantID?: InputMaybe<Scalars['ID']['input']>;
   token?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['Time']['input']>;
@@ -7432,6 +7433,7 @@ export type Mutation = {
   adminBoostTrendingUsers: Array<User>;
   adminCreateAnatomicalModel: AnatomicalModel;
   adminCreateConversation: SparkyConversation;
+  adminCreateConversationFromConversation: SparkyConversation;
   /** Identical to createConversationFromPost, but allows the admin to specify a config id */
   adminCreateConversationFromPost: SparkyConversation;
   adminCreateFinancialDisclosureRole: FinancialDisclosureRole;
@@ -7503,6 +7505,11 @@ export type Mutation = {
   createConversation: SparkyConversation;
   /** Creates a new sparky conversation using the given comment id (and parent post0 for context. */
   createConversationFromComment: SparkyConversation;
+  /**
+   * Creates a new sparky conversation using the given conversation id for context.
+   * The targeted conversation cannot be a reflective conversation. (ie. should be open evidence, perplexity, etc.)
+   */
+  createConversationFromConversation: SparkyConversation;
   /** Creates a new sparky conversation using the given post id for context. */
   createConversationFromPost: SparkyConversation;
   createConversationFromVideo: SparkyConversation;
@@ -7740,6 +7747,12 @@ export type MutationAdminCreateAnatomicalModelArgs = {
 export type MutationAdminCreateConversationArgs = {
   model: ConversationModel;
   userID: Scalars['ID']['input'];
+};
+
+
+export type MutationAdminCreateConversationFromConversationArgs = {
+  configID?: InputMaybe<Scalars['ID']['input']>;
+  conversationId: Scalars['ID']['input'];
 };
 
 
@@ -8031,6 +8044,11 @@ export type MutationCreateConversationArgs = {
 
 export type MutationCreateConversationFromCommentArgs = {
   commentId: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateConversationFromConversationArgs = {
+  conversationId: Scalars['ID']['input'];
 };
 
 
@@ -14558,6 +14576,7 @@ export type SparkyConversation = Node & {
   medicalTermsWordcloudURL?: Maybe<Scalars['String']['output']>;
   /** The messages in this conversation. */
   messages?: Maybe<Array<SparkyMessage>>;
+  model?: Maybe<Scalars['String']['output']>;
   /** The post this conversation was started from. */
   post?: Maybe<Post>;
   /** The results of the reflection analysis, generated from all user sent messages in this conversation. */
@@ -14565,6 +14584,8 @@ export type SparkyConversation = Node & {
   scores?: Maybe<Array<ReflectionAnalysisScore>>;
   /** The entity this conversation was started from. Used to determine which entity to link to when displaying the conversation. */
   startedFrom: SparkyConversationStartedFrom;
+  /** The conversation this conversation is targeting for earning reflective CE. */
+  targetConversation?: Maybe<SparkyConversation>;
   tenant?: Maybe<Tenant>;
   token?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['Time']['output'];
@@ -14739,6 +14760,9 @@ export type SparkyConversationWhereInput = {
   /** scores edge predicates */
   hasScores?: InputMaybe<Scalars['Boolean']['input']>;
   hasScoresWith?: InputMaybe<Array<ReflectionAnalysisScoreWhereInput>>;
+  /** target_conversation edge predicates */
+  hasTargetConversation?: InputMaybe<Scalars['Boolean']['input']>;
+  hasTargetConversationWith?: InputMaybe<Array<SparkyConversationWhereInput>>;
   /** tenant edge predicates */
   hasTenant?: InputMaybe<Scalars['Boolean']['input']>;
   hasTenantWith?: InputMaybe<Array<TenantWhereInput>>;
@@ -14773,6 +14797,22 @@ export type SparkyConversationWhereInput = {
   medicalTermsWordcloudURLNEQ?: InputMaybe<Scalars['String']['input']>;
   medicalTermsWordcloudURLNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   medicalTermsWordcloudURLNotNil?: InputMaybe<Scalars['Boolean']['input']>;
+  /** model field predicates */
+  model?: InputMaybe<Scalars['String']['input']>;
+  modelContains?: InputMaybe<Scalars['String']['input']>;
+  modelContainsFold?: InputMaybe<Scalars['String']['input']>;
+  modelEqualFold?: InputMaybe<Scalars['String']['input']>;
+  modelGT?: InputMaybe<Scalars['String']['input']>;
+  modelGTE?: InputMaybe<Scalars['String']['input']>;
+  modelHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  modelHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  modelIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  modelIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  modelLT?: InputMaybe<Scalars['String']['input']>;
+  modelLTE?: InputMaybe<Scalars['String']['input']>;
+  modelNEQ?: InputMaybe<Scalars['String']['input']>;
+  modelNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  modelNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   not?: InputMaybe<SparkyConversationWhereInput>;
   or?: InputMaybe<Array<SparkyConversationWhereInput>>;
   /** started_from field predicates */
@@ -17483,6 +17523,7 @@ export type UpdateSparkyConversationInput = {
   clearMessages?: InputMaybe<Scalars['Boolean']['input']>;
   clearPost?: InputMaybe<Scalars['Boolean']['input']>;
   clearScores?: InputMaybe<Scalars['Boolean']['input']>;
+  clearTargetConversation?: InputMaybe<Scalars['Boolean']['input']>;
   clearTenant?: InputMaybe<Scalars['Boolean']['input']>;
   clearToken?: InputMaybe<Scalars['Boolean']['input']>;
   clearVideo?: InputMaybe<Scalars['Boolean']['input']>;
@@ -17506,6 +17547,7 @@ export type UpdateSparkyConversationInput = {
   removeScoreIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** The entity this conversation was started from. Used to determine which entity to link to when displaying the conversation. */
   startedFrom?: InputMaybe<SparkyConversationStartedFrom>;
+  targetConversationID?: InputMaybe<Scalars['ID']['input']>;
   tenantID?: InputMaybe<Scalars['ID']['input']>;
   token?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['Time']['input']>;
@@ -21448,12 +21490,19 @@ export type WorkExperienceWhereInput = {
   titleNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type SparkyConversationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type SparkyConversationQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string }> | null, targetConversation?: { __typename?: 'SparkyConversation', id: string, token?: string | null } | null } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
+
 export type SparkyConversationsQueryVariables = Exact<{
   where: SparkyConversationWhereInput;
 }>;
 
 
-export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string }> | null } | null } | null> | null } };
+export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string }> | null } | null } | null> | null } };
 
 export type AdminCreateConversationFromPostMutationVariables = Exact<{
   postId: Scalars['ID']['input'];
@@ -21462,6 +21511,21 @@ export type AdminCreateConversationFromPostMutationVariables = Exact<{
 
 
 export type AdminCreateConversationFromPostMutation = { __typename?: 'Mutation', adminCreateConversationFromPost: { __typename?: 'SparkyConversation', id: string, token?: string | null } };
+
+export type AdminCreateConversationFromConversationMutationVariables = Exact<{
+  conversationId: Scalars['ID']['input'];
+}>;
+
+
+export type AdminCreateConversationFromConversationMutation = { __typename?: 'Mutation', adminCreateConversationFromConversation: { __typename?: 'SparkyConversation', id: string, token?: string | null } };
+
+export type AdminCreateConversationMutationVariables = Exact<{
+  model: ConversationModel;
+  userID: Scalars['ID']['input'];
+}>;
+
+
+export type AdminCreateConversationMutation = { __typename?: 'Mutation', adminCreateConversation: { __typename?: 'SparkyConversation', token?: string | null } };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -21499,6 +21563,25 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const SparkyConversationDocument = new TypedDocumentString(`
+    query SparkyConversation($id: ID!) {
+  node(id: $id) {
+    ... on SparkyConversation {
+      id
+      token
+      model
+      createdAt
+      messages {
+        body
+      }
+      targetConversation {
+        id
+        token
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SparkyConversationQuery, SparkyConversationQueryVariables>;
 export const SparkyConversationsDocument = new TypedDocumentString(`
     query SparkyConversations($where: SparkyConversationWhereInput!) {
   sparkyConversations(where: $where) {
@@ -21506,6 +21589,7 @@ export const SparkyConversationsDocument = new TypedDocumentString(`
       node {
         id
         token
+        model
         createdAt
         messages {
           body
@@ -21523,6 +21607,21 @@ export const AdminCreateConversationFromPostDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AdminCreateConversationFromPostMutation, AdminCreateConversationFromPostMutationVariables>;
+export const AdminCreateConversationFromConversationDocument = new TypedDocumentString(`
+    mutation AdminCreateConversationFromConversation($conversationId: ID!) {
+  adminCreateConversationFromConversation(conversationId: $conversationId) {
+    id
+    token
+  }
+}
+    `) as unknown as TypedDocumentString<AdminCreateConversationFromConversationMutation, AdminCreateConversationFromConversationMutationVariables>;
+export const AdminCreateConversationDocument = new TypedDocumentString(`
+    mutation AdminCreateConversation($model: ConversationModel!, $userID: ID!) {
+  adminCreateConversation(model: $model, userID: $userID) {
+    token
+  }
+}
+    `) as unknown as TypedDocumentString<AdminCreateConversationMutation, AdminCreateConversationMutationVariables>;
 export const PostDocument = new TypedDocumentString(`
     query Post($id: ID!) {
   node(id: $id) {
