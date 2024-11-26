@@ -1,6 +1,8 @@
+'use server'
 import { graphql } from "@/gql";
 import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput } from "@/gql/graphql";
 import { GraphQLClient } from "graphql-request";
+import { cookies } from "next/headers";
 import { cache } from "react";
 
 const GetConversation = graphql(`
@@ -99,7 +101,7 @@ async function adminCreateChatFromConversation(conversationId: string): Promise<
 
 
 async function getChats(postId?:string): Promise<SparkyConversation[]> {
-
+  const _cookies = cookies()
   let where = {
     "hasUserWith": [{"id": "8589934649"}]
   } as SparkyConversationWhereInput

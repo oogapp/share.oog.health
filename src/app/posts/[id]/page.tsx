@@ -8,6 +8,7 @@ type Props = {
   params: { id: string }
 }
 
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
