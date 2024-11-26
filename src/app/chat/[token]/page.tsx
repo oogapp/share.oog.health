@@ -63,22 +63,11 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
 
     async function handleCitation(id: string, key: number) {
         let message = await getMessage(id);
-        if (chat?.model == "OpenEvidence") {
-            if (message) {
-                let citation = message.references?.find((ref: OpenEvidenceReference) => ref.citationKey == key);
-                if (citation) {
-                    setCitation(citation)
-                    setShowCitation(true)
-                }
-            }
-        }
-        if (chat?.model == "Perplexity") {
-            if (message) {
-                let citation = message.opengraphReferences?.[key - 1]
-                if (citation) {
-                    setOgCitation(citation)
-                    setShowOgCitation(true)
-                }
+        if (message) {
+            let citation = message.references?.find((ref: OpenEvidenceReference) => ref.citationKey == key);
+            if (citation) {
+                setCitation(citation)
+                setShowCitation(true)
             }
         }
     }
