@@ -60,7 +60,7 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
             <div className="font-bold">{title}</div>
             <div className="ml-auto">
-                {(conversation?.model != "Reflection" && totalMessages > 0) && <Button disabled={loading} onClick={handleCreateChat}>
+                {(conversation?.model != "Reflection" && totalMessages > 1) && <Button disabled={loading} onClick={handleCreateChat}>
                     Earn CE
                 </Button>}
             </div>

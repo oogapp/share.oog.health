@@ -1,6 +1,6 @@
 'use server'
 import { graphql } from "@/gql";
-import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery } from "@/gql/graphql";
+import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery, SparkyMessagesQuery, SparkyMessageWhereInput } from "@/gql/graphql";
 import { GraphQLClient } from "graphql-request";
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -28,6 +28,32 @@ const GetMessage = graphql(`
 }
 `)
 
+const GetMessages = graphql(`
+query SparkyMessages($where: SparkyMessageWhereInput!) {
+  sparkyMessages(where: $where) {
+    edges {
+      node {
+        id
+        body
+        references {
+          citationKey
+          sourceTexts
+          referenceText
+          referenceDetail {
+            doi
+            url
+            title
+            journalName
+            authorsString
+            publicationDate
+            publicationInfoString
+          }
+        }
+      }
+    }
+  }
+}
+`)
 
 const GetConversation = graphql(`
 query SparkyConversation($id: ID!) {
@@ -158,6 +184,17 @@ async function getChatByToken(token: string): Promise<SparkyConversation> {
   return resp.sparkyConversations.edges?.map(edge=>edge?.node)[0] as SparkyConversation;
 }
 
+async function getMessageByStreamID(streamID: string): Promise<SparkyMessage> {
+  let where = {
+    streamMessageID: streamID
+  } as SparkyMessageWhereInput
+
+  let resp: SparkyMessagesQuery = await client.request(GetMessages.toString(), {
+    where: where,
+  });
+  return resp.sparkyMessages.edges?.map(edge=>edge?.node)[0] as SparkyMessage;
+}
+
 const getChatsCached = cache(getChats);
-export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage };
+export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage, getMessageByStreamID };
 

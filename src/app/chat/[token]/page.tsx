@@ -1,13 +1,15 @@
 'use client'
-import { getChatByToken, getMessage } from '@/api/chats';
+import { getChatByToken, getMessage, getMessageByStreamID } from '@/api/chats';
 import ChatChannelHeader from '@/components/ChatChannelHeader';
 import Congrats from '@/components/Congrats';
+import { Button } from '@/components/ui/button';
 import {
     Drawer,
     DrawerContent
 } from "@/components/ui/drawer";
 import { Label } from '@/components/ui/label';
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
+import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
@@ -17,8 +19,11 @@ import {
     MessageList,
     Thread,
     Window,
+    defaultRenderMessages,
     renderText,
-    useCreateChatClient
+    useCreateChatClient,
+    useMessageContext,
+    useTranslationContext
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 
@@ -31,16 +36,135 @@ const customRenderText = (text: string) => {
     return renderText(text)
 };
 
-const perplexityCustomRenderText = (text: string) => {
+const CustomMessageActionList = () => {
+    const { message } = useMessageContext("CustomMessageActionList");
+    const { t } = useTranslationContext("CustomMessageActionList");
+    return (
+        <>
+            <button
+                className="str-chat__message-actions-list-item-button"
+                onClick={(event) => {
+                    window.alert(`Yell action clicked on message: ${message.id}!`);
+                }}
+            >
+                Yello!
+            </button>
+            {/** ...other action buttons... */}
+        </>
+    );
+};
 
-    console.log(text)
+const CustomMessageStatus = () => {
+    const [showCitation, setShowCitation] = useState(false)
+    const [citation, setCitation] = useState<OpenEvidenceReference | null>(null)
+    const [citationsLoading, setCitationsLoading] = useState(false)
+    const [citationsLoaded, setCitationsLoaded] = useState(false)
+    const [citations, setCitations] = useState<OpenEvidenceReference[]>([])
+    const { message } = useMessageContext("CustomMessageStatus");
+    const { t } = useTranslationContext("CustomMessageStatus");
 
-    // write [1] to [1](https://admin.oog.health/citations/193273530232/1)
-    text = text.replaceAll(/\[(\d+)\]/g, '[$1](https://admin.oog.health/citations/193273530232/$1)');
+    async function loadCitations() {
+        try {
+            setCitationsLoading(true)
+            let sparkyMessage = await getMessageByStreamID(message.id);
+            setCitationsLoading(false)
+            if (sparkyMessage) {
+                setCitations(sparkyMessage.references!)
+            } else {
+                setCitations([])
+            }
+            setCitationsLoaded(true)
+        } catch (e) {
+            console.log("error=", e)
+        }
 
-    return renderText(text)
+    }
+
+    useEffect(() => {
+        if (citationsLoaded || citationsLoading) return
+        if (message) {
+            console.log("message=", message)
+            loadCitations()
+        }
+    }, [message, citationsLoaded, citationsLoading])
+
+    if (message.user?.id != "sparky_reflection_bot_v1") {
+        return null
+    }
+    return (
+        <div className='space-y-4 my-3 w-full border-t border-gray-600 w-full'>
+            <div className="mt-3 flex !gap-x-2">
+                <Button variant={'sparky'} size='sm'>
+                    <ShareIcon className="w-4 h-4" />
+                    Share</Button>
+                <Button variant={'sparky'} size='sm'>
+                    <ThumbsDown className="w-4 h-4" />
+                    Not Helpful</Button>
+                <Button variant={'sparky'} size='sm'>
+                    <img src="/ce-bubble.png" className="w-6 h-6" />
+                </Button>
+            </div>
+            <div className='space-y-4'>
+                <div className='flex items-center text-white gap-x-2'>
+                    <ListIcon className="w-4 h-4" />
+                    <div className='text-xl'>References</div>
+                </div>
+                <div className='space-y-4'>
+                    {citations?.map((citation, index) => {
+                        return (
+                            <div
+                                onClick={() => {
+                                    setCitation(citation)
+                                    setShowCitation(true)
+                                }}
+                                key={index} className='flex cursor-pointer gap-x-2 align-top bg-gray-800 text-white p-2 rounded-xl'>
+                                <div className=''>
+                                    <div className='bg-brand/20 text-brand p-0.5 rounded-full text-xs w-4 h-4 inline-flex items-center justify-center'>
+                                        {citation?.citationKey}
+                                    </div>
+                                </div>
+                                <div className='space-y-2 '>
+                                    <div className='text-sm'>{citation.referenceDetail?.title}</div>
+                                    <div className='text-xs text-gray-400'>{citation.referenceDetail?.publicationInfoString}</div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+
+
+            <Drawer
+                open={showCitation}
+                onOpenChange={(open) => setShowCitation(open)}
+                dismissible={true}>
+                <DrawerContent>
+                    {citation && <div className="flex p-3">
+                        <div className="border-b border-gray-600 space-y-1">
+                            <div>
+                                <Link className="underline font-bold" target="new" href={citation.referenceDetail.url}>
+                                    {citation?.referenceDetail?.title}
+                                </Link>
+                            </div>
+                            <div className="text-sm">
+                                {citation?.referenceDetail?.authorsString}
+                            </div>
+                            <div className="text-sm">
+                                {citation?.referenceDetail?.publicationInfoString}
+                            </div>
+                            <div>
+                                <Label>Source Texts</Label>
+                                <div className="text-sm overflow-x-scroll h-64">
+                                    {citation.sourceTexts}
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+                </DrawerContent>
+            </Drawer>
+        </div>
+    );
 }
-
 
 function AuthenticatedApp({ userId, token, channelId }: { userId: string, token: string, channelId: string }) {
 
@@ -160,14 +284,26 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
             </Drawer>
 
             <Chat client={client} initialNavOpen={false} theme='str-chat__theme-dark'>
-                {channel && <Channel channel={channel}>
+                {channel && <Channel
+                    MessageStatus={CustomMessageStatus}
+                    channel={channel}>
                     <Window>
                         <div>
                             <ChatChannelHeader conversation={chat!} />
                         </div>
                         <MessageList
+
                             // @ts-ignore
                             renderText={customRenderText}
+                            renderMessages={(params) => {
+
+                                let customClasses = {
+                                    message: "sparky__message",
+                                }
+                                params.customClasses = customClasses;
+
+                                return defaultRenderMessages(params)
+                            }}
                         />
                         <MessageInput grow />
                     </Window>
