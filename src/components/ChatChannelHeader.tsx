@@ -51,7 +51,6 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
     return (
         <div className="p-3 bg-gray-900 flex items-center">
-
             <div className="mr-3">
                 <Link href={`/chat`} className="">
                     <ChevronLeft className="w-6 h-6" />

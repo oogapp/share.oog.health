@@ -7630,6 +7630,8 @@ export type Mutation = {
    * Muting a user will hide their posts from the current user's feed. Muted users won't know they are muted.
    */
   muteUser: UserMute;
+  /** Converts a "medical search" conversation into a reflective conversation */
+  reflectOnConversation: SparkyConversation;
   refreshInstagramConnection?: Maybe<AccountConnection>;
   refreshTiktokConnection?: Maybe<AccountConnection>;
   refreshYoutubeConnection?: Maybe<AccountConnection>;
@@ -8376,6 +8378,11 @@ export type MutationMarkNotificationsAsReadArgs = {
 
 export type MutationMuteUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationReflectOnConversationArgs = {
+  conversationId: Scalars['ID']['input'];
 };
 
 
@@ -14802,6 +14809,7 @@ export type SparkyConversation = Node & {
   comment?: Maybe<Comment>;
   /** The configuration for this conversation. */
   config?: Maybe<SparkyChatConfig>;
+  convertedFromModel?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Time']['output'];
   /** Whether this is a demo conversation. */
   demo: Scalars['Boolean']['output'];
@@ -14967,6 +14975,22 @@ export type SparkyConversationWhereInput = {
   clinicalTermsWordcloudURLNEQ?: InputMaybe<Scalars['String']['input']>;
   clinicalTermsWordcloudURLNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   clinicalTermsWordcloudURLNotNil?: InputMaybe<Scalars['Boolean']['input']>;
+  /** converted_from_model field predicates */
+  convertedFromModel?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelContains?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelContainsFold?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelEqualFold?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelGT?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelGTE?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  convertedFromModelIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  convertedFromModelLT?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelLTE?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelNEQ?: InputMaybe<Scalars['String']['input']>;
+  convertedFromModelNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  convertedFromModelNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   /** created_at field predicates */
   createdAt?: InputMaybe<Scalars['Time']['input']>;
   createdAtGT?: InputMaybe<Scalars['Time']['input']>;
@@ -21839,14 +21863,14 @@ export type SparkyMessageQueryVariables = Exact<{
 }>;
 
 
-export type SparkyMessageQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage', references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
+export type SparkyMessageQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage', conversation?: { __typename?: 'SparkyConversation', id: string } | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
 
 export type SparkyMessagesQueryVariables = Exact<{
   where: SparkyMessageWhereInput;
 }>;
 
 
-export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
+export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, conversation?: { __typename?: 'SparkyConversation', id: string } | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
 
 export type SparkyConversationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -21884,6 +21908,13 @@ export type AdminCreateConversationMutationVariables = Exact<{
 
 
 export type AdminCreateConversationMutation = { __typename?: 'Mutation', adminCreateConversation: { __typename?: 'SparkyConversation', token?: string | null } };
+
+export type ReflectOnConversationMutationVariables = Exact<{
+  conversationId: Scalars['ID']['input'];
+}>;
+
+
+export type ReflectOnConversationMutation = { __typename?: 'Mutation', reflectOnConversation: { __typename?: 'SparkyConversation', id: string } };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -21925,6 +21956,9 @@ export const SparkyMessageDocument = new TypedDocumentString(`
     query SparkyMessage($id: ID!) {
   node(id: $id) {
     ... on SparkyMessage {
+      conversation {
+        id
+      }
       references {
         citationKey
         sourceTexts
@@ -21950,6 +21984,9 @@ export const SparkyMessagesDocument = new TypedDocumentString(`
       node {
         id
         body
+        conversation {
+          id
+        }
         references {
           citationKey
           sourceTexts
@@ -22028,6 +22065,13 @@ export const AdminCreateConversationDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AdminCreateConversationMutation, AdminCreateConversationMutationVariables>;
+export const ReflectOnConversationDocument = new TypedDocumentString(`
+    mutation ReflectOnConversation($conversationId: ID!) {
+  reflectOnConversation(conversationId: $conversationId) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<ReflectOnConversationMutation, ReflectOnConversationMutationVariables>;
 export const PostDocument = new TypedDocumentString(`
     query Post($id: ID!) {
   node(id: $id) {

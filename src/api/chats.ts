@@ -9,6 +9,9 @@ const GetMessage = graphql(`
   query SparkyMessage($id: ID!) {
   node(id: $id) {
     ... on SparkyMessage {
+      conversation {
+        id
+      }
       references {
         citationKey
         sourceTexts
@@ -35,6 +38,9 @@ query SparkyMessages($where: SparkyMessageWhereInput!) {
       node {
         id
         body
+        conversation {
+          id
+        }
         references {
           citationKey
           sourceTexts
@@ -119,6 +125,14 @@ const AdminCreateConversation = graphql(`
 }
 `)
 
+const ReflectOnConversation = graphql(`
+  mutation ReflectOnConversation($conversationId: ID!) {
+  reflectOnConversation(conversationId: $conversationId) {
+    id
+  }
+}
+`)
+
 const client = new GraphQLClient(process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT!,{
     fetch,
     headers: {
@@ -195,6 +209,12 @@ async function getMessageByStreamID(streamID: string): Promise<SparkyMessage> {
   return resp.sparkyMessages.edges?.map(edge=>edge?.node)[0] as SparkyMessage;
 }
 
+async function reflectOnConversation(conversationId: string): Promise<void> {
+    await client.request(ReflectOnConversation.toString(), {
+        conversationId: conversationId
+    });
+}
+
 const getChatsCached = cache(getChats);
-export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage, getMessageByStreamID };
+export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage, getMessageByStreamID, reflectOnConversation };
 

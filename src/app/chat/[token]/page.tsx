@@ -1,14 +1,15 @@
 'use client'
-import { getChatByToken, getMessage, getMessageByStreamID } from '@/api/chats';
+import { getChatByToken, getMessage, getMessageByStreamID, reflectOnConversation } from '@/api/chats';
 import ChatChannelHeader from '@/components/ChatChannelHeader';
 import Congrats from '@/components/Congrats';
+import { MessageSimple } from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
     DrawerContent
 } from "@/components/ui/drawer";
 import { Label } from '@/components/ui/label';
-import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
+import { OpenEvidenceReference, OpenGraphReference, SparkyConversation, SparkyMessage } from '@/gql/graphql';
 import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -29,29 +30,10 @@ import 'stream-chat-react/dist/css/v2/index.css';
 
 
 const customRenderText = (text: string) => {
-    console.log("text=", text)
     text = text.replaceAll("\\_", '');
     text = text.replaceAll(/\[\[/g, '[');
     text = text.replaceAll(")]", ")")
     return renderText(text)
-};
-
-const CustomMessageActionList = () => {
-    const { message } = useMessageContext("CustomMessageActionList");
-    const { t } = useTranslationContext("CustomMessageActionList");
-    return (
-        <>
-            <button
-                className="str-chat__message-actions-list-item-button"
-                onClick={(event) => {
-                    window.alert(`Yell action clicked on message: ${message.id}!`);
-                }}
-            >
-                Yello!
-            </button>
-            {/** ...other action buttons... */}
-        </>
-    );
 };
 
 const CustomMessageStatus = () => {
@@ -62,14 +44,17 @@ const CustomMessageStatus = () => {
     const [citations, setCitations] = useState<OpenEvidenceReference[]>([])
     const { message } = useMessageContext("CustomMessageStatus");
     const { t } = useTranslationContext("CustomMessageStatus");
+    const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
+    const [showAllCitations, setShowAllCitations] = useState(false)
 
     async function loadCitations() {
         try {
             setCitationsLoading(true)
-            let sparkyMessage = await getMessageByStreamID(message.id);
+            let sm = await getMessageByStreamID(message.id);
+            setSparkyMessage(sm)
             setCitationsLoading(false)
-            if (sparkyMessage) {
-                setCitations(sparkyMessage.references!)
+            if (sm) {
+                setCitations(sm.references!)
             } else {
                 setCitations([])
             }
@@ -78,6 +63,10 @@ const CustomMessageStatus = () => {
             console.log("error=", e)
         }
 
+    }
+
+    async function handleConvertToCE() {
+        await reflectOnConversation(sparkyMessage?.conversation?.id!)
     }
 
     useEffect(() => {
@@ -100,7 +89,11 @@ const CustomMessageStatus = () => {
                 <Button variant={'sparky'} size='sm'>
                     <ThumbsDown className="w-4 h-4" />
                     Not Helpful</Button>
-                <Button variant={'sparky'} size='sm'>
+                <Button
+                    onClick={() => {
+                        handleConvertToCE()
+                    }}
+                    variant={'sparky'} size='sm'>
                     <img src="/ce-bubble.png" className="w-6 h-6" />
                 </Button>
             </div>
@@ -108,9 +101,12 @@ const CustomMessageStatus = () => {
                 <div className='flex items-center text-white gap-x-2'>
                     <ListIcon className="w-4 h-4" />
                     <div className='text-xl'>References</div>
+                    <div className='ml-auto text-gray-400'>
+                        {citations?.length} references
+                    </div>
                 </div>
                 <div className='space-y-4'>
-                    {citations?.map((citation, index) => {
+                    {citations?.slice(0, showAllCitations ? citations.length : 3).map((citation, index) => {
                         return (
                             <div
                                 onClick={() => {
@@ -125,11 +121,25 @@ const CustomMessageStatus = () => {
                                 </div>
                                 <div className='space-y-2 '>
                                     <div className='text-sm'>{citation.referenceDetail?.title}</div>
-                                    <div className='text-xs text-gray-400'>{citation.referenceDetail?.publicationInfoString}</div>
+                                    <div className='text-xs text-gray-400 hidden'>{citation.referenceDetail?.publicationInfoString}</div>
                                 </div>
                             </div>
                         )
                     })}
+
+                    {showAllCitations ?
+                        <div
+                            onClick={() => setShowAllCitations(false)}
+                            className='flex text-white underline justify-center'>
+                            Show Less
+                        </div> :
+                        <div
+                            onClick={() => setShowAllCitations(true)}
+                            className='flex  text-white underline justify-center'>
+                            Show All References
+                        </div>
+                    }
+
                 </div>
             </div>
 
@@ -149,7 +159,7 @@ const CustomMessageStatus = () => {
                             <div className="text-sm">
                                 {citation?.referenceDetail?.authorsString}
                             </div>
-                            <div className="text-sm">
+                            <div className="text-sm ">
                                 {citation?.referenceDetail?.publicationInfoString}
                             </div>
                             <div>
@@ -288,19 +298,22 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
                     MessageStatus={CustomMessageStatus}
                     channel={channel}>
                     <Window>
-                        <div>
+                        <div className=''>
                             <ChatChannelHeader conversation={chat!} />
                         </div>
                         <MessageList
-
+                            disableDateSeparator={true}
+                            hideNewMessageSeparator={true}
                             // @ts-ignore
                             renderText={customRenderText}
+                            Message={MessageSimple}
                             renderMessages={(params) => {
 
                                 let customClasses = {
                                     message: "sparky__message",
                                 }
-                                params.customClasses = customClasses;
+                                //params.customClasses = customClasses
+
 
                                 return defaultRenderMessages(params)
                             }}

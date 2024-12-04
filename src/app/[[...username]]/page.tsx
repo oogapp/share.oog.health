@@ -13,6 +13,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     let un = params.username[0];
     let id = un;
+    // if id is favicon.ico, return early
+    if (id === "favicon.ico") {
+        return {
+            title: "Oog",
+        }
+    }
     let user = await getUserByUsername(id);
     let title = `Oog / ${user.firstName} ${user.lastName}`
     return {
