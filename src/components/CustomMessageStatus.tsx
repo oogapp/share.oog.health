@@ -1,5 +1,5 @@
 'use client'
-import { getMessageByStreamID, reflectOnConversation } from '@/api/chats';
+import { flagMessageAsNotHelpful, getMessageByStreamID, reflectOnConversation } from '@/api/chats';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/drawer";
 import { Label } from '@/components/ui/label';
 import { OpenEvidenceReference, SparkyMessage } from '@/gql/graphql';
+import { cn } from '@/lib/utils';
 import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -58,6 +59,12 @@ export const CustomMessageStatus = () => {
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
     }
 
+    async function handleNotHelpful() {
+        await flagMessageAsNotHelpful(sparkyMessage?.id!)
+        loadCitations()
+    }
+
+
     useEffect(() => {
         if (citationsLoaded || citationsLoading) return
         if (message) {
@@ -71,13 +78,23 @@ export const CustomMessageStatus = () => {
     return (
         <div className='space-y-4 my-3 w-full border-t border-gray-600 w-full'>
             <div className="mt-3 flex !gap-x-2">
-                <Button variant={'sparky'} size='sm'>
+                <Button
+                    disabled={sparkyMessage?.notHelpful}
+                    variant={'sparky'} size='sm'>
                     <ShareIcon className="w-4 h-4" />
                     Share</Button>
-                <Button variant={'sparky'} size='sm'>
-                    <ThumbsDown className="w-4 h-4" />
-                    Not Helpful</Button>
                 <Button
+                    onClick={() => {
+                        handleNotHelpful()
+                    }}
+                    variant={'sparky'} size='sm'>
+                    <ThumbsDown className={cn("w-4 h-4", {
+                        'text-red-500': sparkyMessage?.notHelpful
+                    })} />
+                    Not Helpful
+                </Button>
+                <Button
+                    disabled={sparkyMessage?.notHelpful}
                     onClick={() => {
                         handleConvertToCE()
                     }}

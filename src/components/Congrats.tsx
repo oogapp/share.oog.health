@@ -1,11 +1,5 @@
 'use client'
-import { Button } from '@/components/ui/button';
-import {
-    Drawer,
-    DrawerContentWithoutOverlay
-} from "@/components/ui/drawer";
 import * as animationData from '@/lib/ce-earned-pillow.json';
-import Link from 'next/link';
 import { useState } from 'react';
 import Lottie from 'react-lottie';
 import 'stream-chat-react/dist/css/v2/index.css';
@@ -26,7 +20,7 @@ export default function Congrats() {
             </div>}
 
 
-            <Drawer open={showAnimation}>
+            {/*<Drawer open={showAnimation}>
                 <DrawerContentWithoutOverlay>
                     <div className="p-5 flex flex-col space-y-8">
                         <h1 className="text-2xl font-bold text-center">Congratulations!</h1>
@@ -40,7 +34,7 @@ export default function Congrats() {
                         </div>
                     </div>
                 </DrawerContentWithoutOverlay>
-            </Drawer>
+            </Drawer>*/}
         </div>
     )
 }

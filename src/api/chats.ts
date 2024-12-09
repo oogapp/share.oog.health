@@ -12,6 +12,7 @@ const GetMessage = graphql(`
       conversation {
         id
       }
+      notHelpful
       references {
         citationKey
         sourceTexts
@@ -38,6 +39,7 @@ query SparkyMessages($where: SparkyMessageWhereInput!) {
       node {
         id
         body
+        notHelpful
         conversation {
           id
         }
@@ -71,6 +73,7 @@ query SparkyConversation($id: ID!) {
       createdAt
       messages {
         body
+        notHelpful
       }
       targetConversation {
         id
@@ -92,6 +95,7 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
         createdAt
       	messages {
           body
+          notHelpful
         }
       }
   	}
@@ -130,6 +134,12 @@ const ReflectOnConversation = graphql(`
   reflectOnConversation(conversationId: $conversationId) {
     id
   }
+}
+`)
+
+const FlagMessageAsNotHelpful = graphql(`
+  mutation FlagMessageNotHelpful($messageId: ID!) {
+  flagMessageNotHelpful(messageId: $messageId)
 }
 `)
 
@@ -215,6 +225,20 @@ async function reflectOnConversation(conversationId: string): Promise<void> {
     });
 }
 
+async function flagMessageAsNotHelpful(messageId: string): Promise<void> {
+    await client.request(FlagMessageAsNotHelpful.toString(), {
+        messageId: messageId
+    });
+}
+
 const getChatsCached = cache(getChats);
-export { adminCreateChat, adminCreateChatFromConversation, createChat, getChatByToken, getChats, getMessage, getMessageByStreamID, reflectOnConversation };
+export {
+  adminCreateChat,
+  adminCreateChatFromConversation,
+  createChat, flagMessageAsNotHelpful, getChatByToken,
+  getChats,
+  getMessage,
+  getMessageByStreamID,
+  reflectOnConversation
+};
 
