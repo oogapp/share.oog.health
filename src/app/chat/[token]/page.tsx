@@ -5,7 +5,6 @@ import 'stream-chat-react/dist/css/v2/index.css';
 export default async function ChatDetail({ params }: { params: { token: string } }) {
     let { token } = params
     let user = await currentUser()
-    console.log("User: ", user)
 
     return (
         <div className='h-dvh'>

@@ -156,7 +156,7 @@ const FlagMessageAsNotHelpful = graphql(`
 
 
 function getClient() {
-  let bearerToken = cookies().get('token')?.value
+  let bearerToken = cookies().get('bearerToken')?.value
   if(!bearerToken) {
     console.log("No token found in cookies, using default token")
     bearerToken = "K16tnqpqTtUTEjoqaKWwNLmMTd4Gy6jR"
