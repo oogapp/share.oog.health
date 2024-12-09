@@ -22313,6 +22313,11 @@ export type WorkExperienceWhereInput = {
   titleNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, streamToken: string, firstName?: string | null, lastName?: string | null } };
+
 export type SparkyMessageQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -22414,6 +22419,16 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const CurrentUserDocument = new TypedDocumentString(`
+    query CurrentUser {
+  currentUser {
+    id
+    streamToken
+    firstName
+    lastName
+  }
+}
+    `) as unknown as TypedDocumentString<CurrentUserQuery, CurrentUserQueryVariables>;
 export const SparkyMessageDocument = new TypedDocumentString(`
     query SparkyMessage($id: ID!) {
   node(id: $id) {

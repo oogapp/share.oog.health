@@ -15,6 +15,7 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
+    "\n  query CurrentUser {\n  currentUser {\n    id\n    streamToken\n    firstName\n    lastName\n  }\n}\n": types.CurrentUserDocument,
     "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      conversation {\n        id\n      }\n      notHelpful\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessageDocument,
     "\nquery SparkyMessages($where: SparkyMessageWhereInput!) {\n  sparkyMessages(where: $where) {\n    edges {\n      node {\n        id\n        body\n        notHelpful\n        conversation {\n          id\n        }\n        references {\n          citationKey\n          sourceTexts\n          referenceText\n          referenceDetail {\n            doi\n            url\n            title\n            journalName\n            authorsString\n            publicationDate\n            publicationInfoString\n          }\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessagesDocument,
     "\nquery SparkyConversation($id: ID!) {\n  node(id: $id) {\n    ... on SparkyConversation {\n      id\n      token\n      model\n      createdAt\n      messages {\n        body\n        notHelpful\n      }\n      targetConversation {\n        id\n        token\n      }\n    }\n  }\n}\n": types.SparkyConversationDocument,
@@ -29,6 +30,10 @@ const documents = {
     "\nquery User($id: ID!) {\n  node(id: $id) {\n    __typename\n    ... on User {\n      id\n      firstName\n      lastName\n      credential\n      npiTaxonomyCode\n      npiTaxonomyDescription\n      profileImage {\n        id\n        url\n        width\n        height\n      }\n    }\n  }\n}\n": types.UserDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query CurrentUser {\n  currentUser {\n    id\n    streamToken\n    firstName\n    lastName\n  }\n}\n"): typeof import('./graphql').CurrentUserDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

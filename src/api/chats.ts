@@ -1,9 +1,20 @@
 'use server'
 import { graphql } from "@/gql";
-import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery, SparkyMessagesQuery, SparkyMessageWhereInput } from "@/gql/graphql";
+import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, CurrentUserQuery, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery, SparkyMessagesQuery, SparkyMessageWhereInput, User } from "@/gql/graphql";
 import { GraphQLClient } from "graphql-request";
 import { cookies } from "next/headers";
 import { cache } from "react";
+
+const CurrentUser = graphql(`
+  query CurrentUser {
+  currentUser {
+    id
+    streamToken
+    firstName
+    lastName
+  }
+}
+`)
 
 const GetMessage = graphql(`
   query SparkyMessage($id: ID!) {
@@ -143,15 +154,23 @@ const FlagMessageAsNotHelpful = graphql(`
 }
 `)
 
-const client = new GraphQLClient(process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT!,{
+
+function getClient() {
+  let bearerToken = cookies().get('token')?.value
+  if(!bearerToken) {
+    console.log("No token found in cookies, using default token")
+    bearerToken = "K16tnqpqTtUTEjoqaKWwNLmMTd4Gy6jR"
+  }
+  return new GraphQLClient(process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT!,{
     fetch,
     headers: {
-        authorization: "Bearer K16tnqpqTtUTEjoqaKWwNLmMTd4Gy6jR"
+        authorization: "Bearer " + bearerToken
     }
-})
+  })
+}
 
 async function createChat(postId: string): Promise<String> {
-    let resp: AdminCreateConversationFromPostMutation = await client.request(CreateConversation.toString(), {
+    let resp: AdminCreateConversationFromPostMutation = await getClient().request(CreateConversation.toString(), {
         postId: postId,
         configId: "1"
     });
@@ -159,7 +178,7 @@ async function createChat(postId: string): Promise<String> {
 }
 
 async function adminCreateChat(model: string): Promise<String> {
-    let resp: AdminCreateConversationMutation = await client.request(AdminCreateConversation.toString(), {
+    let resp: AdminCreateConversationMutation = await getClient().request(AdminCreateConversation.toString(), {
         model: model,
         userID: "8589934649"
     });
@@ -167,14 +186,14 @@ async function adminCreateChat(model: string): Promise<String> {
 }
 
 async function adminCreateChatFromConversation(conversationId: string): Promise<String> {
-    let resp: AdminCreateConversationFromConversationMutation = await client.request(AdminCreateConversationFromConversation.toString(), {
+    let resp: AdminCreateConversationFromConversationMutation = await getClient().request(AdminCreateConversationFromConversation.toString(), {
         conversationId: conversationId
     });
     return resp.adminCreateConversationFromConversation.token!
 }
 
 async function getMessage(id: string): Promise<SparkyMessage> {
-    let resp:SparkyMessageQuery = await client.request(GetMessage.toString(), {
+    let resp:SparkyMessageQuery = await getClient().request(GetMessage.toString(), {
         id: id
     });
     return resp.node as SparkyMessage;
@@ -191,7 +210,7 @@ async function getChats(postId?:string): Promise<SparkyConversation[]> {
     where.hasPostWith= [{"id": postId}]
   }
 
-  let resp: SparkyConversationsQuery = await client.request(GetConversations.toString(), {
+  let resp: SparkyConversationsQuery = await getClient().request(GetConversations.toString(), {
     where: where,
   });
   return resp.sparkyConversations.edges?.map(edge=>edge?.node) as SparkyConversation[];
@@ -202,7 +221,7 @@ async function getChatByToken(token: string): Promise<SparkyConversation> {
     token: token
   } as SparkyConversationWhereInput
 
-  let resp: SparkyConversationsQuery = await client.request(GetConversations.toString(), {
+  let resp: SparkyConversationsQuery = await getClient().request(GetConversations.toString(), {
     where: where,
   });
   return resp.sparkyConversations.edges?.map(edge=>edge?.node)[0] as SparkyConversation;
@@ -213,29 +232,34 @@ async function getMessageByStreamID(streamID: string): Promise<SparkyMessage> {
     streamMessageID: streamID
   } as SparkyMessageWhereInput
 
-  let resp: SparkyMessagesQuery = await client.request(GetMessages.toString(), {
+  let resp: SparkyMessagesQuery = await getClient().request(GetMessages.toString(), {
     where: where,
   });
   return resp.sparkyMessages.edges?.map(edge=>edge?.node)[0] as SparkyMessage;
 }
 
 async function reflectOnConversation(conversationId: string): Promise<void> {
-    await client.request(ReflectOnConversation.toString(), {
+    await getClient().request(ReflectOnConversation.toString(), {
         conversationId: conversationId
     });
 }
 
 async function flagMessageAsNotHelpful(messageId: string): Promise<void> {
-    await client.request(FlagMessageAsNotHelpful.toString(), {
+    await getClient().request(FlagMessageAsNotHelpful.toString(), {
         messageId: messageId
     });
+}
+
+async function currentUser():Promise<User> {
+  let resp:CurrentUserQuery = await getClient().request(CurrentUser.toString())
+  return resp?.currentUser as User
 }
 
 const getChatsCached = cache(getChats);
 export {
   adminCreateChat,
   adminCreateChatFromConversation,
-  createChat, flagMessageAsNotHelpful, getChatByToken,
+  createChat, currentUser, flagMessageAsNotHelpful, getChatByToken,
   getChats,
   getMessage,
   getMessageByStreamID,
