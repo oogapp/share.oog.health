@@ -36,8 +36,6 @@ export const CustomMessageStatus = () => {
     const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
     const [showAllCitations, setShowAllCitations] = useState(false)
 
-    console.log("CustomMessageStatus.message=", message)
-
     async function loadCitations() {
         try {
             setCitationsLoading(true)
@@ -63,7 +61,6 @@ export const CustomMessageStatus = () => {
     useEffect(() => {
         if (citationsLoaded || citationsLoading) return
         if (message) {
-            console.log("message=", message)
             loadCitations()
         }
     }, [message, citationsLoaded, citationsLoading])

@@ -112,8 +112,6 @@ const MessageSimpleWithContext = <
         },
     );
 
-    console.log("message.id", message.id, message.user)
-
     return (
         <>
             {
@@ -165,7 +163,7 @@ const MessageSimpleWithContext = <
                         />
                     )}
                     {showReferences && (
-                        <div className='str-chat__message-metadata'>
+                        <div className='str-chat__message-metadata min-h-96'>
                             <CustomMessageStatus />
                         </div>
                     )}

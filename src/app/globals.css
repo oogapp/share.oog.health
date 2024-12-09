@@ -178,3 +178,11 @@
 .str-chat__message--system {
   @apply my-5;
 }
+
+.str-chat__message-input {
+  background: none !important;
+}
+
+.str-chat__empty-channel {
+  display: none !important;
+}

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DefaultStreamChatGenerics, useChannelPreviewInfo, useChannelStateContext } from "stream-chat-react";
-import { Button } from "./ui/button";
 
 
 function getChatTypeName(model: string) {
@@ -13,7 +12,7 @@ function getChatTypeName(model: string) {
         case "Perplexity":
             return "A"
         case "OpenEvidence":
-            return "B"
+            return "Medical Search"
         case "ChatGpt":
             return "C"
         case "Reflection":
@@ -50,7 +49,7 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
 
     return (
-        <div className="p-3 bg-gray-900 flex items-center">
+        <div className="p-3 bg-black flex items-center">
             <div className="mr-3">
                 <Link href={`/chat`} className="">
                     <ChevronLeft className="w-6 h-6" />
@@ -59,9 +58,7 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
             <div className="font-bold">{title}</div>
             <div className="ml-auto">
-                {(conversation?.model != "Reflection" && totalMessages > 1) && <Button disabled={loading} onClick={handleCreateChat}>
-                    Earn CE
-                </Button>}
+
             </div>
         </div>
     )
