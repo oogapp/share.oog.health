@@ -9,6 +9,7 @@ import {
     DrawerContent
 } from "@/components/ui/drawer";
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
 import Link from 'next/link';
 import { useEffect, useLayoutEffect, useState } from 'react';
@@ -177,8 +178,31 @@ function AuthenticatedApp({ userId, token, channelId }: { userId: string, token:
         }
     }, [client]);
 
-    if (!client) return <div>loading...</div>
-
+    if (!client) {
+        // generate a skeleton chat/avatar list using the Skeleton component
+        return (
+            <div className='h-dvh p-5 space-y-8'>
+                <div className="flex space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-32 w-[250px]" />
+                    </div>
+                </div>
+                <div className="flex space-x-4">
+                    <div className="space-y-2">
+                        <Skeleton className="h-32 w-[250px]" />
+                    </div>
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                </div>
+                <div className="flex space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-32 w-[250px]" />
+                    </div>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className='h-dvh'>
             {showAnimation && <Congrats />}
