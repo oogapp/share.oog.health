@@ -75,20 +75,40 @@ function SparkyThinking() {
     )
 }
 
+function EmptyStateIndicator() {
+    return (
+        <div className="space-y-2 p-5">
+            <img src="/oog_brain.svg" className="h-32 mx-auto" />
+            <div className="text-3xl font-title">Welcome! </div>
+            <div className="space-y-4">
+                <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
+                <p>You can also earn Continuing Education (CE) credits as you learn.</p>
+                <p>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</p>
+            </div>
+        </div>
+    )
+}
+
 const customRenderMessages: MessageRenderer<DefaultStreamChatGenerics> = (options) => {
     const elements = defaultRenderMessages(options);
+    if (elements.length == 0) {
+        elements.push(<EmptyStateIndicator key='empty-indicator' />);
+    }
     elements.push(<SparkyThinking key={'sparky_thinking'} />);
     return elements;
 };
 
 const CustomMessageList = () => (
-    <MessageList
-        disableDateSeparator={true}
-        hideNewMessageSeparator={true}
-        // @ts-ignore
-        renderText={customRenderText}
-        Message={MessageSimple}
-        renderMessages={customRenderMessages} />
+    <>
+        <MessageList
+            disableDateSeparator={true}
+            hideNewMessageSeparator={true}
+            // @ts-ignore
+            renderText={customRenderText}
+            Message={MessageSimple}
+            renderMessages={customRenderMessages} >
+        </MessageList>
+    </>
 );
 
 export default function AuthenticatedChat({ userId, token, channelId }: { userId: string, token: string, channelId: string }) {
@@ -223,7 +243,7 @@ export default function AuthenticatedChat({ userId, token, channelId }: { userId
                     TypingIndicator={CustomTypingIndicator}
                     channel={channel}>
                     <Window>
-                        <div className=''>
+                        <div className='hidden'>
                             <ChatChannelHeader conversation={chat!} />
                         </div>
                         <CustomMessageList
