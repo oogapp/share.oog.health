@@ -150,7 +150,7 @@ function getEnvFromCookies() {
   let env = cookies().get('environment')?.value
   if(!env) {
     console.log("No environment found in cookies, using default environment")
-    env = "staging"
+    env = "production"
   }
   if(env != "production" && env != "staging") {
     console.log("Invalid environment found in cookies, using default environment")
