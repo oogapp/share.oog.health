@@ -28,14 +28,14 @@ export default function PostChat({ params }: { params: { id: string } }) {
 
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 py-4">
 
             <div className="px-2 py-1">
                 <CreateChatButtons />
             </div>
 
             <div className="py-1">
-                <div className="font-bold text-white px-2">Previous Chats</div>
+                <div className="font-bold text-white px-2">Previous Searches</div>
 
                 {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">No chats yet</div>}
 
@@ -53,19 +53,11 @@ export default function PostChat({ params }: { params: { id: string } }) {
                         return (
                             <Link href={`/chat/${chat.token}`} className="text-white flex text-sm block py-3 relative" key={chat.id}>
                                 <div className="px-2">
-                                    <div className="flex items-center gap-x-2">
+                                    <div className="flex items-center gap-x-2 hidden">
                                         <div className="text-gray-400">{dateHuman}</div>
-                                        <div className={cn("", {
-                                            "text-blue-200 bg-blue-900 rounded-md px-1": model == "Perplexity",
-                                            "text-blue-300 bg-blue-900 rounded-md px-1": model == "OpenEvidence",
-                                            "text-blue-100 bg-blue-900 rounded-md px-1": model == "ChatGPT",
-                                            "text-blue-50 bg-blue-900 rounded-md px-1": model == "Reflection",
-                                        })}>
-                                            {getChatTypeName(model!)}
-                                        </div>
                                     </div>
                                     <div className={cn("line-clamp-3", {
-                                        "text-gray-300": lastMessage == "No messages yet"
+                                        "text-gray-400": lastMessage == "No messages yet"
                                     })}>{lastMessage}</div>
                                 </div>
                                 <div className="ml-auto flex items-center justify-center">

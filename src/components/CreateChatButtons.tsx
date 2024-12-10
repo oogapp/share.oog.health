@@ -20,10 +20,7 @@ export default function CreateChatButtons() {
 
     return (
         <div className="space-y-4">
-            <div className=" text-white text-center text-xs">
-                Chat with...
-            </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div>
                 {/*<Button disabled={loading} onClick={() => {
                     handleCreateChat(ConversationModel.Perplexity)
                 }}>
@@ -35,7 +32,7 @@ export default function CreateChatButtons() {
                         handleCreateChat(ConversationModel.OpenEvidence)
                     }
                 }>
-                    Medical Search
+                    Ask Anything
                 </Button>
 
                 {/*<Button disabled={loading} onClick={

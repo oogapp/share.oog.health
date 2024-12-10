@@ -159,7 +159,7 @@ function getClient() {
   let bearerToken = cookies().get('auth-token')?.value
   if(!bearerToken) {
     console.log("No token found in cookies, using default token")
-    bearerToken = "K16tnqpqTtUTEjoqaKWwNLmMTd4Gy6jR"
+    bearerToken = "aGIiI4EBoYdci37upZJWQQU-VUSY-zb7"
   }
   return new GraphQLClient(process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT!,{
     fetch,

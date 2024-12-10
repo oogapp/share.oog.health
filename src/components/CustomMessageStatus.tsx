@@ -5,11 +5,9 @@ import {
     Drawer,
     DrawerContent
 } from "@/components/ui/drawer";
-import { Label } from '@/components/ui/label';
 import { OpenEvidenceReference, SparkyMessage } from '@/gql/graphql';
 import { cn } from '@/lib/utils';
 import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
     renderText,
@@ -17,6 +15,7 @@ import {
     useTranslationContext
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
+import Citation from './Citation';
 
 
 const customRenderText = (text: string) => {
@@ -154,27 +153,7 @@ export const CustomMessageStatus = () => {
                 onOpenChange={(open) => setShowCitation(open)}
                 dismissible={true}>
                 <DrawerContent>
-                    {citation && <div className="flex p-3">
-                        <div className="border-b border-gray-600 space-y-1">
-                            <div>
-                                <Link className="underline font-bold" target="new" href={citation.referenceDetail.url}>
-                                    {citation?.referenceDetail?.title}
-                                </Link>
-                            </div>
-                            <div className="text-sm">
-                                {citation?.referenceDetail?.authorsString}
-                            </div>
-                            <div className="text-sm ">
-                                {citation?.referenceDetail?.publicationInfoString}
-                            </div>
-                            <div>
-                                <Label>Source Texts</Label>
-                                <div className="text-sm overflow-x-scroll h-64">
-                                    {citation.sourceTexts}
-                                </div>
-                            </div>
-                        </div>
-                    </div>}
+                    <Citation citation={citation!} />
                 </DrawerContent>
             </Drawer>
         </div>
