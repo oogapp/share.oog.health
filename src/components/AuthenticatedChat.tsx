@@ -111,7 +111,7 @@ const CustomMessageList = () => (
     </>
 );
 
-export default function AuthenticatedChat({ userId, token, channelId }: { userId: string, token: string, channelId: string }) {
+export default function AuthenticatedChat({ userId, token, channelId, apiKey }: { userId: string, token: string, channelId: string, apiKey: string }) {
 
     const [chat, setChat] = useState<SparkyConversation | null>(null);
     const [showAnimation, setShowAnimation] = useState(false)
@@ -165,7 +165,7 @@ export default function AuthenticatedChat({ userId, token, channelId }: { userId
 
 
     const client = useCreateChatClient({
-        apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
+        apiKey: apiKey,
         tokenOrProvider: token,
         userData: { id: userId },
     });

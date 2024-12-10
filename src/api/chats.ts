@@ -146,18 +146,23 @@ const FlagMessageAsNotHelpful = graphql(`
 }
 `)
 
-
-function getClient() {
-  let bearerToken = cookies().get('auth-token')?.value
+function getEnvFromCookies() {
   let env = cookies().get('environment')?.value
   if(!env) {
     console.log("No environment found in cookies, using default environment")
-    env = "production"
+    env = "staging"
   }
   if(env != "production" && env != "staging") {
     console.log("Invalid environment found in cookies, using default environment")
     env = "production"
   }
+  return env
+}
+
+
+function getClient() {
+  let bearerToken = cookies().get('auth-token')?.value
+  let env = getEnvFromCookies()
   if(!bearerToken) {
     console.log("No token found in cookies, using default token")
     bearerToken = "aGIiI4EBoYdci37upZJWQQU-VUSY-zb7"
@@ -258,8 +263,7 @@ const getChatsCached = cache(getChats);
 export {
   adminCreateChatFromConversation,
   createChat, currentUser, flagMessageAsNotHelpful, getChatByToken,
-  getChats,
-  getMessage,
+  getChats, getEnvFromCookies, getMessage,
   getMessageByStreamID,
   reflectOnConversation
 };
