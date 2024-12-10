@@ -28,16 +28,24 @@ export default function PostChat({ params }: { params: { id: string } }) {
 
 
     return (
-        <div className="space-y-4 py-4">
+        <div className="space-y-4">
 
-            <div className="px-2 py-1 sticky top-0 bg-black z-10">
+            <div className="p-3 sticky top-0 z-10 space-y-4">
+                <div className="space-y-2">
+                    <div className="text-xl">Welcome! </div>
+                    <div className="">Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references. </div>
+                    <div>You can also earn Continuing Education (CE) credits as you learn.</div>
+                    <div>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</div>
+                </div>
                 <CreateChatButtons />
             </div>
 
-            <div className="py-1">
-                <div className="font-bold text-white px-2">Previous Searches</div>
+            <div className="py-1 hidden">
+                <div className="font-bold text-white px-2">Previous Questions</div>
 
-                {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">No chats yet</div>}
+                {chats.length == 0 && <div className="text-white text-sm block py-1 border-b border-gray-600 my-3">
+                    You haven&apos;t asked any questions yet.
+                </div>}
 
                 <div className="divide-y divide-gray-600">
                     {chats?.map((chat: SparkyConversation) => {

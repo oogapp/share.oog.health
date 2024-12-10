@@ -1,9 +1,21 @@
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import localFont from 'next/font/local';
+
+// Font files can be colocated inside of `app`
+const marsden = localFont({
+  variable: '--font-marsden',
+  src: [
+    {
+      path: './fonts/Marsden-Nr-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    }
+  ]
+})
+
 
 export const metadata: Metadata = {
 
@@ -21,7 +33,7 @@ export default function RootLayout({
       <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
       <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
       <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-      <body className="h-full bg-black">
+      <body className={`h-full bg-black`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

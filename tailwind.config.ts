@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ['SF Pro Display']
+		},
   		backgroundImage: {
   			'stiches': 'url("/stiches.svg")',
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
