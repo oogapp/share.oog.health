@@ -79,7 +79,7 @@ function EmptyStateIndicator() {
     return (
         <div className="space-y-2 p-5">
             <img src="/oog_brain.svg" className="h-32 mx-auto" />
-            <div className="text-3xl font-title">Welcome! </div>
+            <div className="text-3xl font-title">Welcome to OOGpt! </div>
             <div className="space-y-4">
                 <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
                 <p>You can also earn Continuing Education (CE) credits as you learn.</p>
