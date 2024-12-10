@@ -32,7 +32,7 @@ export default function PostChat({ params }: { params: { id: string } }) {
 
             <div className="p-3 sticky top-0 z-10 space-y-4">
                 <div className="space-y-2">
-                    <div className="text-xl">Welcome! </div>
+                    <div className="text-3xl font-title">Welcome! </div>
                     <div className="">Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references. </div>
                     <div>You can also earn Continuing Education (CE) credits as you learn.</div>
                     <div>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</div>
