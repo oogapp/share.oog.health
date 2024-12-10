@@ -149,11 +149,26 @@ const FlagMessageAsNotHelpful = graphql(`
 
 function getClient() {
   let bearerToken = cookies().get('auth-token')?.value
+  let env = cookies().get('environment')?.value
+  if(!env) {
+    console.log("No environment found in cookies, using default environment")
+    env = "production"
+  }
+  if(env != "production" && env != "staging") {
+    console.log("Invalid environment found in cookies, using default environment")
+    env = "production"
+  }
   if(!bearerToken) {
     console.log("No token found in cookies, using default token")
     bearerToken = "aGIiI4EBoYdci37upZJWQQU-VUSY-zb7"
   }
-  return new GraphQLClient(process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT!,{
+
+  let endpoint = process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT
+  if(env == "staging") {
+    endpoint = process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT_STAGING
+  }
+  console.log("Using endpoint: " + endpoint)
+  return new GraphQLClient(endpoint!,{
     fetch,
     headers: {
         authorization: "Bearer " + bearerToken
