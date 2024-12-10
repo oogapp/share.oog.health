@@ -30,12 +30,15 @@ export default function PostChat({ params }: { params: { id: string } }) {
     return (
         <div className="space-y-4">
 
-            <div className="p-3 sticky top-0 z-10 space-y-4">
+            <div className="p-3 sticky flex flex-col justify-between top-0 z-10 space-y-4 h-screen">
                 <div className="space-y-2">
+                    <img src="/oog_brain.svg" className="h-32 mx-auto" />
                     <div className="text-3xl font-title">Welcome! </div>
-                    <div className="">Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references. </div>
-                    <div>You can also earn Continuing Education (CE) credits as you learn.</div>
-                    <div>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</div>
+                    <div className="space-y-4">
+                        <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
+                        <p>You can also earn Continuing Education (CE) credits as you learn.</p>
+                        <p>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</p>
+                    </div>
                 </div>
                 <CreateChatButtons />
             </div>
