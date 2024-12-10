@@ -22346,14 +22346,6 @@ export type SparkyConversationsQueryVariables = Exact<{
 
 export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string, notHelpful: boolean }> | null } | null } | null> | null } };
 
-export type AdminCreateConversationFromPostMutationVariables = Exact<{
-  postId: Scalars['ID']['input'];
-  configId?: InputMaybe<Scalars['ID']['input']>;
-}>;
-
-
-export type AdminCreateConversationFromPostMutation = { __typename?: 'Mutation', adminCreateConversationFromPost: { __typename?: 'SparkyConversation', id: string, token?: string | null } };
-
 export type AdminCreateConversationFromConversationMutationVariables = Exact<{
   conversationId: Scalars['ID']['input'];
 }>;
@@ -22361,13 +22353,12 @@ export type AdminCreateConversationFromConversationMutationVariables = Exact<{
 
 export type AdminCreateConversationFromConversationMutation = { __typename?: 'Mutation', adminCreateConversationFromConversation: { __typename?: 'SparkyConversation', id: string, token?: string | null } };
 
-export type AdminCreateConversationMutationVariables = Exact<{
+export type CreateConversationMutationVariables = Exact<{
   model: ConversationModel;
-  userID: Scalars['ID']['input'];
 }>;
 
 
-export type AdminCreateConversationMutation = { __typename?: 'Mutation', adminCreateConversation: { __typename?: 'SparkyConversation', token?: string | null } };
+export type CreateConversationMutation = { __typename?: 'Mutation', createConversation: { __typename?: 'SparkyConversation', token?: string | null } };
 
 export type ReflectOnConversationMutationVariables = Exact<{
   conversationId: Scalars['ID']['input'];
@@ -22523,14 +22514,6 @@ export const SparkyConversationsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<SparkyConversationsQuery, SparkyConversationsQueryVariables>;
-export const AdminCreateConversationFromPostDocument = new TypedDocumentString(`
-    mutation AdminCreateConversationFromPost($postId: ID!, $configId: ID) {
-  adminCreateConversationFromPost(postId: $postId, configID: $configId) {
-    id
-    token
-  }
-}
-    `) as unknown as TypedDocumentString<AdminCreateConversationFromPostMutation, AdminCreateConversationFromPostMutationVariables>;
 export const AdminCreateConversationFromConversationDocument = new TypedDocumentString(`
     mutation AdminCreateConversationFromConversation($conversationId: ID!) {
   adminCreateConversationFromConversation(conversationId: $conversationId) {
@@ -22539,13 +22522,13 @@ export const AdminCreateConversationFromConversationDocument = new TypedDocument
   }
 }
     `) as unknown as TypedDocumentString<AdminCreateConversationFromConversationMutation, AdminCreateConversationFromConversationMutationVariables>;
-export const AdminCreateConversationDocument = new TypedDocumentString(`
-    mutation AdminCreateConversation($model: ConversationModel!, $userID: ID!) {
-  adminCreateConversation(model: $model, userID: $userID) {
+export const CreateConversationDocument = new TypedDocumentString(`
+    mutation CreateConversation($model: ConversationModel!) {
+  createConversation(model: $model) {
     token
   }
 }
-    `) as unknown as TypedDocumentString<AdminCreateConversationMutation, AdminCreateConversationMutationVariables>;
+    `) as unknown as TypedDocumentString<CreateConversationMutation, CreateConversationMutationVariables>;
 export const ReflectOnConversationDocument = new TypedDocumentString(`
     mutation ReflectOnConversation($conversationId: ID!) {
   reflectOnConversation(conversationId: $conversationId) {

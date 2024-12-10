@@ -1,6 +1,6 @@
 'use server'
 import { graphql } from "@/gql";
-import { AdminCreateConversationFromConversationMutation, AdminCreateConversationFromPostMutation, AdminCreateConversationMutation, CurrentUserQuery, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery, SparkyMessagesQuery, SparkyMessageWhereInput, User } from "@/gql/graphql";
+import { AdminCreateConversationFromConversationMutation, CreateConversationMutation, CurrentUserQuery, SparkyConversation, SparkyConversationsQuery, SparkyConversationWhereInput, SparkyMessage, SparkyMessageQuery, SparkyMessagesQuery, SparkyMessageWhereInput, User } from "@/gql/graphql";
 import { GraphQLClient } from "graphql-request";
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -114,14 +114,6 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
 }
 `)
 
-const CreateConversation = graphql(`
-mutation AdminCreateConversationFromPost($postId: ID!, $configId: ID) {
-  adminCreateConversationFromPost(postId: $postId, configID: $configId) {
-    id
-    token
-  }
-}
-`)
 
 const AdminCreateConversationFromConversation = graphql(`
 mutation AdminCreateConversationFromConversation($conversationId: ID!) {
@@ -132,9 +124,9 @@ mutation AdminCreateConversationFromConversation($conversationId: ID!) {
 }
 `)
 
-const AdminCreateConversation = graphql(`
-  mutation AdminCreateConversation($model: ConversationModel!, $userID: ID!) {
-  adminCreateConversation(model: $model, userID: $userID) {
+const CreateConversation = graphql(`
+  mutation CreateConversation($model: ConversationModel!) {
+  createConversation(model: $model) {
     token
   }
 }
@@ -169,20 +161,12 @@ function getClient() {
   })
 }
 
-async function createChat(postId: string): Promise<String> {
-    let resp: AdminCreateConversationFromPostMutation = await getClient().request(CreateConversation.toString(), {
-        postId: postId,
-        configId: "1"
-    });
-    return resp.adminCreateConversationFromPost.token!
-}
 
-async function adminCreateChat(model: string): Promise<String> {
-    let resp: AdminCreateConversationMutation = await getClient().request(AdminCreateConversation.toString(), {
+async function createChat(model: string): Promise<String> {
+    let resp: CreateConversationMutation = await getClient().request(CreateConversation.toString(), {
         model: model,
-        userID: "8589934649"
     });
-    return resp.adminCreateConversation.token!
+    return resp.createConversation.token!
 }
 
 async function adminCreateChatFromConversation(conversationId: string): Promise<String> {
@@ -257,7 +241,6 @@ async function currentUser():Promise<User> {
 
 const getChatsCached = cache(getChats);
 export {
-  adminCreateChat,
   adminCreateChatFromConversation,
   createChat, currentUser, flagMessageAsNotHelpful, getChatByToken,
   getChats,

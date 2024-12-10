@@ -30,7 +30,7 @@ export default function PostChat({ params }: { params: { id: string } }) {
     return (
         <div className="space-y-4 py-4">
 
-            <div className="px-2 py-1">
+            <div className="px-2 py-1 sticky top-0 bg-black z-10">
                 <CreateChatButtons />
             </div>
 

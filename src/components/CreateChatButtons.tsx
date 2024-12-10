@@ -1,5 +1,5 @@
 'use client'
-import { adminCreateChat } from "@/api/chats";
+import { createChat } from "@/api/chats";
 import { ConversationModel } from "@/gql/graphql";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,7 +13,7 @@ export default function CreateChatButtons() {
 
     async function handleCreateChat(model: ConversationModel) {
         setLoading(true);
-        let channelId = await adminCreateChat(model);
+        let channelId = await createChat(model);
         setLoading(false);
         router.push(`/chat/${channelId}`);
     }
