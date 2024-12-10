@@ -8,7 +8,7 @@ import {
 import { OpenEvidenceReference, SparkyMessage } from '@/gql/graphql';
 import { cn } from '@/lib/utils';
 import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
     renderText,
     useMessageContext,
@@ -35,6 +35,10 @@ export const CustomMessageStatus = () => {
     const { t } = useTranslationContext("CustomMessageStatus");
     const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
     const [showAllCitations, setShowAllCitations] = useState(false)
+
+    const totalCitations = useMemo(() => {
+        return citations?.length
+    }, [citations])
 
     async function loadCitations() {
         try {
@@ -101,7 +105,7 @@ export const CustomMessageStatus = () => {
                     <img src="/ce-bubble.png" className="w-6 h-6" />
                 </Button>
             </div>
-            <div className='space-y-4'>
+            {totalCitations > 0 && <div className='space-y-4'>
                 <div className='flex items-center text-white gap-x-2'>
                     <ListIcon className="w-4 h-4" />
                     <div className='text-xl'>References</div>
@@ -145,7 +149,7 @@ export const CustomMessageStatus = () => {
                     }
 
                 </div>
-            </div>
+            </div>}
 
 
             <Drawer
