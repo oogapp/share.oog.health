@@ -20,7 +20,7 @@ export default function Chat() {
 
     return (
         <div>
-            <div className="outline h-screen flex items-center justify-center">
+            <div className="h-screen flex items-center justify-center">
                 <img src="/oog_brain.svg" className="h-32 mx-auto animate-ping" />
             </div>
         </div>
