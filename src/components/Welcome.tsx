@@ -31,7 +31,6 @@ export default function Welcome() {
                 <div className="space-y-4">
                     <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
                     <p>You can also earn Continuing Education (CE) credits as you learn.</p>
-                    <p>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</p>
                 </div>
             </div>
 
