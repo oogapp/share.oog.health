@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import localFont from 'next/font/local';
@@ -15,6 +15,12 @@ const marsden = localFont({
   ]
 })
 
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: 'device-width',
+  maximumScale: 1,
+  minimumScale: 1,
+}
 
 export const metadata: Metadata = {
 
