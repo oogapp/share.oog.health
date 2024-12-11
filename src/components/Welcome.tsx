@@ -38,7 +38,8 @@ export default function Welcome() {
                     value={initialMessage}
                     onChange={(e) => setInitialMessage(e.target.value)}
                     placeholder="Ask anything" />
-                <Button disabled={loading} onClick={submit}>Ask</Button>
+
+                <Button disabled={loading || initialMessage == ""} onClick={submit}>Ask</Button>
             </div>
 
         </div>
