@@ -23,9 +23,11 @@ export default function Welcome() {
 
         <div className="space-y-6 p-5">
 
-            <div>
-                <img src="/oog_brain.svg" className="h-32 mx-auto" />
-                <div className="text-3xl font-title">Welcome to OOGpt! </div>
+            <div className="space-y-4">
+                <div className="flex items-center gap-x-4">
+                    <img src="/oog_brain.svg" className="h-12" />
+                    <div className="text-3xl font-title">Welcome to OOGpt! </div>
+                </div>
                 <div className="space-y-4">
                     <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
                     <p>You can also earn Continuing Education (CE) credits as you learn.</p>
