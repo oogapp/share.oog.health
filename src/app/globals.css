@@ -185,3 +185,11 @@
 
 .str-chat__empty-channel {
 }
+
+.str-chat__message--me .str-chat__message-inner {
+  margin-inline-start: 78px !important;
+}
+
+.str-chat__message--other .str-chat__message-inner {
+  margin-inline-end: 78px !important;
+}

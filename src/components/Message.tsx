@@ -83,11 +83,11 @@ const MessageSimpleWithContext = <
     let handleClick: (() => void) | undefined = undefined;
 
     if (allowRetry) {
-        handleClick = () => handleRetry(message);
+        //handleClick = () => handleRetry(message);
     } else if (isBounced) {
-        handleClick = () => setIsBounceDialogOpen(true);
+        //handleClick = () => setIsBounceDialogOpen(true);
     } else if (isEdited) {
-        handleClick = () => setEditedTimestampOpen((prev) => !prev);
+        //handleClick = () => setEditedTimestampOpen((prev) => !prev);
     }
 
     const rootClassName = clsx(
@@ -100,7 +100,7 @@ const MessageSimpleWithContext = <
         message.text ? 'str-chat__message--has-text' : 'has-no-text',
         {
             'str-chat__message--has-attachment': hasAttachment,
-            'str-chat__message--highlighted': highlighted,
+            //'str-chat__message--highlighted': highlighted,
             'str-chat__message--pinned pinned-message': message.pinned,
             'str-chat__message--with-reactions': hasReactions,
             'str-chat__message-send-can-be-retried':
@@ -134,10 +134,7 @@ const MessageSimpleWithContext = <
                         onClick={handleClick}
                         onKeyUp={handleClick}
                     >
-                        {/*<MessageActions />*/}
-                        <div className='str-chat__message-reactions-host'>
-                            {hasReactions && <ReactionsList reverse />}
-                        </div>
+
                         <div className={cn('str-chat__message-bubble', {
                             "!bg-transparent": message.is_medical_search,
                             'bg-stream-message-from-me': isMyMessage()
@@ -156,12 +153,7 @@ const MessageSimpleWithContext = <
                             <MessageErrorIcon />
                         </div>
                     </div>
-                    {showReplyCountButton && (
-                        <MessageRepliesCountButton
-                            onClick={handleOpenThread}
-                            reply_count={message.reply_count}
-                        />
-                    )}
+
                     {showReferences && (
                         <div className='str-chat__message-metadata min-h-96'>
                             <CustomMessageStatus />

@@ -103,6 +103,7 @@ const CustomMessageList = () => (
         <MessageList
             disableDateSeparator={true}
             hideNewMessageSeparator={true}
+            messageActions={[]}
             // @ts-ignore
             renderText={customRenderText}
             Message={MessageSimple}
@@ -239,22 +240,21 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
                 client={client}
                 initialNavOpen={false}
                 theme='str-chat__theme-dark'>
-                {channel && <Channel
-                    TypingIndicator={CustomTypingIndicator}
-                    channel={channel}>
-                    <Window>
-                        <div className='hidden'>
-                            <ChatChannelHeader conversation={chat!} />
-                        </div>
-                        <CustomMessageList
-
-
-                        />
-                        <MessageInput
-                            additionalTextareaProps={{ placeholder: 'Ask me anything' }}
-                            grow />
-                    </Window>
-                </Channel>}
+                {channel &&
+                    <Channel
+                        TypingIndicator={CustomTypingIndicator}
+                        channel={channel}>
+                        <Window>
+                            <div className='hidden'>
+                                <ChatChannelHeader conversation={chat!} />
+                            </div>
+                            <CustomMessageList />
+                            <MessageInput
+                                additionalTextareaProps={{ placeholder: 'Ask me anything' }}
+                                grow />
+                        </Window>
+                    </Channel>
+                }
             </Chat>
         </div>
     )
