@@ -109,6 +109,7 @@ const MessageSimpleWithContext = <
             'str-chat__virtual-message__wrapper--end': endOfGroup,
             'str-chat__virtual-message__wrapper--first': firstOfGroup,
             'str-chat__virtual-message__wrapper--group': groupedByUser,
+            'str-chat__is_medical_search': message.is_medical_search,
         },
     );
 

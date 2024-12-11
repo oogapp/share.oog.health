@@ -125,8 +125,8 @@ mutation AdminCreateConversationFromConversation($conversationId: ID!) {
 `)
 
 const CreateConversation = graphql(`
-  mutation CreateConversation($model: ConversationModel!) {
-  createConversation(model: $model) {
+  mutation CreateConversation($model: ConversationModel!,$initialMessage:String) {
+  createConversation(model: $model,initialMessage:$initialMessage) {
     token
   }
 }
@@ -182,9 +182,10 @@ function getClient() {
 }
 
 
-async function createChat(model: string): Promise<String> {
+async function createChat(model: string,initialMessage:string): Promise<String> {
     let resp: CreateConversationMutation = await getClient().request(CreateConversation.toString(), {
         model: model,
+        initialMessage:initialMessage
     });
     return resp.createConversation.token!
 }

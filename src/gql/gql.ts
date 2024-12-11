@@ -21,7 +21,7 @@ const documents = {
     "\nquery SparkyConversation($id: ID!) {\n  node(id: $id) {\n    ... on SparkyConversation {\n      id\n      token\n      model\n      createdAt\n      messages {\n        body\n        notHelpful\n      }\n      targetConversation {\n        id\n        token\n      }\n    }\n  }\n}\n": types.SparkyConversationDocument,
     "\nquery SparkyConversations($where: SparkyConversationWhereInput!) {\n  sparkyConversations(where: $where) {\n    edges {\n      node {\n        id\n        token\n        model\n        createdAt\n      \tmessages {\n          body\n          notHelpful\n        }\n      }\n  \t}\n  }\n}\n": types.SparkyConversationsDocument,
     "\nmutation AdminCreateConversationFromConversation($conversationId: ID!) {\n  adminCreateConversationFromConversation(conversationId: $conversationId) {\n    id\n    token\n  }\n}\n": types.AdminCreateConversationFromConversationDocument,
-    "\n  mutation CreateConversation($model: ConversationModel!) {\n  createConversation(model: $model) {\n    token\n  }\n}\n": types.CreateConversationDocument,
+    "\n  mutation CreateConversation($model: ConversationModel!,$initialMessage:String) {\n  createConversation(model: $model,initialMessage:$initialMessage) {\n    token\n  }\n}\n": types.CreateConversationDocument,
     "\n  mutation ReflectOnConversation($conversationId: ID!) {\n  reflectOnConversation(conversationId: $conversationId) {\n    id\n  }\n}\n": types.ReflectOnConversationDocument,
     "\n  mutation FlagMessageNotHelpful($messageId: ID!) {\n  flagMessageNotHelpful(messageId: $messageId)\n}\n": types.FlagMessageNotHelpfulDocument,
     "\nquery Post($id: ID!) {\n  node(id: $id) {\n    ... on Post {\n      id\n  type\n  title\n  createdAt\n  status\n  body\n  featured\n  insightsGeneratedAt\n  commentsDisabled\n  creditHours\n  topics {\n    id\n    name\n  }\n  topicClassifications {\n    id\n    modelVersion\n    topic {\n      id\n      name\n    }\n    active\n    suggested\n  }\n  audiences {\n    id\n    name\n  }\n  totalComments\n  totalLikes\n  totalBookmarks\n  termsPerMinute\n  author {\n    id\n    username\n    firstName\n    lastName\n    username\n    hasSubmittedDisclosure\n    hasDisclosuresNeedingReview\n    reflectionsOnAuthoredPostsDisabled\n    npiTaxonomyCode\n    npiTaxonomyDescription\n    credential\n    profileImage {\n      url\n    }\n  }\n  coverImage {\n    id\n    url\n  }\n  videos {\n    id\n    thumbnailURL\n    alternatePlaylists {\n      cdn\n      url\n    }\n    duration\n    width\n    height\n    hlsURL\n    insightsGeneratedAt\n    discussionPoints\n    terms\n    termFrequencies\n    termsPerMinute\n    wordcloud\n  }\n    }\n  }\n}\n": types.PostDocument,
@@ -56,7 +56,7 @@ export function graphql(source: "\nmutation AdminCreateConversationFromConversat
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateConversation($model: ConversationModel!) {\n  createConversation(model: $model) {\n    token\n  }\n}\n"): typeof import('./graphql').CreateConversationDocument;
+export function graphql(source: "\n  mutation CreateConversation($model: ConversationModel!,$initialMessage:String) {\n  createConversation(model: $model,initialMessage:$initialMessage) {\n    token\n  }\n}\n"): typeof import('./graphql').CreateConversationDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

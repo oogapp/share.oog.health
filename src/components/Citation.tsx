@@ -7,7 +7,7 @@ export default function Citation({ citation }: { citation: OpenEvidenceReference
     if (!citation) return null
     return (
         <div className="flex p-3">
-            <div className="border-b border-gray-600 space-y-2">
+            <div className="border-b border-gray-600 space-y-4">
                 <div className="text-lg">
                     {citation?.referenceDetail?.title}
                 </div>
@@ -18,9 +18,9 @@ export default function Citation({ citation }: { citation: OpenEvidenceReference
                     {citation?.referenceDetail?.publicationInfoString}
                 </div>
                 <div>
-                    <Button size='sm' asChild>
+                    <Button asChild>
                         <Link className="flex items-center" target="new" href={citation.referenceDetail.url}>
-                            View Source <ExternalLink className="w-4 h-4" />
+                            View Source <ExternalLink className="w-5 h-5" />
                         </Link>
                     </Button>
                 </div>

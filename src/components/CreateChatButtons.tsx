@@ -13,7 +13,7 @@ export default function CreateChatButtons() {
 
     async function handleCreateChat(model: ConversationModel) {
         setLoading(true);
-        let channelId = await createChat(model);
+        let channelId = await createChat(model, "");
         setLoading(false);
         router.push(`/chat/${channelId}`);
     }

@@ -11,7 +11,7 @@ export default function CreateChat({ postId }: { postId: string }) {
 
     async function handleCreateChat() {
         setLoading(true);
-        let token = await createChat(postId);
+        let token = await createChat(postId, "");
         setLoading(false);
         router.push(`/posts/${postId}/chat/${token}`);
     }

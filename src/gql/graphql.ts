@@ -7757,7 +7757,7 @@ export type Mutation = {
   createComment: Comment;
   /** Creates a new comment, and kicks off a reflection analysis in the background. Also creates a linked SparkyChat to track the conversation. */
   createCommentV2: Comment;
-  /** Creates a new sparky conversation using the given post id for context. */
+  /** Creates a new conversation with the specified model and an optional initial message. */
   createConversation: SparkyConversation;
   /** Creates a new sparky conversation using the given comment id (and parent post0 for context. */
   createConversationFromComment: SparkyConversation;
@@ -8358,6 +8358,7 @@ export type MutationCreateCommentV2Args = {
 
 
 export type MutationCreateConversationArgs = {
+  initialMessage?: InputMaybe<Scalars['String']['input']>;
   model: ConversationModel;
 };
 
@@ -22355,6 +22356,7 @@ export type AdminCreateConversationFromConversationMutation = { __typename?: 'Mu
 
 export type CreateConversationMutationVariables = Exact<{
   model: ConversationModel;
+  initialMessage?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -22523,8 +22525,8 @@ export const AdminCreateConversationFromConversationDocument = new TypedDocument
 }
     `) as unknown as TypedDocumentString<AdminCreateConversationFromConversationMutation, AdminCreateConversationFromConversationMutationVariables>;
 export const CreateConversationDocument = new TypedDocumentString(`
-    mutation CreateConversation($model: ConversationModel!) {
-  createConversation(model: $model) {
+    mutation CreateConversation($model: ConversationModel!, $initialMessage: String) {
+  createConversation(model: $model, initialMessage: $initialMessage) {
     token
   }
 }
