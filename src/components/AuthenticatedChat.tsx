@@ -91,9 +91,6 @@ function EmptyStateIndicator() {
 
 const customRenderMessages: MessageRenderer<DefaultStreamChatGenerics> = (options) => {
     const elements = defaultRenderMessages(options);
-    if (elements.length == 0) {
-        elements.push(<EmptyStateIndicator key='empty-indicator' />);
-    }
     elements.push(<SparkyThinking key={'sparky_thinking'} />);
     return elements;
 };

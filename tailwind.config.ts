@@ -10,7 +10,6 @@ const config: Config = {
   theme: {
   	extend: {
 		fontFamily: {
-			sans: ['SF Pro Display'],
 			title: ['var(--font-marsden)', 'SF Pro Display']
 		},
   		backgroundImage: {
