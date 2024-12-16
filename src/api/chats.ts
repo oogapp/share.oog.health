@@ -105,6 +105,7 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
         model
         createdAt
       	messages {
+          id
           body
           notHelpful
         }

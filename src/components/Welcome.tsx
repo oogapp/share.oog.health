@@ -4,6 +4,8 @@ import { createChat } from "@/api/chats";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConversationModel } from "@/gql/graphql";
+import { Clock } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -41,6 +43,13 @@ export default function Welcome() {
                     placeholder="Ask anything" />
 
                 <Button disabled={loading || initialMessage == ""} onClick={submit}>Ask</Button>
+
+                <Button className="flex items-center" asChild>
+                    <Link href="/history">
+                        <Clock className="h-6 w-6" />
+                        Previous Searches
+                    </Link>
+                </Button>
             </div>
 
         </div>
