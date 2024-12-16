@@ -87,6 +87,10 @@
   }
 }
 
+.str-chat__list {
+  overscroll-behavior: contain !important;
+}
+
 .str-chat__message-url-link {
   @apply !bg-brand/20 !text-brand mr-1 p-0.5 rounded-full text-xs min-w-4 max-w-6 h-4 inline-flex items-center justify-center;
 }

@@ -80,17 +80,17 @@ export const CustomMessageStatus = () => {
     }
     return (
         <div className='space-y-4 my-3 w-full border-t border-gray-600 w-full'>
-            <div className="mt-3 flex !gap-x-2">
+            <div className="mt-3 flex !gap-x-1">
                 <Button
                     disabled={sparkyMessage?.notHelpful}
-                    variant={'sparky'} size='sm'>
+                    variant={'sparky'} >
                     <ShareIcon className="w-4 h-4" />
                     Share</Button>
                 <Button
                     onClick={() => {
                         handleNotHelpful()
                     }}
-                    variant={'sparky'} size='sm'>
+                    variant={'sparky'} >
                     <ThumbsDown className={cn("w-4 h-4", {
                         'text-red-500': sparkyMessage?.notHelpful
                     })} />
@@ -101,7 +101,7 @@ export const CustomMessageStatus = () => {
                     onClick={() => {
                         handleConvertToCE()
                     }}
-                    variant={'sparky'} size='sm'>
+                    variant={'sparky'}>
                     <img src="/ce-bubble.png" className="w-6 h-6" />
                 </Button>
             </div>

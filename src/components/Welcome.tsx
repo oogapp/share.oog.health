@@ -17,7 +17,7 @@ export default function Welcome() {
         setLoading(true)
         let channelId = await createChat(ConversationModel.OpenEvidence, initialMessage)
         router.push(`/chat/${channelId}`);
-        setLoading(false)
+        //setLoading(false)
     }
     return (
 
