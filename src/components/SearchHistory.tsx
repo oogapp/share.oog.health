@@ -56,12 +56,12 @@ export default function SearchHistory() {
                         }
 
                         return (
-                            <Link href={`/chat/${chat.token}`} className="text-white  flex text-sm block py-3 relative" key={chat.id}>
+                            <Link href={`/chat/${chat.token}`} className="text-white  flex  block py-3 relative" key={chat.id}>
                                 <div className="px-2 space-y-2">
                                     <div className="flex items-center gap-x-2 hidden">
                                         <div className="text-gray-400">{dateHuman}</div>
                                     </div>
-                                    <div className={cn("line-clamp-3 font-bold", {
+                                    <div className={cn("line-clamp-3 text-base font-bold", {
                                         "text-gray-400": firstMessage == "No messages yet"
                                     })}>{firstMessage}</div>
                                     {secondMessage && <div className="line-clamp-3 text-gray-300">{secondMessage}</div>}
