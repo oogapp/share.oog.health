@@ -27,6 +27,7 @@ import {
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 import Citation from './Citation';
+import Reference from './Reference';
 
 
 const customRenderText = (text: string) => {
@@ -135,6 +136,10 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
             if (citation) {
                 setCitation(citation)
                 setShowCitation(true)
+            } else {
+                let opengraphReference = message.opengraphReferences?.[key - 1];
+                setOgCitation(opengraphReference!)
+                setShowOgCitation(true)
             }
         }
     }
@@ -147,8 +152,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
             if (target.classList.contains('str-chat__message-url-link')) {
                 e.preventDefault();
                 let href = target.getAttribute('href');
-                // https://admin.oog.health/citations/193273530232/6
-                // extract the last two numbers, as messageId and citationKey
+                console.log("href=", href)
                 let parts = href?.split('/');
                 let messageId = parts?.[parts.length - 2];
                 let citationKey = parts?.[parts.length - 1];
@@ -230,6 +234,16 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
                 dismissible={true}>
                 <DrawerContent>
                     <Citation citation={citation!} />
+                </DrawerContent>
+            </Drawer>
+
+
+            <Drawer
+                open={showOgCitation}
+                onOpenChange={(open) => setShowOgCitation(open)}
+                dismissible={true}>
+                <DrawerContent>
+                    <Reference reference={ogCitation!} />
                 </DrawerContent>
             </Drawer>
 

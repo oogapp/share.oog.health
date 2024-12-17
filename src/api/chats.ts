@@ -24,6 +24,12 @@ const GetMessage = graphql(`
         id
       }
       notHelpful
+      opengraphReferences {
+        title
+        description
+        url
+        image
+      }
       references {
         citationKey
         sourceTexts
@@ -53,6 +59,12 @@ query SparkyMessages($where: SparkyMessageWhereInput!) {
         notHelpful
         conversation {
           id
+        }
+        opengraphReferences {
+          title
+          description
+          url
+          image
         }
         references {
           citationKey
