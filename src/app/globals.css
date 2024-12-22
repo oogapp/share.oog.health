@@ -201,3 +201,12 @@
 .str-chat__is_medical_search .str-chat__message-inner {
   margin-inline-end: 0px !important;
 }
+
+.fade-in-enter {
+  opacity: 0;
+}
+
+.fade-in-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+}

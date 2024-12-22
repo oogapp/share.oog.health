@@ -152,7 +152,6 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
             if (target.classList.contains('str-chat__message-url-link')) {
                 e.preventDefault();
                 let href = target.getAttribute('href');
-                console.log("href=", href)
                 let parts = href?.split('/');
                 let messageId = parts?.[parts.length - 2];
                 let citationKey = parts?.[parts.length - 1];

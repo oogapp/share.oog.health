@@ -16,6 +16,28 @@ const CurrentUser = graphql(`
 }
 `)
 
+const MedicalSearchSubscription = graphql(`
+  subscription MedicalSearch {
+  medicalSearchResponse(token:"test-token") {
+    text
+    citation {
+      citationKey
+      referenceText
+      referenceDetail {
+        title
+        authorsString
+        publicationInfoString
+        journalName
+        journalShortName
+        publicationDate
+        doi
+        url
+      }
+    }
+  }
+}
+`)
+
 const GetMessage = graphql(`
   query SparkyMessage($id: ID!) {
   node(id: $id) {

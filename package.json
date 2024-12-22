@@ -24,6 +24,7 @@
     "date-utils": "^1.2.21",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
+    "graphql-ws": "^5.16.0",
     "hls.js": "^1.5.13",
     "lucide-react": "^0.460.0",
     "next": "14.2.18",
@@ -31,8 +32,9 @@
     "react": "^18",
     "react-dom": "^18",
     "react-lottie": "1.2.6",
+    "react-transition-group": "^4.4.5",
     "stream-chat": "^8.45.1",
-    "stream-chat-react": "^12.6.0",
+    "stream-chat-react": "^12.8.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.1"
@@ -44,6 +46,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-lottie": "^1.2.10",
+    "@types/react-transition-group": "^4.4.12",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

@@ -6,7 +6,9 @@ import {
     areMessageUIPropsEqual, MessageDeleted as DefaultMessageDeleted, MessageOptions as DefaultMessageOptions, MessageRepliesCountButton as DefaultMessageRepliesCountButton, MessageStatus as DefaultMessageStatus, MessageTimestamp as DefaultMessageTimestamp, isMessageBounced,
     isMessageEdited,
     messageHasAttachments,
-    messageHasReactions, MessageText
+    messageHasReactions,
+    StreamedMessageText,
+    useMessageTextStreaming
 } from 'stream-chat-react';
 
 import type { DefaultStreamChatGenerics, MessageUIComponentProps } from 'stream-chat-react';
@@ -78,6 +80,11 @@ const MessageSimpleWithContext = <
     const isBounced = isMessageBounced(message);
     const isEdited = isMessageEdited(message);
     const showReferences = message.is_medical_search == true
+    const { streamedMessageText } = useMessageTextStreaming({
+        renderingLetterCount: 10,
+        streamingLetterIntervalMs: 50,
+        text: message.text ?? '',
+    });
 
 
     let handleClick: (() => void) | undefined = undefined;
@@ -143,7 +150,7 @@ const MessageSimpleWithContext = <
                             {message.attachments?.length && !message.quoted_message ? (
                                 <Attachment actionHandler={handleAction} attachments={message.attachments} />
                             ) : null}
-                            <MessageText message={message} renderText={renderText} />
+                            <StreamedMessageText message={message} renderText={renderText} />
                             {message.mml && (
                                 <MML
                                     actionHandler={handleAction}

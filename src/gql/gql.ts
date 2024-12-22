@@ -16,6 +16,7 @@ import * as types from './graphql';
  */
 const documents = {
     "\n  query CurrentUser {\n  currentUser {\n    id\n    streamToken\n    firstName\n    lastName\n  }\n}\n": types.CurrentUserDocument,
+    "\n  subscription MedicalSearch {\n  medicalSearchResponse(token:\"test-token\") {\n    text\n    citation {\n      citationKey\n      referenceText\n      referenceDetail {\n        title\n        authorsString\n        publicationInfoString\n        journalName\n        journalShortName\n        publicationDate\n        doi\n        url\n      }\n    }\n  }\n}\n": types.MedicalSearchDocument,
     "\n  query SparkyMessage($id: ID!) {\n  node(id: $id) {\n    ... on SparkyMessage {\n      conversation {\n        id\n      }\n      notHelpful\n      opengraphReferences {\n        title\n        description\n        url\n        image\n      }\n      references {\n        citationKey\n        sourceTexts\n        referenceText\n        referenceDetail {\n          doi\n          url\n          title\n          journalName\n          authorsString\n          publicationDate\n          publicationInfoString\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessageDocument,
     "\nquery SparkyMessages($where: SparkyMessageWhereInput!) {\n  sparkyMessages(where: $where) {\n    edges {\n      node {\n        id\n        body\n        notHelpful\n        conversation {\n          id\n        }\n        opengraphReferences {\n          title\n          description\n          url\n          image\n        }\n        references {\n          citationKey\n          sourceTexts\n          referenceText\n          referenceDetail {\n            doi\n            url\n            title\n            journalName\n            authorsString\n            publicationDate\n            publicationInfoString\n          }\n        }\n      }\n    }\n  }\n}\n": types.SparkyMessagesDocument,
     "\nquery SparkyConversation($id: ID!) {\n  node(id: $id) {\n    ... on SparkyConversation {\n      id\n      token\n      model\n      createdAt\n      messages {\n        body\n        notHelpful\n      }\n      targetConversation {\n        id\n        token\n      }\n    }\n  }\n}\n": types.SparkyConversationDocument,
@@ -33,6 +34,10 @@ const documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query CurrentUser {\n  currentUser {\n    id\n    streamToken\n    firstName\n    lastName\n  }\n}\n"): typeof import('./graphql').CurrentUserDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  subscription MedicalSearch {\n  medicalSearchResponse(token:\"test-token\") {\n    text\n    citation {\n      citationKey\n      referenceText\n      referenceDetail {\n        title\n        authorsString\n        publicationInfoString\n        journalName\n        journalShortName\n        publicationDate\n        doi\n        url\n      }\n    }\n  }\n}\n"): typeof import('./graphql').MedicalSearchDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

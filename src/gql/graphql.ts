@@ -7733,6 +7733,14 @@ export type MedicalNreResult = {
   word?: Maybe<Scalars['String']['output']>;
 };
 
+export type MedicalSearchEvent = {
+  __typename?: 'MedicalSearchEvent';
+  citation?: Maybe<OpenEvidenceReference>;
+  eventType: Scalars['String']['output'];
+  reference?: Maybe<OpenGraphReference>;
+  text: Scalars['String']['output'];
+};
+
 export type MedicalSubjectHeading = Node & {
   __typename?: 'MedicalSubjectHeading';
   descriptorUI: Scalars['String']['output'];
@@ -16772,12 +16780,12 @@ export type SubmitVerificationRequestInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  chatMessages: SparkyChatMessageEnvelope;
+  medicalSearchResponse: MedicalSearchEvent;
 };
 
 
-export type SubscriptionChatMessagesArgs = {
-  chatID?: InputMaybe<Scalars['ID']['input']>;
+export type SubscriptionMedicalSearchResponseArgs = {
+  token: Scalars['String']['input'];
 };
 
 export type TableData = {
@@ -22839,6 +22847,11 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, streamToken: string, firstName?: string | null, lastName?: string | null } };
 
+export type MedicalSearchSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MedicalSearchSubscription = { __typename?: 'Subscription', medicalSearchResponse: { __typename?: 'MedicalSearchEvent', text: string, citation?: { __typename?: 'OpenEvidenceReference', citationKey: number, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', title: string, authorsString: string, publicationInfoString: string, journalName: string, journalShortName: string, publicationDate: string, doi: string, url: string } } | null } };
+
 export type SparkyMessageQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -22942,6 +22955,27 @@ export const CurrentUserDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CurrentUserQuery, CurrentUserQueryVariables>;
+export const MedicalSearchDocument = new TypedDocumentString(`
+    subscription MedicalSearch {
+  medicalSearchResponse(token: "test-token") {
+    text
+    citation {
+      citationKey
+      referenceText
+      referenceDetail {
+        title
+        authorsString
+        publicationInfoString
+        journalName
+        journalShortName
+        publicationDate
+        doi
+        url
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<MedicalSearchSubscription, MedicalSearchSubscriptionVariables>;
 export const SparkyMessageDocument = new TypedDocumentString(`
     query SparkyMessage($id: ID!) {
   node(id: $id) {
