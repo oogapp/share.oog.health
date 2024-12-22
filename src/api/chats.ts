@@ -142,6 +142,7 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
           id
           body
           notHelpful
+          sentBySparky
         }
       }
   	}
