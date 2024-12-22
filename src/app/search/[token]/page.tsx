@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 export default async function ShareSearch({ params }: { params: { token: string } }) {
 
     let chat = await getChatByToken(params.token);
+    console.log(chat)
 
     return (
         <div className="flex flex-col">

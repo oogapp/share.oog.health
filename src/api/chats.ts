@@ -217,6 +217,20 @@ function getClient() {
   })
 }
 
+function getAdminClient() {
+  let bearerToken = "K16tnqpqTtUTEjoqaKWwNLmMTd4Gy6jR"
+  let env = getEnvFromCookies()
+  let endpoint = process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT
+  if(env == "staging") {
+    endpoint = process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT_STAGING
+  }
+  return new GraphQLClient(endpoint!,{
+    fetch,
+    headers: {
+        authorization: "Bearer " + bearerToken
+    }
+  })
+}
 
 async function createChat(model: string,initialMessage:string): Promise<String> {
     let resp: CreateConversationMutation = await getClient().request(CreateConversation.toString(), {
@@ -262,7 +276,7 @@ async function getChatByToken(token: string): Promise<SparkyConversation> {
     token: token
   } as SparkyConversationWhereInput
 
-  let resp: SparkyConversationsQuery = await getClient().request(GetConversations.toString(), {
+  let resp: SparkyConversationsQuery = await getAdminClient().request(GetConversations.toString(), {
     where: where,
   });
   return resp.sparkyConversations.edges?.map(edge=>edge?.node)[0] as SparkyConversation;
