@@ -12,10 +12,10 @@ export default async function ShareSearch({ params }: { params: { token: string 
                 return parseInt(a.id) - parseInt(b.id)
             })?.map((message) => {
                 return (
-                    <div key={message.id} className={cn("flex p-4 m-4 outline", {
+                    <div key={message.id} className={cn("flex p-4 m-4 ", {
                         "justify-end": !message?.sentBySparky
                     })}>
-                        <div className="outline">{message.body} {message.sentBySparky && <>Sent by Sparky</>}</div>
+                        <div className="">{message.body}</div>
                     </div>
                 )
             })}

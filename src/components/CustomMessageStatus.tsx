@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/drawer";
 import { OpenEvidenceReference, OpenGraphReference, SparkyMessage } from '@/gql/graphql';
 import { cn } from '@/lib/utils';
-import { ListIcon, ShareIcon, ThumbsDown } from 'lucide-react';
+import { ListIcon, ThumbsDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
     renderText,
@@ -93,11 +93,11 @@ export const CustomMessageStatus = () => {
     return (
         <div className='space-y-4 my-3 w-full border-t border-gray-600 w-full'>
             <div className="mt-3 flex !gap-x-1">
-                <Button
+                {/*<Button
                     disabled={sparkyMessage?.notHelpful}
                     variant={'sparky'} >
                     <ShareIcon className="w-4 h-4" />
-                    Share</Button>
+                    Share</Button>*/}
                 <Button
                     onClick={() => {
                         handleNotHelpful()

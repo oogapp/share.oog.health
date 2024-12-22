@@ -163,7 +163,7 @@ const MessageSimpleWithContext = <
                     </div>
 
                     {showReferences && (
-                        <div className='str-chat__message-metadata min-h-96'>
+                        <div className='str-chat__message-metadata'>
                             <CustomMessageStatus />
                         </div>
                     )}
