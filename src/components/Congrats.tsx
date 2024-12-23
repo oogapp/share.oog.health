@@ -1,8 +1,11 @@
 'use client'
 import * as animationData from '@/lib/ce-earned-pillow.json';
+import Link from 'next/link';
 import { useState } from 'react';
 import Lottie from 'react-lottie';
 import 'stream-chat-react/dist/css/v2/index.css';
+import { Button } from './ui/button';
+import { Drawer, DrawerContentWithoutOverlay } from './ui/drawer';
 
 export default function Congrats() {
     const [showAnimation, setShowAnimation] = useState(true);
@@ -20,21 +23,24 @@ export default function Congrats() {
             </div>}
 
 
-            {/*<Drawer open={showAnimation}>
+            <Drawer open={showAnimation}>
                 <DrawerContentWithoutOverlay>
-                    <div className="p-5 flex flex-col space-y-8">
+                    <div className="p-5 flex flex-col space-y-4">
                         <h1 className="text-2xl font-bold text-center">Congratulations!</h1>
+                        <div className='text-center'>
+                            You've earned 0.5 CE credit for your reflection.
+                        </div>
+                        <div className='text-center'>
+                            Redeem your credits in your CE dashboard
+                        </div>
                         <div className="space-y-4 text-center flex flex-col">
-                            <Button asChild>
-                                <Link href="/ce">Download Certificate</Link>
-                            </Button>
                             <Button>
-                                <Link href="/">Earn more ce</Link>
+                                <Link href="/chat">Ask another question</Link>
                             </Button>
                         </div>
                     </div>
                 </DrawerContentWithoutOverlay>
-            </Drawer>*/}
+            </Drawer>
         </div>
     )
 }

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Skeleton } from '@/components/ui/skeleton';
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import {
     Channel,
     Chat,
@@ -20,7 +20,6 @@ import {
     MessageRenderer,
     Window,
     defaultRenderMessages,
-    renderText,
     useChatContext,
     useCreateChatClient,
     useMessageListContext
@@ -31,10 +30,11 @@ import Reference from './Reference';
 
 
 const customRenderText = (text: string) => {
+    console.log("customRenderText", text)
     text = text.replaceAll("\\_", '');
     text = text.replaceAll(/\[\[/g, '[');
     text = text.replaceAll(")]", ")")
-    return renderText(text)
+    return text
 };
 
 function SparkyThinking() {
@@ -101,6 +101,7 @@ const CustomMessageList = () => (
         <MessageList
             disableDateSeparator={true}
             hideNewMessageSeparator={true}
+            UnreadMessagesSeparator={<></>}
             messageActions={[]}
             // @ts-ignore
             renderText={customRenderText}
@@ -144,9 +145,12 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
         }
     }
 
+    const hasEarnedCredits = useMemo(() => {
+        return chat?.educationCredit?.id != null
+    }, [chat])
 
     // intercept all clicks on str-chat__message-url-link
-    useEffect(() => {
+    /*useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
             if (target.classList.contains('str-chat__message-url-link')) {
@@ -162,7 +166,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
         }
         document.addEventListener('click', handleClick);
         return () => document.removeEventListener('click', handleClick);
-    }, [])
+    }, [])*/
 
 
     const client = useCreateChatClient({
@@ -183,6 +187,10 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
                     //@ts-ignore
                     if (event.type == "ce_credit_earned") {
                         setShowAnimation(true)
+                    }
+                    if (event.type == "notification.mark_read") {
+                        console.log("mark all read")
+                        client.markAllRead()
                     }
                 })
                 setChannel(chan)
@@ -259,9 +267,9 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
                                 <ChatChannelHeader conversation={chat!} />
                             </div>
                             <CustomMessageList />
-                            <MessageInput
+                            {!hasEarnedCredits && <MessageInput
                                 additionalTextareaProps={{ placeholder: 'Ask me anything' }}
-                                grow />
+                                grow />}
                         </Window>
                     </Channel>
                 }

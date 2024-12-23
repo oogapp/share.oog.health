@@ -138,6 +138,9 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
         token
         model
         createdAt
+        educationCredit {
+          id
+        }
       	messages {
           id
           body

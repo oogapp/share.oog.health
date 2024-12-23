@@ -8,9 +8,11 @@ import {
 import { OpenEvidenceReference, OpenGraphReference, SparkyMessage } from '@/gql/graphql';
 import { cn } from '@/lib/utils';
 import { ListIcon, ThumbsDown } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { createRef, useEffect, useMemo, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import {
     renderText,
+    useChatContext,
     useMessageContext,
     useTranslationContext
 } from 'stream-chat-react';
@@ -26,12 +28,13 @@ const customRenderText = (text: string) => {
     return renderText(text)
 };
 
-export const CustomMessageStatus = () => {
+export const CustomMessageStatus = ({ showCitationKey }: { showCitationKey: number | null }) => {
     const [showCitation, setShowCitation] = useState(false)
     const [showReference, setShowReference] = useState(false)
 
     const [citation, setCitation] = useState<OpenEvidenceReference | null>(null)
     const [openGraphReference, setOpenGraphReference] = useState<OpenGraphReference | null>(null)
+    const { client } = useChatContext('MessageSimple');
 
     const [citationsLoading, setCitationsLoading] = useState(false)
     const [citationsLoaded, setCitationsLoaded] = useState(false)
@@ -42,6 +45,34 @@ export const CustomMessageStatus = () => {
     const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
     const [showAllCitations, setShowAllCitations] = useState(false)
 
+    const handleEvent = (event: any) => {
+        if (event.type == "add_citation") {
+            if (event.message_id == message.id) {
+                let citationKey = event.citation_key
+                let citation = {
+                    citationKey: citationKey,
+                    referenceDetail: {
+                        title: event.citation_title,
+                        journalName: event.citation_journal_name,
+                    }
+                } as OpenEvidenceReference
+                // does this citation already exist?
+                let exists = citations.find(c => c.citationKey == citationKey)
+                if (!exists) {
+                    setCitations([...citations, citation])
+                }
+            }
+        }
+        if (event.type == "citations_complete") {
+            loadCitations()
+        }
+    }
+
+    useEffect(() => {
+        client.on(handleEvent);
+        return () => client.off(handleEvent);
+    }, [client, handleEvent]);
+
     const totalCitations = useMemo(() => {
         return citations?.length
     }, [citations])
@@ -50,11 +81,20 @@ export const CustomMessageStatus = () => {
         return openGraphReferences?.length
     }, [openGraphReferences])
 
+    useEffect(() => {
+        if (showCitationKey) {
+            let citation = citations.find(c => c.citationKey == showCitationKey)
+            if (citation) {
+                setCitation(citation)
+                setShowCitation(true)
+            }
+        }
+    }, [showCitationKey])
+
     async function loadCitations() {
         try {
             setCitationsLoading(true)
             let sm = await getMessageByStreamID(message.id);
-            console.log("sm=", sm)
             setSparkyMessage(sm)
             setCitationsLoading(false)
             if (sm) {
@@ -128,26 +168,34 @@ export const CustomMessageStatus = () => {
                     </div>
                 </div>
                 <div className='space-y-4'>
-                    {citations?.slice(0, showAllCitations ? citations.length : 3).map((citation, index) => {
-                        return (
-                            <div
-                                onClick={() => {
-                                    setCitation(citation)
-                                    setShowCitation(true)
-                                }}
-                                key={index} className='flex cursor-pointer gap-x-2 align-top bg-gray-800 text-white p-2 rounded-xl'>
-                                <div className=''>
-                                    <div className='bg-brand/20 text-brand p-0.5 rounded-full text-xs w-4 h-4 inline-flex items-center justify-center'>
-                                        {citation?.citationKey}
+                    <TransitionGroup>
+                        {citations?.sort((a, b) => {
+                            return a.citationKey - b.citationKey
+                        })?.slice(0, showAllCitations ? citations.length : 3).map((citation, index) => {
+                            const itemRef = createRef<any>();
+                            return (
+                                <CSSTransition nodeRef={itemRef} key={index} timeout={250} classNames="fade-in">
+                                    <div
+                                        ref={itemRef}
+                                        onClick={() => {
+                                            setCitation(citation)
+                                            setShowCitation(true)
+                                        }}
+                                        className='flex cursor-pointer gap-x-2 align-top bg-gray-800 text-white p-2 my-2 rounded-xl'>
+                                        <div className=''>
+                                            <div className='bg-brand/20 text-brand p-0.5 rounded-full text-xs w-4 h-4 inline-flex items-center justify-center'>
+                                                {citation?.citationKey}
+                                            </div>
+                                        </div>
+                                        <div className='space-y-1'>
+                                            <div className='text-sm'>{citation.referenceDetail?.title}</div>
+                                            <div className='text-sm text-gray-400'>{citation.referenceDetail?.journalName}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='space-y-2 '>
-                                    <div className='text-sm'>{citation.referenceDetail?.title}</div>
-                                    <div className='text-xs text-gray-400 hidden'>{citation.referenceDetail?.publicationInfoString}</div>
-                                </div>
-                            </div>
-                        )
-                    })}
+                                </CSSTransition>
+                            )
+                        })}
+                    </TransitionGroup>
 
                     {showAllCitations ?
                         <div

@@ -22878,7 +22878,7 @@ export type SparkyConversationsQueryVariables = Exact<{
 }>;
 
 
-export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, sentBySparky: boolean }> | null } | null } | null> | null } };
+export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, educationCredit?: { __typename?: 'EducationCredit', id: string } | null, messages?: Array<{ __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, sentBySparky: boolean }> | null } | null } | null> | null } };
 
 export type AdminCreateConversationFromConversationMutationVariables = Exact<{
   conversationId: Scalars['ID']['input'];
@@ -23073,6 +23073,9 @@ export const SparkyConversationsDocument = new TypedDocumentString(`
         token
         model
         createdAt
+        educationCredit {
+          id
+        }
         messages {
           id
           body
