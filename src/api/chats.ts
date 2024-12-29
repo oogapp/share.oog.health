@@ -260,7 +260,7 @@ async function getMessage(id: string): Promise<SparkyMessage> {
 async function getChats(postId?:string): Promise<SparkyConversation[]> {
   const _cookies = cookies()
   let where = {
-    "hasUserWith": [{"id": "8589934649"}]
+    //"hasUserWith": [{"id": "8589934649"}]
   } as SparkyConversationWhereInput
   let variables = {}
 
