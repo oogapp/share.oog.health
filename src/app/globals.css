@@ -87,6 +87,12 @@
   }
 }
 
+.str-chat,
+.str-chat__container,
+.str-chat__list {
+  background: none !important;
+}
+
 .str-chat__list {
   overscroll-behavior: contain !important;
 }
@@ -209,4 +215,35 @@
 .fade-in-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in-out;
+}
+
+.str-chat__textarea__textarea {
+  padding-left: 36px !important;
+}
+
+.str-chat__message-textarea-with-emoji-picker {
+}
+
+.str-chat__list-notifications {
+  display: none !important;
+}
+
+.str-chat__message-input {
+  border-radius: 25px !important;
+  border: 1px solid #33393a !important;
+}
+
+.str-chat__message-input .str-chat__message-textarea-container {
+  border: none !important;
+}
+
+.str-chat__message-input
+  .str-chat__message-input-inner
+  .str-chat__message-textarea-container
+  .str-chat__message-textarea-with-emoji-picker {
+  padding: 12px !important;
+}
+
+.str-chat__list {
+  padding-top: 36px !important;
 }

@@ -49,14 +49,14 @@ export default function ChatChannelHeader({ conversation }: { conversation: Spar
 
 
     return (
-        <div className="p-3 bg-black flex items-center">
+        <div className="p-3 flex items-center">
             <div className="mr-3">
                 <Link href={`/chat`} className="">
                     <ChevronLeft className="w-6 h-6" />
                 </Link>
             </div>
 
-            <div className="font-bold">{title}</div>
+            <div className="font-bold"></div>
             <div className="ml-auto">
 
             </div>

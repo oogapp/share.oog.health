@@ -1,15 +1,17 @@
 'use client'
-import { getChatByToken, getMessage } from '@/api/chats';
-import ChatChannelHeader from '@/components/ChatChannelHeader';
+import { getChatByToken } from '@/api/chats';
 import Congrats from '@/components/Congrats';
 import { CustomTypingIndicator } from '@/components/CustomTypingIndicator';
 import { MessageSimple } from '@/components/Message';
 import {
     Drawer,
-    DrawerContent
+    DrawerContent,
+    DrawerHeader
 } from "@/components/ui/drawer";
-import { Skeleton } from '@/components/ui/skeleton';
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
+import { MessageVariant } from '@/lib/utils';
+import { ClockIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import {
     Channel,
@@ -26,11 +28,15 @@ import {
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 import Citation from './Citation';
+import Ai from './icons/Ai';
+import Pencil from './icons/Pencil';
+import { MessageSimpleV2 } from './MessageV2';
+import PreviousSearches from './PreviousSearches';
 import Reference from './Reference';
+import { SendButton } from './SendButton';
 
 
 const customRenderText = (text: string) => {
-    console.log("customRenderText", text)
     text = text.replaceAll("\\_", '');
     text = text.replaceAll(/\[\[/g, '[');
     text = text.replaceAll(")]", ")")
@@ -71,20 +77,32 @@ function SparkyThinking() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <div className='text-sm'>{thinkingLabel}</div>
+            <div className='text-sm text-white'>{thinkingLabel}</div>
         </div>
     )
 }
 
 function EmptyStateIndicator() {
     return (
-        <div className="space-y-2 p-5">
-            <img src="/oog_brain.svg" className="h-32 mx-auto" />
-            <div className="text-3xl font-title">Welcome to OOGpt! </div>
-            <div className="space-y-4">
-                <p>Ask any medical question, and we’ll provide clinically accurate responses supported by peer-reviewed journal references.</p>
-                <p>You can also earn Continuing Education (CE) credits as you learn.</p>
-                <p>We’re continuously fine-tuning our platform, so please let us know if a response is ‘helpful’ or ‘not helpful’—your feedback makes us better!</p>
+        <div className="space-y-1 p-5 relative h-full">
+            <div className='text-3xl'>OOG</div>
+            <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+
+            <div className='absolute bottom-0 right-0 left-0 py-6 space-y-4 p-5'>
+                <div className='text-right text-gray-400 text-sm'>Try Asking...</div>
+                <div className='flex flex-col space-y-2'>
+                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
+                        What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?
+                    </div>
+
+                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
+                        What is the treatment of choice for necrotizing fasciitis in pediatrics?
+                    </div>
+
+                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
+                        Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?
+                    </div>
+                </div>
             </div>
         </div>
     )
@@ -92,12 +110,18 @@ function EmptyStateIndicator() {
 
 const customRenderMessages: MessageRenderer<DefaultStreamChatGenerics> = (options) => {
     const elements = defaultRenderMessages(options);
-    elements.push(<SparkyThinking key={'sparky_thinking'} />);
+    //elements.push(<SparkyThinking key={'sparky_thinking'} />);
     return elements;
 };
 
-const CustomMessageList = () => (
-    <>
+function CustomMessageList({ messageVariant }: { messageVariant: MessageVariant }) {
+
+    let messageComponent = MessageSimple
+    if (messageVariant == MessageVariant.V2) {
+        messageComponent = MessageSimpleV2
+    }
+
+    return (
         <MessageList
             disableDateSeparator={true}
             hideNewMessageSeparator={true}
@@ -105,13 +129,16 @@ const CustomMessageList = () => (
             messageActions={[]}
             // @ts-ignore
             renderText={customRenderText}
-            Message={MessageSimple}
+            Message={messageComponent}
             renderMessages={customRenderMessages} >
-        </MessageList>
-    </>
-);
 
-export default function AuthenticatedChat({ userId, token, channelId, apiKey }: { userId: string, token: string, channelId: string, apiKey: string }) {
+        </MessageList>
+    )
+}
+
+
+
+export default function AuthenticatedChat({ userId, token, channelId, apiKey, messageVariant = MessageVariant.V1 }: { userId: string, token: string, channelId: string, apiKey: string, messageVariant: MessageVariant }) {
 
     const [chat, setChat] = useState<SparkyConversation | null>(null);
     const [showAnimation, setShowAnimation] = useState(false)
@@ -119,6 +146,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
     const [ogCitation, setOgCitation] = useState<OpenGraphReference | null>(null)
     const [showOgCitation, setShowOgCitation] = useState(false)
     const [showCitation, setShowCitation] = useState(false)
+    const [showHistory, setShowHistory] = useState(false)
 
     useEffect(() => {
         if (channelId) {
@@ -130,44 +158,9 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
         }
     }, [channelId]);
 
-    async function handleCitation(id: string, key: number) {
-        let message = await getMessage(id);
-        if (message) {
-            let citation = message.references?.find((ref: OpenEvidenceReference) => ref.citationKey == key);
-            if (citation) {
-                setCitation(citation)
-                setShowCitation(true)
-            } else {
-                let opengraphReference = message.opengraphReferences?.[key - 1];
-                setOgCitation(opengraphReference!)
-                setShowOgCitation(true)
-            }
-        }
-    }
-
     const hasEarnedCredits = useMemo(() => {
         return chat?.educationCredit?.id != null
     }, [chat])
-
-    // intercept all clicks on str-chat__message-url-link
-    /*useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (target.classList.contains('str-chat__message-url-link')) {
-                e.preventDefault();
-                let href = target.getAttribute('href');
-                let parts = href?.split('/');
-                let messageId = parts?.[parts.length - 2];
-                let citationKey = parts?.[parts.length - 1];
-                if (messageId && citationKey) {
-                    handleCitation(messageId, parseInt(citationKey));
-                }
-            }
-        }
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, [])*/
-
 
     const client = useCreateChatClient({
         apiKey: apiKey,
@@ -209,31 +202,36 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
     if (!client) {
         // generate a skeleton chat/avatar list using the Skeleton component
         return (
-            <div className='h-dvh p-5 space-y-8'>
-                <div className="flex space-x-4">
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                    <div className="space-y-2">
-                        <Skeleton className="h-32 w-[250px]" />
-                    </div>
-                </div>
-                <div className="flex space-x-4">
-                    <div className="space-y-2">
-                        <Skeleton className="h-32 w-[250px]" />
-                    </div>
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                </div>
-                <div className="flex space-x-4">
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                    <div className="space-y-2">
-                        <Skeleton className="h-32 w-[250px]" />
-                    </div>
-                </div>
-            </div>
+            <></>
         )
     }
     return (
         <div className='h-dvh'>
+
+            <div className='absolute flex top-0 right-0 left-0 z-50'>
+                <div className='flex items-center gap-x-2 ml-auto p-5'>
+                    <Link href={"/chat"}>
+                        <Pencil />
+                    </Link>
+                    <div className='cursor-pointer' onClick={() => {
+                        setShowHistory(true)
+                    }}>
+                        <ClockIcon />
+                    </div>
+                </div>
+            </div>
+
             {showAnimation && <Congrats />}
+
+            <Drawer
+                open={showHistory}
+                onOpenChange={(open) => setShowHistory(open)}
+                dismissible={true}>
+                <DrawerContent>
+                    <DrawerHeader>Search History</DrawerHeader>
+                    <PreviousSearches />
+                </DrawerContent>
+            </Drawer>
 
             <Drawer
                 open={showCitation}
@@ -260,16 +258,23 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey }: 
                 theme='str-chat__theme-dark'>
                 {channel &&
                     <Channel
+                        EmptyStateIndicator={EmptyStateIndicator}
+                        SendButton={SendButton}
                         TypingIndicator={CustomTypingIndicator}
                         channel={channel}>
                         <Window>
-                            <div className='hidden'>
-                                <ChatChannelHeader conversation={chat!} />
-                            </div>
-                            <CustomMessageList />
-                            {!hasEarnedCredits && <MessageInput
-                                additionalTextareaProps={{ placeholder: 'Ask me anything' }}
-                                grow />}
+                            <CustomMessageList messageVariant={messageVariant} />
+                            {!hasEarnedCredits &&
+                                <div className='relative overflow-hidden'>
+                                    <div className='p-3 relative pb-6 rounded-t-xl'>
+                                        <Ai className='absolute left-8 top-6' />
+                                        <MessageInput
+                                            additionalTextareaProps={{ placeholder: 'Ask me anything' }}
+                                            grow />
+
+                                    </div>
+                                </div>
+                            }
                         </Window>
                     </Channel>
                 }

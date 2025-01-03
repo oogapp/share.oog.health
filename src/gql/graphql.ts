@@ -665,6 +665,7 @@ export type ArticleEdge = {
 export type ArticleFeed = Node & {
   __typename?: 'ArticleFeed';
   articles?: Maybe<Array<Article>>;
+  enabled: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   ignoreImages: Scalars['Boolean']['output'];
   lastUpdated?: Maybe<Scalars['Time']['output']>;
@@ -682,6 +683,9 @@ export type ArticleFeed = Node & {
  */
 export type ArticleFeedWhereInput = {
   and?: InputMaybe<Array<ArticleFeedWhereInput>>;
+  /** enabled field predicates */
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  enabledNEQ?: InputMaybe<Scalars['Boolean']['input']>;
   /** articles edge predicates */
   hasArticles?: InputMaybe<Scalars['Boolean']['input']>;
   hasArticlesWith?: InputMaybe<Array<ArticleWhereInput>>;
@@ -3658,6 +3662,8 @@ export type CreatePostInput = {
   discussionPoints?: InputMaybe<Array<Scalars['String']['input']>>;
   educationCreditIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   embeddingIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Whether this post should be excluded from the feed */
+  excludeFromFeed?: InputMaybe<Scalars['Boolean']['input']>;
   /** The external URL for this post. This is used for articles and other external content */
   externalURL?: InputMaybe<Scalars['String']['input']>;
   /** Whether this post is featured */
@@ -7864,6 +7870,7 @@ export type Mutation = {
   adminDeleteLike: Scalars['Boolean']['output'];
   adminDeleteNotification: Scalars['Boolean']['output'];
   adminDeleteReportReason: ReportReason;
+  adminDeleteUser: User;
   adminDeleteUserCohort: Scalars['Boolean']['output'];
   adminDenyEducationCredit: Scalars['Boolean']['output'];
   adminDisableUser: User;
@@ -7991,6 +7998,7 @@ export type Mutation = {
   /** Deletes a WorkExperience entry for the current user */
   deleteWorkExperience: WorkExperience;
   deleteYoutubeConnection?: Maybe<AccountConnection>;
+  flagMessageHelpful: Scalars['Boolean']['output'];
   flagMessageNotHelpful: Scalars['Boolean']['output'];
   /** Follow a single Topic */
   followTopic: Topic;
@@ -8298,6 +8306,11 @@ export type MutationAdminDeleteNotificationArgs = {
 
 
 export type MutationAdminDeleteReportReasonArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationAdminDeleteUserArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -8777,6 +8790,11 @@ export type MutationDeleteWorkExperienceArgs = {
 
 export type MutationDeleteYoutubeConnectionArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type MutationFlagMessageHelpfulArgs = {
+  messageId: Scalars['ID']['input'];
 };
 
 
@@ -10293,6 +10311,8 @@ export type Post = Node & {
   /** All credits earned from this post, across all the user. */
   educationCredits?: Maybe<Array<EducationCredit>>;
   embeddings?: Maybe<Array<PostEmbedding>>;
+  /** Whether this post should be excluded from the feed */
+  excludeFromFeed: Scalars['Boolean']['output'];
   /** The external URL for this post. This is used for articles and other external content */
   externalURL?: Maybe<Scalars['String']['output']>;
   /** Whether this post is featured */
@@ -10939,6 +10959,9 @@ export type PostWhereInput = {
   creditHoursLTE?: InputMaybe<Scalars['Float']['input']>;
   creditHoursNEQ?: InputMaybe<Scalars['Float']['input']>;
   creditHoursNotIn?: InputMaybe<Array<Scalars['Float']['input']>>;
+  /** exclude_from_feed field predicates */
+  excludeFromFeed?: InputMaybe<Scalars['Boolean']['input']>;
+  excludeFromFeedNEQ?: InputMaybe<Scalars['Boolean']['input']>;
   /** external_url field predicates */
   externalURL?: InputMaybe<Scalars['String']['input']>;
   externalURLContains?: InputMaybe<Scalars['String']['input']>;
@@ -15963,6 +15986,7 @@ export type SparkyMessage = Node & {
   createdAt: Scalars['Time']['output'];
   id: Scalars['ID']['output'];
   invalidMessage: Scalars['Boolean']['output'];
+  isHelpful: Scalars['Boolean']['output'];
   isNudge: Scalars['Boolean']['output'];
   notHelpful: Scalars['Boolean']['output'];
   opengraphReferences?: Maybe<Array<OpenGraphReference>>;
@@ -16064,6 +16088,9 @@ export type SparkyMessageWhereInput = {
   /** invalid_message field predicates */
   invalidMessage?: InputMaybe<Scalars['Boolean']['input']>;
   invalidMessageNEQ?: InputMaybe<Scalars['Boolean']['input']>;
+  /** is_helpful field predicates */
+  isHelpful?: InputMaybe<Scalars['Boolean']['input']>;
+  isHelpfulNEQ?: InputMaybe<Scalars['Boolean']['input']>;
   /** is_nudge field predicates */
   isNudge?: InputMaybe<Scalars['Boolean']['input']>;
   isNudgeNEQ?: InputMaybe<Scalars['Boolean']['input']>;
@@ -18511,6 +18538,8 @@ export type UpdatePostInput = {
   creditHours?: InputMaybe<Scalars['Float']['input']>;
   /** The main discussion points for this post. If the post has an attached sourceArticle, the discussionPoints have been copied from there and are identical.  */
   discussionPoints?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Whether this post should be excluded from the feed */
+  excludeFromFeed?: InputMaybe<Scalars['Boolean']['input']>;
   /** The external URL for this post. This is used for articles and other external content */
   externalURL?: InputMaybe<Scalars['String']['input']>;
   /** Whether this post is featured */
@@ -20627,6 +20656,7 @@ export type UserSearchResult = {
 /** UserStatus is enum for the field status */
 export enum UserStatus {
   Active = 'active',
+  Deleted = 'deleted',
   Denied = 'denied',
   Disabled = 'disabled',
   Pending = 'pending'
@@ -22857,28 +22887,28 @@ export type SparkyMessageQueryVariables = Exact<{
 }>;
 
 
-export type SparkyMessageQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'BoardCertification' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'CertifyingBoard' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelLog' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionCriteriaGroup' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage', notHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCohort' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
+export type SparkyMessageQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'BoardCertification' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'CertifyingBoard' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelLog' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionCriteriaGroup' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation' } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage', notHelpful: boolean, isHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCohort' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
 
 export type SparkyMessagesQueryVariables = Exact<{
   where: SparkyMessageWhereInput;
 }>;
 
 
-export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
+export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, isHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
 
 export type SparkyConversationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type SparkyConversationQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'BoardCertification' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'CertifyingBoard' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelLog' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionCriteriaGroup' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string, notHelpful: boolean }> | null, targetConversation?: { __typename?: 'SparkyConversation', id: string, token?: string | null } | null } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCohort' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
+export type SparkyConversationQuery = { __typename?: 'Query', node?: { __typename?: 'AccountConnection' } | { __typename?: 'AnatomicalModel' } | { __typename?: 'ApiQueryLog' } | { __typename?: 'ApiToken' } | { __typename?: 'Article' } | { __typename?: 'ArticleFeed' } | { __typename?: 'Audience' } | { __typename?: 'AuditLog' } | { __typename?: 'BoardCertification' } | { __typename?: 'Bookmark' } | { __typename?: 'Certificate' } | { __typename?: 'CertificateSurveyAnswer' } | { __typename?: 'CertificateSurveyQuestion' } | { __typename?: 'CertificateSurveyQuestionChoice' } | { __typename?: 'CertifyingBoard' } | { __typename?: 'ClinicalTrial' } | { __typename?: 'ClinicalTrialDocument' } | { __typename?: 'ClinicalTrialEmbedding' } | { __typename?: 'CloudflareUpload' } | { __typename?: 'Collection' } | { __typename?: 'Comment' } | { __typename?: 'CommentLike' } | { __typename?: 'CommentNamedEntity' } | { __typename?: 'Course' } | { __typename?: 'Dashboard' } | { __typename?: 'EducationCredit' } | { __typename?: 'EducationHistory' } | { __typename?: 'EducationRequirement' } | { __typename?: 'FaceDetectRequest' } | { __typename?: 'FinancialDisclosure' } | { __typename?: 'FinancialDisclosurePrintTemplate' } | { __typename?: 'FinancialDisclosureRole' } | { __typename?: 'FinancialDisclosureStatement' } | { __typename?: 'GiblibVideo' } | { __typename?: 'GoogleDriveFile' } | { __typename?: 'GptLog' } | { __typename?: 'HumanOntologyNode' } | { __typename?: 'Image' } | { __typename?: 'ImportedVideo' } | { __typename?: 'InsightRequest' } | { __typename?: 'InstagramScrapeLog' } | { __typename?: 'JobHistory' } | { __typename?: 'LanguageModelLog' } | { __typename?: 'LanguageModelResponse' } | { __typename?: 'LearningObjective' } | { __typename?: 'LicenseHistory' } | { __typename?: 'Like' } | { __typename?: 'MediaItem' } | { __typename?: 'MedicalHealthTerm' } | { __typename?: 'MedicalSubjectHeading' } | { __typename?: 'Notification' } | { __typename?: 'NotificationConfig' } | { __typename?: 'NpiTaxonomy' } | { __typename?: 'Office' } | { __typename?: 'PhoneVerificationToken' } | { __typename?: 'Poll' } | { __typename?: 'PollAnswer' } | { __typename?: 'PollQuestion' } | { __typename?: 'Post' } | { __typename?: 'PostCitation' } | { __typename?: 'PostCollection' } | { __typename?: 'PostEmbedding' } | { __typename?: 'PostLearningObjective' } | { __typename?: 'PostReaction' } | { __typename?: 'PostReport' } | { __typename?: 'Provider' } | { __typename?: 'PubmedAbstractEmbedding' } | { __typename?: 'PubmedArticle' } | { __typename?: 'PubmedArticleAbstract' } | { __typename?: 'PubmedArticleEmbedding' } | { __typename?: 'PubmedCentralArticle' } | { __typename?: 'PubmedDownloadLog' } | { __typename?: 'PubmedTopicCluster' } | { __typename?: 'ReflectionAnalysis' } | { __typename?: 'ReflectionAnalysisResult' } | { __typename?: 'ReflectionAnalysisScore' } | { __typename?: 'ReflectionCriteria' } | { __typename?: 'ReflectionCriteriaGroup' } | { __typename?: 'ReflectionExperiment' } | { __typename?: 'ReflectionExperimentRun' } | { __typename?: 'ReportReason' } | { __typename?: 'Search' } | { __typename?: 'SearchConversion' } | { __typename?: 'SparkyChat' } | { __typename?: 'SparkyChatConfig' } | { __typename?: 'SparkyChatMessage' } | { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, messages?: Array<{ __typename?: 'SparkyMessage', body: string, notHelpful: boolean, isHelpful: boolean }> | null, targetConversation?: { __typename?: 'SparkyConversation', id: string, token?: string | null } | null } | { __typename?: 'SparkyConversationConfigSet' } | { __typename?: 'SparkyMessage' } | { __typename?: 'SparkyPrompt' } | { __typename?: 'SparkyQuery' } | { __typename?: 'SparkyRule' } | { __typename?: 'SparkyRuleCondition' } | { __typename?: 'SparkyRuleField' } | { __typename?: 'Tag' } | { __typename?: 'Tenant' } | { __typename?: 'Topic' } | { __typename?: 'TopicClassification' } | { __typename?: 'TopicCluster' } | { __typename?: 'TopicNpiTaxonomy' } | { __typename?: 'TopicPubmedTopicCluster' } | { __typename?: 'TranscriptionRequest' } | { __typename?: 'Upload' } | { __typename?: 'User' } | { __typename?: 'UserAnalyticsEvent' } | { __typename?: 'UserBlock' } | { __typename?: 'UserCohort' } | { __typename?: 'UserCollectionCompletion' } | { __typename?: 'UserFeedHistory' } | { __typename?: 'UserLink' } | { __typename?: 'UserMute' } | { __typename?: 'UserNotificationToken' } | { __typename?: 'UserReport' } | { __typename?: 'UserTenant' } | { __typename?: 'UserVideoEvent' } | { __typename?: 'VerificationRequest' } | { __typename?: 'Video' } | { __typename?: 'VideoFrame' } | { __typename?: 'VideoPipeline' } | { __typename?: 'WaitListConfig' } | { __typename?: 'WaitlistEntry' } | { __typename?: 'WorkExperience' } | null };
 
 export type SparkyConversationsQueryVariables = Exact<{
   where: SparkyConversationWhereInput;
 }>;
 
 
-export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, educationCredit?: { __typename?: 'EducationCredit', id: string } | null, messages?: Array<{ __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, sentBySparky: boolean }> | null } | null } | null> | null } };
+export type SparkyConversationsQuery = { __typename?: 'Query', sparkyConversations: { __typename?: 'SparkyConversationConnection', edges?: Array<{ __typename?: 'SparkyConversationEdge', node?: { __typename?: 'SparkyConversation', id: string, token?: string | null, model?: string | null, createdAt: any, educationCredit?: { __typename?: 'EducationCredit', id: string } | null, messages?: Array<{ __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, isHelpful: boolean, sentBySparky: boolean }> | null } | null } | null> | null } };
 
 export type AdminCreateConversationFromConversationMutationVariables = Exact<{
   conversationId: Scalars['ID']['input'];
@@ -22908,6 +22938,13 @@ export type FlagMessageNotHelpfulMutationVariables = Exact<{
 
 
 export type FlagMessageNotHelpfulMutation = { __typename?: 'Mutation', flagMessageNotHelpful: boolean };
+
+export type FlagMessageHelpfulMutationVariables = Exact<{
+  messageId: Scalars['ID']['input'];
+}>;
+
+
+export type FlagMessageHelpfulMutation = { __typename?: 'Mutation', flagMessageHelpful: boolean };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -22984,6 +23021,7 @@ export const SparkyMessageDocument = new TypedDocumentString(`
         id
       }
       notHelpful
+      isHelpful
       opengraphReferences {
         title
         description
@@ -23016,6 +23054,7 @@ export const SparkyMessagesDocument = new TypedDocumentString(`
         id
         body
         notHelpful
+        isHelpful
         conversation {
           id
         }
@@ -23055,6 +23094,7 @@ export const SparkyConversationDocument = new TypedDocumentString(`
       messages {
         body
         notHelpful
+        isHelpful
       }
       targetConversation {
         id
@@ -23080,6 +23120,7 @@ export const SparkyConversationsDocument = new TypedDocumentString(`
           id
           body
           notHelpful
+          isHelpful
           sentBySparky
         }
       }
@@ -23114,6 +23155,11 @@ export const FlagMessageNotHelpfulDocument = new TypedDocumentString(`
   flagMessageNotHelpful(messageId: $messageId)
 }
     `) as unknown as TypedDocumentString<FlagMessageNotHelpfulMutation, FlagMessageNotHelpfulMutationVariables>;
+export const FlagMessageHelpfulDocument = new TypedDocumentString(`
+    mutation FlagMessageHelpful($messageId: ID!) {
+  flagMessageHelpful(messageId: $messageId)
+}
+    `) as unknown as TypedDocumentString<FlagMessageHelpfulMutation, FlagMessageHelpfulMutationVariables>;
 export const PostDocument = new TypedDocumentString(`
     query Post($id: ID!) {
   node(id: $id) {

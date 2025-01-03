@@ -18,8 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        sparky: "bg-gray-800 flex text-white !rounded-full text-xs !px-4"
-
+        sparky: "bg-gray-800 flex text-white !rounded-full text-xs !px-4",
+        sparkyv2: "bg-white/15 flex text-white text-xs !px-4 !py-1 !h-8 text-sm !rounded-xl"
       },
       size: {
         default: "h-12 px-8 py-3",

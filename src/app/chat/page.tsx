@@ -1,14 +1,11 @@
 
-import Welcome from "@/components/Welcome";
+import { createChat } from "@/api/chats";
+import { ConversationModel } from "@/gql/graphql";
+import { redirect } from "next/navigation";
 
-export default function Chat() {
+export default async function Chat() {
 
+    let chatToken = await createChat(ConversationModel.OpenEvidence, null)
+    redirect(`/chat/v2/${chatToken}`)
 
-    return (
-        <div>
-            <div className="h-screen flex">
-                <Welcome />
-            </div>
-        </div>
-    )
 }

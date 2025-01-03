@@ -1,4 +1,3 @@
-'use client'
 import { cn } from '@/lib/utils';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -14,11 +13,20 @@ import {
 
 import type { DefaultStreamChatGenerics, MessageUIComponentProps } from 'stream-chat-react';
 import { Attachment as DefaultAttachment, Avatar as DefaultAvatar, EditMessageForm as DefaultEditMessageForm, ReactionsList as DefaultReactionList, MessageContextValue, useChatContext, useComponentContext, useMessageContext, useTranslationContext } from 'stream-chat-react';
-import { CustomMessageStatus } from './CustomMessageStatus';
+import { MessageFooter } from './MessageFooter';
 
 type MessageSimpleWithContextProps<
     StreamChatGenerics extends DefaultStreamChatGenerics = DefaultStreamChatGenerics
 > = MessageContextValue<StreamChatGenerics>;
+
+// parse [[1]] references into clickable links
+export function parseReferences(text: string) {
+    return text.replace(/\[\[(\d+)\]\]/g, (match, key) => {
+        return `<a data-citation-key='${key}' class='!bg-brand/20 !text-brand mr-1 p-0.5 rounded-full text-xs min-w-4 max-w-6 h-4 inline-flex items-center justify-center cursor-pointer'>
+            ${match.replaceAll('[', '').replaceAll(']', '')}
+        </a>`
+    });
+}
 
 const MessageSimpleWithContext = <
     StreamChatGenerics extends DefaultStreamChatGenerics = DefaultStreamChatGenerics
@@ -88,14 +96,7 @@ const MessageSimpleWithContext = <
         text: message.text ?? '',
     });
 
-    // parse [[1]] references into clickable links
-    function parseReferences(text: string) {
-        return text.replace(/\[\[(\d+)\]\]/g, (match, key) => {
-            return `<a data-citation-key='${key}' class='!bg-brand/20 !text-brand mr-1 p-0.5 rounded-full text-xs min-w-4 max-w-6 h-4 inline-flex items-center justify-center cursor-pointer'>
-                ${match.replaceAll('[', '').replaceAll(']', '')}
-            </a>`
-        });
-    }
+
 
     const parsedMessageText = useMemo(() => {
         let t = parseReferences(streamedMessageText ?? '');
@@ -171,6 +172,7 @@ const MessageSimpleWithContext = <
         <>
             {
                 <div className={rootClassName} key={message.id}>
+
                     <div
                         className={clsx('str-chat__message-inner', {
                             'str-chat__simple-message--error-failed': allowRetry || isBounced,
@@ -183,7 +185,7 @@ const MessageSimpleWithContext = <
 
                         <div ref={messageBodyRef} className={cn('str-chat__message-bubble ', {
                             "!bg-transparent": message.is_medical_search,
-                            'bg-stream-message-from-me': isMyMessage()
+                            "!bg-white/20": isMyMessage(),
                         })}>
                             {message.is_medical_search ?
                                 <>
@@ -194,7 +196,7 @@ const MessageSimpleWithContext = <
                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                 </svg>
-                                                <div className='text-sm text-white'>Analyzing Query</div>
+                                                <div className='text-sm'>Analyzing Query</div>
                                             </div>
                                         </div>
                                     }
@@ -210,7 +212,7 @@ const MessageSimpleWithContext = <
 
                     {(showReferences && message.text != "") && (
                         <div className='str-chat__message-metadata'>
-                            <CustomMessageStatus showCitationKey={showCitationKey} />
+                            <MessageFooter showCitationKey={showCitationKey} />
                         </div>
                     )}
                 </div>
@@ -227,7 +229,7 @@ const MemoizedMessageSimple = React.memo(
 /**
  * The default UI component that renders a message and receives functionality and logic from the MessageContext.
  */
-export const MessageSimple = <
+export const MessageSimpleV2 = <
     StreamChatGenerics extends DefaultStreamChatGenerics = DefaultStreamChatGenerics
 >(
     props: MessageUIComponentProps<StreamChatGenerics>,

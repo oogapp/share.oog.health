@@ -46,6 +46,7 @@ const GetMessage = graphql(`
         id
       }
       notHelpful
+      isHelpful
       opengraphReferences {
         title
         description
@@ -79,6 +80,7 @@ query SparkyMessages($where: SparkyMessageWhereInput!) {
         id
         body
         notHelpful
+        isHelpful
         conversation {
           id
         }
@@ -119,6 +121,7 @@ query SparkyConversation($id: ID!) {
       messages {
         body
         notHelpful
+        isHelpful
       }
       targetConversation {
         id
@@ -145,6 +148,7 @@ query SparkyConversations($where: SparkyConversationWhereInput!) {
           id
           body
           notHelpful
+          isHelpful
           sentBySparky
         }
       }
@@ -182,6 +186,12 @@ const ReflectOnConversation = graphql(`
 const FlagMessageAsNotHelpful = graphql(`
   mutation FlagMessageNotHelpful($messageId: ID!) {
   flagMessageNotHelpful(messageId: $messageId)
+}
+`)
+
+const FlagMessageAsHelpful = graphql(`
+  mutation FlagMessageHelpful($messageId: ID!) {
+  flagMessageHelpful(messageId: $messageId)
 }
 `)
 
@@ -235,7 +245,7 @@ function getAdminClient() {
   })
 }
 
-async function createChat(model: string,initialMessage:string): Promise<String> {
+async function createChat(model: string,initialMessage:string|null): Promise<String> {
     let resp: CreateConversationMutation = await getClient().request(CreateConversation.toString(), {
         model: model,
         initialMessage:initialMessage
@@ -308,6 +318,12 @@ async function flagMessageAsNotHelpful(messageId: string): Promise<void> {
     });
 }
 
+async function flagMessageAsHelpful(messageId: string): Promise<void> {
+    await getClient().request(FlagMessageAsHelpful.toString(), {
+        messageId: messageId
+    });
+}
+
 async function currentUser():Promise<User> {
   let resp:CurrentUserQuery = await getClient().request(CurrentUser.toString())
   return resp?.currentUser as User
@@ -316,8 +332,7 @@ async function currentUser():Promise<User> {
 const getChatsCached = cache(getChats);
 export {
   adminCreateChatFromConversation,
-  createChat, currentUser, flagMessageAsNotHelpful, getChatByToken,
-  getChats, getEnvFromCookies, getMessage,
+  createChat, currentUser, flagMessageAsHelpful, flagMessageAsNotHelpful, getChatByToken, getChats, getEnvFromCookies, getMessage,
   getMessageByStreamID,
   reflectOnConversation
 };

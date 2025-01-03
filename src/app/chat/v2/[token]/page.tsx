@@ -1,7 +1,10 @@
 import { currentUser, getEnvFromCookies } from '@/api/chats';
 import AuthenticatedChat from '@/components/AuthenticatedChat';
+import { ChatBackground } from '@/components/ChatBackground';
 import { MessageVariant } from '@/lib/utils';
 import 'stream-chat-react/dist/css/v2/index.css';
+
+
 
 export default async function ChatDetail({ params }: { params: { token: string } }) {
     let { token } = params
@@ -14,12 +17,20 @@ export default async function ChatDetail({ params }: { params: { token: string }
 
     return (
         <div className='h-dvh'>
-            <AuthenticatedChat
-                messageVariant={MessageVariant.V1}
-                apiKey={streamApiKey}
-                channelId={token}
-                userId={user.id}
-                token={user.streamToken!} />
+
+            <div className='absolute -top-14 inset-0'>
+                <ChatBackground />
+            </div>
+
+
+            <div>
+                <AuthenticatedChat
+                    messageVariant={MessageVariant.V2}
+                    apiKey={streamApiKey}
+                    channelId={token}
+                    userId={user.id}
+                    token={user.streamToken!} />
+            </div>
         </div>
     )
 }
