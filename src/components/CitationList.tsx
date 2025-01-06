@@ -33,11 +33,11 @@ export default function CitationList({ citations, onSelect }: { citations: OpenE
                                     }}
                                     className='flex cursor-pointer bg-black/30 gap-x-2 align-top p-2 my-2 rounded-xl border border-[#262626]'>
                                     <div className=''>
-                                        <div className='bg-brand/20 text-brand p-0.5 rounded-full text-xs w-4 h-4 inline-flex items-center justify-center'>
+                                        <div className='bg-brand/20 text-brand p-0.5 rounded-full text-xs min-w-4 max-w-8 inline-flex items-center justify-center'>
                                             {citation?.citationKey}
                                         </div>
                                     </div>
-                                    <div className='space-y-1'>
+                                    <div className='space-y-1 flex-1'>
                                         <div className='text-sm text-white'>{citation.referenceDetail?.title}</div>
                                         <div className='text-xs text-gray-500'>{citation.referenceDetail?.journalName}</div>
                                     </div>

@@ -22,7 +22,7 @@ type MessageSimpleWithContextProps<
 // parse [[1]] references into clickable links
 export function parseReferences(text: string) {
     return text.replace(/\[\[(\d+)\]\]/g, (match, key) => {
-        return `<a data-citation-key='${key}' class='!bg-brand/20 !text-brand mr-1 p-0.5 rounded-full text-xs min-w-4 max-w-6 h-4 inline-flex items-center justify-center cursor-pointer'>
+        return `<a data-citation-key='${key}' class='!bg-brand/20 !text-brand mr-1 p-0.5 rounded-full text-xs min-w-4 max-w-8 h-4 inline-flex items-center justify-center cursor-pointer'>
             ${match.replaceAll('[', '').replaceAll(']', '')}
         </a>`
     });
