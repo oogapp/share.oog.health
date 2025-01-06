@@ -19,7 +19,9 @@ export default async function ChatDetail({ params }: { params: { token: string }
         <div className='h-dvh'>
 
             <div className='absolute -top-14 inset-0'>
+
                 <ChatBackground />
+
             </div>
 
 

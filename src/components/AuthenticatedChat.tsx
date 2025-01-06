@@ -11,6 +11,7 @@ import {
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
 import { MessageVariant } from '@/lib/utils';
 import { ClockIcon } from 'lucide-react';
+import { motion } from "motion/react";
 import Link from 'next/link';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import {
@@ -34,7 +35,6 @@ import { MessageSimpleV2 } from './MessageV2';
 import PreviousSearches from './PreviousSearches';
 import Reference from './Reference';
 import { SendButton } from './SendButton';
-
 
 const customRenderText = (text: string) => {
     text = text.replaceAll("\\_", '');
@@ -83,25 +83,45 @@ function SparkyThinking() {
 }
 
 function EmptyStateIndicator() {
+
+    const suggestions = [
+        { id: 1, text: 'What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?' },
+        { id: 2, text: 'What is the treatment of choice for necrotizing fasciitis in pediatrics?' },
+        { id: 3, text: 'Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?' },
+    ]
+
+
+
     return (
         <div className="space-y-1 p-5 relative h-full">
-            <div className='text-3xl'>OOG</div>
-            <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+
+            <motion.div
+                initial={{ opacity: 0, }}
+                animate={{ opacity: 1, }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className='text-3xl'>OOG</div>
+                <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+            </motion.div>
 
             <div className='absolute bottom-0 right-0 left-0 py-6 space-y-4 p-5'>
                 <div className='text-right text-gray-400 text-sm'>Try Asking...</div>
                 <div className='flex flex-col space-y-2'>
-                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
-                        What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?
+
+                    <div>
+                        {suggestions.map((suggestion, i) => (
+                            <motion.div
+                                initial={{ opacity: 0, }}
+                                animate={{ opacity: 1, }}
+                                transition={{ duration: 0.5, delay: i * 0.1 }}
+                                key={suggestion.id}
+                                className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200 my-2'>
+                                {suggestion.text}
+                            </motion.div>
+                        ))}
                     </div>
 
-                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
-                        What is the treatment of choice for necrotizing fasciitis in pediatrics?
-                    </div>
 
-                    <div className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200'>
-                        Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?
-                    </div>
                 </div>
             </div>
         </div>
