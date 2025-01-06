@@ -23,6 +23,7 @@ import {
     MessageRenderer,
     Window,
     defaultRenderMessages,
+    useChannelStateContext,
     useChatContext,
     useCreateChatClient,
     useMessageListContext
@@ -84,13 +85,17 @@ function SparkyThinking() {
 
 function EmptyStateIndicator() {
 
+    const { channel } = useChannelStateContext();
+
     const suggestions = [
         { id: 1, text: 'What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?' },
         { id: 2, text: 'What is the treatment of choice for necrotizing fasciitis in pediatrics?' },
         { id: 3, text: 'Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?' },
     ]
 
-
+    async function sendMessage(text: string) {
+        await channel.sendMessage({ text });
+    }
 
     return (
         <div className="space-y-1 p-5 relative h-full">
@@ -115,7 +120,8 @@ function EmptyStateIndicator() {
                                 animate={{ opacity: 1, }}
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                                 key={suggestion.id}
-                                className='w-4/5 bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200 my-2'>
+                                onClick={() => sendMessage(suggestion.text)}
+                                className='w-4/5 cursor-pointer bg-white/10 ml-auto p-2 rounded-lg text-sm pr-6 text-gray-200 my-2'>
                                 {suggestion.text}
                             </motion.div>
                         ))}
@@ -202,7 +208,6 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                         setShowAnimation(true)
                     }
                     if (event.type == "notification.mark_read") {
-                        console.log("mark all read")
                         client.markAllRead()
                     }
                 })
