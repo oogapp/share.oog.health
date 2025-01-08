@@ -22,7 +22,6 @@ export default async function ChatDetail({ params }: { params: { token: string }
                 <ChatBackground />
             </div>
 
-
             <div>
                 <AuthenticatedChat
                     messageVariant={MessageVariant.V2}

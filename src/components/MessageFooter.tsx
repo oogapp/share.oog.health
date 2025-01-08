@@ -65,7 +65,6 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             }
         }
         if (event.type == "citations_complete") {
-            console.log("citations_complete")
             loadCitations()
             setMessageCompleted(true)
         }
@@ -107,7 +106,6 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
                 setCitations([])
             }
             setCitationsLoaded(true)
-            setMessageCompleted(true)
         } catch (e) {
             console.log("error=", e)
         }
@@ -133,6 +131,10 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
         if (citationsLoaded || citationsLoading) return
         if (message) {
             loadCitations()
+        }
+        if (message && !message.is_streaming) {
+            console.log("message=", message)
+            setMessageCompleted(true)
         }
     }, [message, citationsLoaded, citationsLoading])
 

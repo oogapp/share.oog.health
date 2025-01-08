@@ -8,7 +8,7 @@ export default function Citation({ citation }: { citation: OpenEvidenceReference
 
     return (
         <div className="py-8 px-4 w-full ">
-            <div className="border-b border-gray-600 space-y-2  w-full">
+            <div className="border-b border-gray-600 space-y-4 w-full">
                 <div className="text-lg">
                     {citation?.referenceDetail?.title}
                 </div>

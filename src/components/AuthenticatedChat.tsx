@@ -233,8 +233,8 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     return (
         <div className='h-dvh'>
 
-            <div className='absolute flex top-0 right-0 left-0 z-50'>
-                <div className='flex items-center gap-x-2 ml-auto p-5'>
+            <div className='absolute flex top-14 right-0 left-0 z-50'>
+                <div className='flex items-center gap-x-4 ml-auto p-4'>
                     <Link href={"/chat"}>
                         <Pencil />
                     </Link>

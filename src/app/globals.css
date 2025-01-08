@@ -91,6 +91,7 @@
 .str-chat__container,
 .str-chat__list {
   background: none !important;
+  padding-top: 32px !important;
 }
 
 .str-chat__list {
