@@ -105,8 +105,15 @@ function EmptyStateIndicator() {
                 animate={{ opacity: 1, }}
                 transition={{ duration: 0.5 }}
             >
-                <div className='text-3xl'>OOG</div>
-                <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+                <div className='flex gap-x-4'>
+                    <div>
+                        <Ai className='w-12 h-12' />
+                    </div>
+                    <div>
+                        <div className='text-3xl'>OOGpt</div>
+                        <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+                    </div>
+                </div>
             </motion.div>
 
             <div className='absolute bottom-0 right-0 left-0 py-6 space-y-4 p-5'>
