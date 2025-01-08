@@ -238,7 +238,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
         )
     }
     return (
-        <div className='h-dvh'>
+        <div className='h-full'>
 
             <div className='absolute flex top-14 right-0 left-0 z-50'>
                 <div className='flex items-center gap-x-4 ml-auto p-4'>

@@ -16,20 +16,20 @@ export default async function ChatDetail({ params }: { params: { token: string }
     }
 
     return (
-        <div className='h-dvh'>
+        <div className='h-full'>
 
             <div className='absolute -top-14 inset-0'>
                 <ChatBackground />
             </div>
 
-            <div>
-                <AuthenticatedChat
-                    messageVariant={MessageVariant.V2}
-                    apiKey={streamApiKey}
-                    channelId={token}
-                    userId={user.id}
-                    token={user.streamToken!} />
-            </div>
+
+            <AuthenticatedChat
+                messageVariant={MessageVariant.V2}
+                apiKey={streamApiKey}
+                channelId={token}
+                userId={user.id}
+                token={user.streamToken!} />
+
         </div>
     )
 }
