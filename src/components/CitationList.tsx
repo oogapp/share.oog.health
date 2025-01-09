@@ -8,8 +8,8 @@ import { Button } from "./ui/button";
 export default function CitationList({ citations, onSelect }: { citations: OpenEvidenceReference[], onSelect: (citation: OpenEvidenceReference) => void }) {
     return (
         <div className='space-y-4'>
-            <div className='flex items-center gap-x-2'>
-                <Button className='bg-white text-black stroke-black' variant={'sparkyv2'}>
+            <div className=' gap-x-2'>
+                <Button className='text-white !text-left bg-black stroke-white inline-flex w-auto !px-0' variant={'sparkyv2'}>
                     <List className="w-5 h-5" />
                     <div>References</div>
                 </Button>

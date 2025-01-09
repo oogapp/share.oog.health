@@ -224,7 +224,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             }
 
             {totalReferences > 0 && <div className='space-y-4'>
-                <div className='flex items-center text-white gap-x-2'>
+                <div className='flex text-white gap-x-2'>
                     <ListIcon className="w-4 h-4" />
                     <div className='text-xl'>References</div>
                     <div className='ml-auto text-gray-400'>
