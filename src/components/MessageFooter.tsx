@@ -133,7 +133,6 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             loadCitations()
         }
         if (message && !message.is_streaming) {
-            console.log("message=", message)
             setMessageCompleted(true)
         }
     }, [message, citationsLoaded, citationsLoading])

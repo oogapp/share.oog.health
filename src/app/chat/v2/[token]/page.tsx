@@ -1,6 +1,7 @@
 import { currentUser, getEnvFromCookies } from '@/api/chats';
 import AuthenticatedChat from '@/components/AuthenticatedChat';
-import { ChatBackground } from '@/components/ChatBackground';
+import { ChatBackgroundVideo } from '@/components/ChatBackgroundVideo';
+import { VideoContextProvider } from '@/components/VideoBackgroundContext';
 import { MessageVariant } from '@/lib/utils';
 import 'stream-chat-react/dist/css/v2/index.css';
 
@@ -17,19 +18,20 @@ export default async function ChatDetail({ params }: { params: { token: string }
 
     return (
         <>
+            <VideoContextProvider>
 
-            <div className='absolute -top-14 inset-0'>
-                <ChatBackground />
-            </div>
+                <div className='absolute -top-14 inset-0'>
+                    <ChatBackgroundVideo />
+                </div>
 
 
-            <AuthenticatedChat
-                messageVariant={MessageVariant.V2}
-                apiKey={streamApiKey}
-                channelId={token}
-                userId={user.id}
-                token={user.streamToken!} />
-
+                <AuthenticatedChat
+                    messageVariant={MessageVariant.V2}
+                    apiKey={streamApiKey}
+                    channelId={token}
+                    userId={user.id}
+                    token={user.streamToken!} />
+            </VideoContextProvider>
         </>
     )
 }

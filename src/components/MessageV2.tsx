@@ -14,6 +14,7 @@ import {
 import type { DefaultStreamChatGenerics, MessageUIComponentProps } from 'stream-chat-react';
 import { Attachment as DefaultAttachment, Avatar as DefaultAvatar, EditMessageForm as DefaultEditMessageForm, ReactionsList as DefaultReactionList, MessageContextValue, useChatContext, useComponentContext, useMessageContext, useTranslationContext } from 'stream-chat-react';
 import { MessageFooter } from './MessageFooter';
+import { useVideoContext } from './VideoBackgroundContext';
 
 type MessageSimpleWithContextProps<
     StreamChatGenerics extends DefaultStreamChatGenerics = DefaultStreamChatGenerics
@@ -95,7 +96,7 @@ const MessageSimpleWithContext = <
         streamingLetterIntervalMs: 50,
         text: message.text ?? '',
     });
-
+    const { setIsSearching } = useVideoContext()
 
 
     const parsedMessageText = useMemo(() => {
@@ -167,6 +168,14 @@ const MessageSimpleWithContext = <
             }
         };
     }, [messageBodyRef.current]);
+
+    useEffect(() => {
+        if (message.is_streaming) {
+            setIsSearching(true)
+        } else {
+            setIsSearching(false)
+        }
+    }, [message.is_streaming]);
 
     return (
         <>
