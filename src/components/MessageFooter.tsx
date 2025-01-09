@@ -147,8 +147,8 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             {messageCompleted && <div className="mt-8 flex !gap-x-2">
                 <Button
                     onClick={() => {
-                        let cid = message.id
-                        let token = cid.split(":")[1]
+                        let cid = message.cid
+                        let token = cid!.split(":")[1]
                         // show share sheet with web share api
                         if (navigator.share) {
                             navigator.share({
