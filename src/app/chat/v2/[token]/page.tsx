@@ -20,10 +20,9 @@ export default async function ChatDetail({ params }: { params: { token: string }
         <>
             <VideoContextProvider>
 
-                <div className='absolute -top-14 inset-0'>
+                <div className='absolute -top-14 inset-0 pointer-events-none'>
                     <ChatBackgroundVideo />
                 </div>
-
 
                 <AuthenticatedChat
                     messageVariant={MessageVariant.V2}

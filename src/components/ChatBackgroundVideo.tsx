@@ -5,7 +5,7 @@ import { useVideoContext } from "./VideoBackgroundContext"
 
 export const ChatBackgroundVideo = () => {
 
-    const { isSearching } = useVideoContext()
+    const { isSearching, setIsSearching } = useVideoContext()
 
     const video = useMemo(() => {
         if (isSearching) {
@@ -18,9 +18,7 @@ export const ChatBackgroundVideo = () => {
 
     return (
         <div>
-            <video autoPlay loop muted className='absolute inset-0 object-cover'>
-                <source src={video} type="video/mp4" />
-            </video>
+            <video src={video} autoPlay loop muted playsInline className='absolute z-1 inset-0 object-cover' controlsList="nodownload"></video>
         </div>
     )
 

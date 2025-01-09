@@ -253,6 +253,10 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     return (
         <>
 
+            {/*<div className='absolute top-0 right-0 left-0 z-50 bg-gradient-to-b from-brand to-transparent h-28 outline'>
+
+            </div>*/}
+
             <div className='absolute flex top-14 right-0 left-0 z-50'>
                 <div className='flex items-center gap-x-4 ml-auto p-4'>
                     <Link href={"/chat"}>
