@@ -9,11 +9,13 @@ import {
     DrawerHeader
 } from "@/components/ui/drawer";
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
+import useOnClickOutside from '@/lib/use-clickoutside';
 import { MessageVariant } from '@/lib/utils';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { ClockIcon } from 'lucide-react';
 import { motion } from "motion/react";
 import Link from 'next/link';
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
     Channel,
     Chat,
@@ -181,6 +183,17 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     const [showCitation, setShowCitation] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
 
+    const ref = useRef<any>()
+    useOnClickOutside(ref, () => {
+
+        // remove focus from textarea
+        let textarea = document.querySelector('textarea') as HTMLTextAreaElement
+        textarea.blur()
+
+        let target = document.querySelector('#str-chat__channel') as HTMLElement
+        enableBodyScroll(target)
+    })
+
     useEffect(() => {
         if (channelId) {
             async function fetchChat() {
@@ -238,7 +251,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
         )
     }
     return (
-        <div className='h-full'>
+        <>
 
             <div className='absolute flex top-14 right-0 left-0 z-50'>
                 <div className='flex items-center gap-x-4 ml-auto p-4'>
@@ -298,7 +311,13 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                             <CustomMessageList messageVariant={messageVariant} />
                             {!hasEarnedCredits &&
                                 <div className='relative overflow-hidden'>
-                                    <div className='p-3 relative pb-6 rounded-t-xl'>
+                                    <div
+                                        ref={ref}
+                                        onClick={() => {
+                                            let target = document.querySelector('#str-chat__channel') as HTMLElement
+                                            disableBodyScroll(target)
+                                        }}
+                                        className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6' />
                                         <MessageInput
                                             additionalTextareaProps={{ placeholder: 'Ask me anything' }}
@@ -311,6 +330,6 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                     </Channel>
                 }
             </Chat>
-        </div>
+        </>
     )
 }

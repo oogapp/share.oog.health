@@ -16,7 +16,7 @@ export default async function ChatDetail({ params }: { params: { token: string }
     }
 
     return (
-        <div className='h-full'>
+        <>
 
             <div className='absolute -top-14 inset-0'>
                 <ChatBackground />
@@ -30,6 +30,6 @@ export default async function ChatDetail({ params }: { params: { token: string }
                 userId={user.id}
                 token={user.streamToken!} />
 
-        </div>
+        </>
     )
 }
