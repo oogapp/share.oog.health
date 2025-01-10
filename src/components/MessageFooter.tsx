@@ -114,6 +114,8 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
 
     async function handleConvertToCE() {
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
+        // scroll to bottom of window
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
     async function handleNotHelpful() {

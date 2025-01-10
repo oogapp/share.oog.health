@@ -1,15 +1,18 @@
 'use client'
 import { OpenEvidenceReference } from "@/gql/graphql";
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import List from "./icons/List";
 import { Button } from "./ui/button";
 
 export default function CitationList({ citations, onSelect }: { citations: OpenEvidenceReference[], onSelect: (citation: OpenEvidenceReference) => void }) {
+
+    const [showAll, setShowAll] = useState(false)
+
     return (
         <div className='space-y-4'>
             <div className=' gap-x-2'>
-                <Button className='text-white !text-left bg-black stroke-white inline-flex w-auto !px-0' variant={'sparkyv2'}>
+                <Button className='text-white !text-left bg-transparent stroke-white inline-flex w-auto !px-0' variant={'sparkyv2'}>
                     <List className="w-5 h-5" />
                     <div>References</div>
                 </Button>
@@ -22,7 +25,7 @@ export default function CitationList({ citations, onSelect }: { citations: OpenE
                 <TransitionGroup>
                     {citations?.sort((a, b) => {
                         return a.citationKey - b.citationKey
-                    })?.map((citation, index) => {
+                    })?.slice(0, showAll ? citations.length : 3)?.map((citation, index) => {
                         const itemRef = createRef<any>();
                         return (
                             <CSSTransition nodeRef={itemRef} key={index} timeout={250} classNames="fade-in">
@@ -47,18 +50,20 @@ export default function CitationList({ citations, onSelect }: { citations: OpenE
                     })}
                 </TransitionGroup>
 
-                {/*showAllCitations ?
+                {citations?.length > 3 && <>
+                    {showAll ?
                         <div
-                            onClick={() => setShowAllCitations(false)}
+                            onClick={() => setShowAll(false)}
                             className='flex text-white underline justify-center'>
                             Show Less
                         </div> :
                         <div
-                            onClick={() => setShowAllCitations(true)}
+                            onClick={() => setShowAll(true)}
                             className='flex  text-white underline justify-center'>
                             Show All References
                         </div>
-                    */}
+                    }
+                </>}
 
             </div>
         </div>
