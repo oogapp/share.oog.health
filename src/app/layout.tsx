@@ -35,14 +35,13 @@ export default async function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className="h-dvh dark" style={{ colorScheme: 'dark', backgroundColor: 'black' }} suppressHydrationWarning>
-      <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
+    <html lang="en" className="min-h-screen dark" style={{ colorScheme: 'dark', backgroundColor: 'black' }} suppressHydrationWarning>
       <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
       <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
       <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
       <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-      <body style={{ backgroundColor: 'black' }} className={`w-full h-dvh ${marsden.variable}`}>
-        <div id="chat-container" className="max-w-lg mx-auto relative h-full overflow-hidden">{children}</div>
+      <body style={{ backgroundColor: 'black' }} className={`w-full h-dvh overflow-hidden ${marsden.variable}`}>
+        <div id="chat-container" className="max-w-lg mx-auto relative h-dvh ">{children}</div>
       </body>
     </html>
   );
