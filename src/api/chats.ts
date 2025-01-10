@@ -271,6 +271,10 @@ async function getChats(postId?:string): Promise<SparkyConversation[]> {
   const _cookies = cookies()
   let where = {
     //"hasUserWith": [{"id": "8589934649"}]
+    or: [
+      {model:"OpenEvidence"},
+      {convertedFromModel: "OpenEvidence"},
+    ]
   } as SparkyConversationWhereInput
   let variables = {}
 
