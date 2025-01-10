@@ -28,11 +28,12 @@ export const metadata: Metadata = {
 
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className="h-dvh dark" style={{ colorScheme: 'dark', backgroundColor: 'black' }} suppressHydrationWarning>
       <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
@@ -41,7 +42,7 @@ export default function RootLayout({
       <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
       <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
       <body style={{ backgroundColor: 'black' }} className={`w-full ${marsden.variable}`}>
-        <div id="chat-container" className="max-w-lg mx-auto relative h-screen overflow-hidden">{children}</div>
+        <div id="chat-container" className="max-w-lg mx-auto relative h-dvh overflow-hidden">{children}</div>
       </body>
     </html>
   );

@@ -9,13 +9,13 @@ const Ai = ({ className }: { className?: string }) => (
         viewBox="0 0 32 32"
     >
         <path
-            stroke="url(#paint0_linear_17376_13842)"
+            stroke="#a4f421"
             strokeLinecap="round"
             strokeWidth="2.246"
             d="M4.657 17.334a17.83 17.83 0 0 0 8.676-8.676 17.83 17.83 0 0 0 8.676 8.676 17.83 17.83 0 0 0-8.676 8.676 17.83 17.83 0 0 0-8.676-8.676Z"
         ></path>
         <path
-            stroke="url(#paint1_linear_17376_13842)"
+            stroke="#a4f421"
             strokeLinecap="round"
             strokeWidth="1.684"
             d="M21.009 8a10.13 10.13 0 0 0 4.324-4.324 10.13 10.13 0 0 0 4.325 4.325 10.13 10.13 0 0 0-4.325 4.324 10.13 10.13 0 0 0-4.324-4.324Z"
@@ -27,7 +27,6 @@ const Ai = ({ className }: { className?: string }) => (
                 x2="3.34"
                 y1="6.834"
                 y2="25.482"
-                gradientUnits="userSpaceOnUse"
             >
                 <stop stopColor="#A7FD1B"></stop>
                 <stop offset="1" stopColor="#00B5D0"></stop>

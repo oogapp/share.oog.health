@@ -83,6 +83,7 @@ query SparkyMessages($where: SparkyMessageWhereInput!) {
         isHelpful
         conversation {
           id
+          convertedFromModel
         }
         opengraphReferences {
           title
@@ -197,6 +198,9 @@ const FlagMessageAsHelpful = graphql(`
 
 function getEnvFromCookies() {
   let env = cookies().get('environment')?.value
+  if(env) {
+    console.log("Using environment from cookies: " + env)
+  }
   if(!env) {
     console.log("No environment found in cookies, using default environment")
     env = "production"

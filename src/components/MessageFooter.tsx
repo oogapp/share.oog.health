@@ -142,6 +142,11 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     if (message.user?.id != "sparky_reflection_bot_v1") {
         return null
     }
+
+    if (sparkyMessage?.conversation?.convertedFromModel == "OpenEvidence") {
+        return null
+    }
+
     return (
         <div className='space-y-4 my-3 w-full border-gray-600 w-full space-y-8'>
 

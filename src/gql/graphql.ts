@@ -3648,6 +3648,8 @@ export type CreatePostInput = {
   bookmarkedUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Whether this post is accredited for CE credits */
   ce?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The disclosure statements for this post */
+  ceDisclosureStatements?: InputMaybe<Scalars['String']['input']>;
   citationIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   commentIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   coverImageID?: InputMaybe<Scalars['ID']['input']>;
@@ -10292,6 +10294,8 @@ export type Post = Node & {
   bookmarks?: Maybe<Array<Bookmark>>;
   /** Whether this post is accredited for CE credits */
   ce: Scalars['Boolean']['output'];
+  /** The disclosure statements for this post */
+  ceDisclosureStatements?: Maybe<Scalars['String']['output']>;
   /** The citations this post is associated with */
   citations?: Maybe<Array<PostCitation>>;
   /** The comments on this post */
@@ -10940,6 +10944,22 @@ export type PostWhereInput = {
   bodyNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   /** ce field predicates */
   ce?: InputMaybe<Scalars['Boolean']['input']>;
+  /** ce_disclosure_statements field predicates */
+  ceDisclosureStatements?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsContains?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsContainsFold?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsEqualFold?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsGT?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsGTE?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  ceDisclosureStatementsIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  ceDisclosureStatementsLT?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsLTE?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsNEQ?: InputMaybe<Scalars['String']['input']>;
+  ceDisclosureStatementsNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  ceDisclosureStatementsNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   ceNEQ?: InputMaybe<Scalars['Boolean']['input']>;
   /** created_at field predicates */
   createdAt?: InputMaybe<Scalars['Time']['input']>;
@@ -18500,10 +18520,13 @@ export type UpdatePostInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   /** Whether this post is accredited for CE credits */
   ce?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The disclosure statements for this post */
+  ceDisclosureStatements?: InputMaybe<Scalars['String']['input']>;
   clearAccreditedLearningObjective?: InputMaybe<Scalars['Boolean']['input']>;
   clearAudiences?: InputMaybe<Scalars['Boolean']['input']>;
   clearAuthor?: InputMaybe<Scalars['Boolean']['input']>;
   clearBookmarkedUsers?: InputMaybe<Scalars['Boolean']['input']>;
+  clearCeDisclosureStatements?: InputMaybe<Scalars['Boolean']['input']>;
   clearCitations?: InputMaybe<Scalars['Boolean']['input']>;
   clearComments?: InputMaybe<Scalars['Boolean']['input']>;
   clearCoverImage?: InputMaybe<Scalars['Boolean']['input']>;
@@ -22894,7 +22917,7 @@ export type SparkyMessagesQueryVariables = Exact<{
 }>;
 
 
-export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, isHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
+export type SparkyMessagesQuery = { __typename?: 'Query', sparkyMessages: { __typename?: 'SparkyMessageConnection', edges?: Array<{ __typename?: 'SparkyMessageEdge', node?: { __typename?: 'SparkyMessage', id: string, body: string, notHelpful: boolean, isHelpful: boolean, conversation?: { __typename?: 'SparkyConversation', id: string, convertedFromModel?: string | null } | null, opengraphReferences?: Array<{ __typename?: 'OpenGraphReference', title: string, description: string, url: string, image: string }> | null, references?: Array<{ __typename?: 'OpenEvidenceReference', citationKey: number, sourceTexts: Array<string>, referenceText: string, referenceDetail: { __typename?: 'OpenEvidenceReferenceDetail', doi: string, url: string, title: string, journalName: string, authorsString: string, publicationDate: string, publicationInfoString: string } }> | null } | null } | null> | null } };
 
 export type SparkyConversationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -23057,6 +23080,7 @@ export const SparkyMessagesDocument = new TypedDocumentString(`
         isHelpful
         conversation {
           id
+          convertedFromModel
         }
         opengraphReferences {
           title
