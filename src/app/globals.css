@@ -248,3 +248,8 @@
 .str-chat__list {
   padding-top: 36px !important;
 }
+
+/* disable focus rings on buttons */
+button {
+  outline: none !important;
+}

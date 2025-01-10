@@ -11,7 +11,6 @@ import {
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
 import useOnClickOutside from '@/lib/use-clickoutside';
 import { MessageVariant } from '@/lib/utils';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { ClockIcon } from 'lucide-react';
 import { motion } from "motion/react";
 import Link from 'next/link';
@@ -185,13 +184,12 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
 
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
-
-        // remove focus from textarea
+        /*
         let textarea = document.querySelector('textarea') as HTMLTextAreaElement
         textarea.blur()
 
         let target = document.querySelector('#str-chat__channel') as HTMLElement
-        enableBodyScroll(target)
+        enableBodyScroll(target)*/
     })
 
     useEffect(() => {
@@ -318,8 +316,8 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                     <div
                                         ref={ref}
                                         onClick={() => {
-                                            let target = document.querySelector('#str-chat__channel') as HTMLElement
-                                            disableBodyScroll(target)
+                                            //let target = document.querySelector('#str-chat__channel') as HTMLElement
+                                            //disableBodyScroll(target)
                                         }}
                                         className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6' />
