@@ -33,6 +33,7 @@ import 'stream-chat-react/dist/css/v2/index.css';
 import Citation from './Citation';
 import Ai from './icons/Ai';
 import Pencil from './icons/Pencil';
+import { useKeyboardOpenContext } from './KeyboardOpenProvider';
 import { MessageSimpleV2 } from './MessageV2';
 import PreviousSearches from './PreviousSearches';
 import Reference from './Reference';
@@ -98,6 +99,8 @@ function EmptyStateIndicator() {
         await channel.sendMessage({ text });
     }
 
+    const { isOpen } = useKeyboardOpenContext()
+
     return (
         <div className="space-y-1 p-5 relative h-full">
 
@@ -117,7 +120,7 @@ function EmptyStateIndicator() {
                 </div>
             </motion.div>
 
-            <div className='absolute bottom-0 right-0 left-0 py-6 space-y-4 p-5'>
+            {!isOpen && <div className='absolute bottom-0 right-0 left-0 py-6 space-y-4 p-5'>
                 <div className='text-right text-gray-400 text-sm'>Try Asking...</div>
                 <div className='flex flex-col space-y-2'>
 
@@ -137,7 +140,7 @@ function EmptyStateIndicator() {
 
 
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }
@@ -181,6 +184,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     const [showOgCitation, setShowOgCitation] = useState(false)
     const [showCitation, setShowCitation] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
+    const { setOpen } = useKeyboardOpenContext()
 
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
@@ -316,6 +320,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                     <div
                                         ref={ref}
                                         onClick={() => {
+                                            setOpen(true)
                                             setTimeout(() => {
                                                 document.querySelector(".str-chat__list")?.scrollTo({ top: 9999999, behavior: 'smooth' })
                                             }, 500)
@@ -323,7 +328,12 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                         className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6 z-10' />
                                         <MessageInput
-                                            additionalTextareaProps={{ placeholder: 'Ask me anything' }}
+                                            additionalTextareaProps={{
+                                                placeholder: 'Ask me anything',
+                                                onBlur: () => {
+                                                    setOpen(false)
+                                                }
+                                            }}
                                             grow />
 
                                     </div>
