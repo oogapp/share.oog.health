@@ -40,8 +40,8 @@ export default async function RootLayout({
       <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
       <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
       <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-      <body style={{ backgroundColor: 'black' }} className={`w-full h-dvh overflow-hidden ${marsden.variable}`}>
-        <div id="chat-container" className="max-w-lg mx-auto relative h-dvh ">{children}</div>
+      <body style={{ backgroundColor: 'black' }} className={`w-full h-svh overflow-hidden ${marsden.variable}`}>
+        <div id="chat-container" className="max-w-lg mx-auto relative h-svh ">{children}</div>
       </body>
     </html>
   );

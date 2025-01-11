@@ -332,7 +332,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                                 placeholder: 'Ask me anything',
                                                 onBlur: () => {
                                                     setOpen(false)
-                                                }
+                                                },
                                             }}
                                             grow />
 
