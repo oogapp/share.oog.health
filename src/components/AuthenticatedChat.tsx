@@ -319,19 +319,12 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                 <div className='relative overflow-hidden'>
                                     <div
                                         ref={ref}
-                                        onClick={() => {
-                                            /*setOpen(true)
-                                            setTimeout(() => {
-                                                document.querySelector(".str-chat__list")?.scrollTo({ top: 9999999, behavior: 'smooth' })
-                                            }, 500)*/
-                                        }}
                                         className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6 z-10' />
                                         <MessageInput
                                             additionalTextareaProps={{
                                                 placeholder: 'Ask me anything',
                                                 onFocus: () => {
-                                                    console.log("focus")
                                                     setOpen(true)
                                                     setTimeout(() => {
                                                         document.querySelector(".str-chat__list")?.scrollTo({ top: 9999999, behavior: 'smooth' })
