@@ -1,5 +1,4 @@
 'use client'
-import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 // create a video context to switch the video background based on if the user is currentlying searching
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -13,10 +12,17 @@ export const KeyboardOpenContextProvider = ({ children }: { children: React.Reac
 
     useEffect(() => {
         if (isOpen) {
-            console.log("disableBodyScroll");
-            disableBodyScroll(document.body, { reserveScrollBarGap: true });
+            // set the body height to the visualviewport height, with overflow-x
+            let h = window?.visualViewport?.height
+            if (h) {
+                document.body.style.height = `${h}px`
+                document.body.style.overflowX = 'hidden'
+            }
+
         } else {
-            enableBodyScroll(document.body);
+            // reset the body height and overflow-x
+            document.body.style.height = ''
+            document.body.style.overflowX = ''
         }
     }, [isOpen]);
 
