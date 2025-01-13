@@ -45,6 +45,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     const { t } = useTranslationContext("CustomMessageStatus");
     const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
     const [showAllCitations, setShowAllCitations] = useState(true)
+    const [convertedToReflection, setConvertedToReflection] = useState(false)
 
     const handleEvent = (event: any) => {
         if (event.type == "add_citation") {
@@ -113,6 +114,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     }
 
     async function handleConvertToCE() {
+        setConvertedToReflection(true)
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
         // scroll to bottom of window
         window.scrollTo(0, document.body.scrollHeight);
@@ -130,11 +132,14 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
 
 
     useEffect(() => {
+
         if (citationsLoaded || citationsLoading) return
         if (message) {
+            console.log("is_streaming=", message?.is_streaming)
             loadCitations()
         }
         if (message && !message.is_streaming) {
+            console.log("streaming has ended")
             setMessageCompleted(true)
         }
     }, [message, citationsLoaded, citationsLoading])
@@ -143,7 +148,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
         return null
     }
 
-    if (sparkyMessage?.conversation?.convertedFromModel == "OpenEvidence") {
+    if (convertedToReflection || sparkyMessage?.conversation?.convertedFromModel == "OpenEvidence") {
         return null
     }
 
