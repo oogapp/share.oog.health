@@ -8,6 +8,7 @@ import {
 import { OpenEvidenceReference, OpenGraphReference, SparkyMessage } from '@/gql/graphql';
 import { cn } from '@/lib/utils';
 import { ListIcon, ShareIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
 import {
     renderText,
@@ -117,7 +118,9 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
         setConvertedToReflection(true)
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
         // scroll to bottom of window
-        window.scrollTo(0, document.body.scrollHeight);
+        setTimeout(() => {
+            document.querySelector(".str-chat__list")?.scrollTo({ top: 9999999, behavior: 'smooth' })
+        }, 500)
     }
 
     async function handleNotHelpful() {
@@ -155,84 +158,94 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     return (
         <div className='space-y-4 my-3 w-full border-gray-600 w-full space-y-8'>
 
-            {messageCompleted && <div className="mt-8 flex !gap-x-2">
-                <Button
-                    onClick={() => {
-                        let cid = message.cid
-                        let token = cid!.split(":")[1]
-                        // show share sheet with web share api
-                        if (navigator.share) {
-                            navigator.share({
-                                title: 'OOG Medical Search',
-                                text: 'Check out this medical search result',
-                                url: `https://share.oog.health/search/` + token
-                            })
-                                .then(() => console.log('Successful share'))
-                                .catch((error) => console.log('Error sharing', error));
-                        } else {
-                            // fallback
-                        }
-                    }}
-                    disabled={sparkyMessage?.notHelpful}
-                    variant={'sparkyv2'} >
-                    <ShareIcon className="w-4 h-4" />
-                    Share</Button>
+            {messageCompleted &&
+                <motion.div
+                    className="mt-8 flex !gap-x-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Button
+                        onClick={() => {
+                            let cid = message.cid
+                            let token = cid!.split(":")[1]
+                            // show share sheet with web share api
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: 'OOG Medical Search',
+                                    text: 'Check out this medical search result',
+                                    url: `https://share.oog.health/search/` + token
+                                })
+                                    .then(() => console.log('Successful share'))
+                                    .catch((error) => console.log('Error sharing', error));
+                            } else {
+                                // fallback
+                            }
+                        }}
+                        disabled={sparkyMessage?.notHelpful}
+                        variant={'sparkyv2'} >
+                        <ShareIcon className="w-4 h-4" />
+                        Share</Button>
 
-                <Button
-                    disabled={sparkyMessage?.notHelpful}
-                    onClick={() => {
-                        handleHelpful()
-                    }}
-                    variant={'sparkyv2'} >
-                    <ThumbsUp className={cn("w-4 h-4", {
-                        'text-green-500': sparkyMessage?.isHelpful
-                    })} />
-                    Helpful
-                </Button>
-                <Button
-                    disabled={sparkyMessage?.isHelpful}
-                    onClick={() => {
-                        handleNotHelpful()
-                    }}
-                    variant={'sparkyv2'} >
-                    <ThumbsDown className={cn("w-4 h-4", {
-                        'text-red-500': sparkyMessage?.notHelpful
-                    })} />
-                    Not Helpful
-                </Button>
-            </div>}
+                    <Button
+                        disabled={sparkyMessage?.notHelpful}
+                        onClick={() => {
+                            handleHelpful()
+                        }}
+                        variant={'sparkyv2'} >
+                        <ThumbsUp className={cn("w-4 h-4", {
+                            'text-green-500': sparkyMessage?.isHelpful
+                        })} />
+                        Helpful
+                    </Button>
+                    <Button
+                        disabled={sparkyMessage?.isHelpful}
+                        onClick={() => {
+                            handleNotHelpful()
+                        }}
+                        variant={'sparkyv2'} >
+                        <ThumbsDown className={cn("w-4 h-4", {
+                            'text-red-500': sparkyMessage?.notHelpful
+                        })} />
+                        Not Helpful
+                    </Button>
+                </motion.div>
+            }
 
-            {messageCompleted && <div
-                onClick={() => {
-                    handleConvertToCE()
-                }}
-                className='grid grid-cols-2 bg-black/30 text-white border rounded-xl cursor-pointer'>
-                <div className='flex flex-col justify-center'>
-                    <div className='p-5'>
-                        <div className='text-xl'>Earn 0.5 CE!</div>
-                        <div className='text-gray-400 text-xs'>
-                            Tap here and tell what you learned.
+            {messageCompleted &&
+                <motion.div
+                    onClick={() => {
+                        handleConvertToCE()
+                    }}
+                    className='grid grid-cols-2 bg-black/30 text-white border rounded-xl cursor-pointer'>
+                    <div className='flex flex-col justify-center'>
+                        <div className='p-5'>
+                            <div className='text-xl'>Earn 0.5 CE!</div>
+                            <div className='text-gray-400 text-xs'>
+                                Tap here and tell what you learned.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='overflow-hidden'>
-                    <div className='relative h-28'>
-                        <img src="/confetti.png" />
-                        <img className='absolute inset-0 h-36' src="/ce_balloon.png" />
+                    <div className='overflow-hidden'>
+                        <div className='relative h-28'>
+                            <img src="/confetti.png" />
+                            <img className='absolute inset-0 h-36' src="/ce_balloon.png" />
+                        </div>
                     </div>
-                </div>
-            </div>}
-
-
-            {totalCitations > 0 &&
-                <CitationList
-                    onSelect={(citation) => {
-                        setCitation(citation)
-                        setShowCitation(true)
-                    }}
-                    citations={citations}
-                />
+                </motion.div>
             }
+
+            {messageCompleted && <>
+                {totalCitations > 0 &&
+                    <CitationList
+                        onSelect={(citation) => {
+                            setCitation(citation)
+                            setShowCitation(true)
+                        }}
+                        citations={citations}
+                    />
+                }
+            </>}
 
             {totalReferences > 0 && <div className='space-y-4'>
                 <div className='flex text-white gap-x-2'>
