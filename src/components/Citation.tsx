@@ -3,8 +3,25 @@ import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
+
+
 export default function Citation({ citation }: { citation: OpenEvidenceReference }) {
     if (!citation) return null
+
+    function handleClick(e: any) {
+        let wk = (window as any).webkit
+        if (wk?.messageHandlers?.openArticle) {
+            e.preventDefault()
+            let url = citation?.referenceDetail?.url
+            let payload = {
+                type: "openArticle",
+                payload: { "url": url }
+            }
+            wk.messageHandlers.openArticle.postMessage(payload)
+        } else {
+            console.log("No message handler")
+        }
+    }
 
     return (
         <div className="py-8 px-4 w-full ">
@@ -17,7 +34,7 @@ export default function Citation({ citation }: { citation: OpenEvidenceReference
                 </div>
                 {citation?.referenceDetail?.url && <div className="">
                     <Button asChild>
-                        <Link className="flex items-center" target="new" href={citation?.referenceDetail?.url}>
+                        <Link onClick={handleClick} className="flex items-center" target="new" href={citation?.referenceDetail?.url}>
                             View Source <ExternalLink className="w-5 h-5" />
                         </Link>
                     </Button>
