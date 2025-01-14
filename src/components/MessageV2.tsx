@@ -90,6 +90,7 @@ const MessageSimpleWithContext = <
     const allowRetry = message.status === 'failed' && message.errorStatusCode !== 403;
     const isBounced = isMessageBounced(message);
     const isEdited = isMessageEdited(message);
+    const [isIntro, setIsIntro] = useState(false);
     const showReferences = message.is_medical_search == true
     const { streamedMessageText } = useMessageTextStreaming({
         renderingLetterCount: 10,
@@ -177,6 +178,8 @@ const MessageSimpleWithContext = <
         }
     }, [message.is_streaming]);
 
+    console.log("message=", message)
+
     return (
         <>
             {
@@ -185,7 +188,7 @@ const MessageSimpleWithContext = <
                     <div
                         className={clsx('str-chat__message-inner', {
                             'str-chat__simple-message--error-failed': allowRetry || isBounced,
-                            "!m-0": message.is_medical_search,
+                            "!mb-6": message.is_medical_search,
                         })}
                         data-testid='message-inner'
                         onClick={handleClick}
@@ -195,6 +198,7 @@ const MessageSimpleWithContext = <
                         <div ref={messageBodyRef} className={cn('str-chat__message-bubble ', {
                             "!bg-transparent": message.is_medical_search,
                             "!bg-white/20": isMyMessage(),
+                            "!bg-[#7FC311]/70": message.is_intro
                         })}>
                             {message.is_medical_search ?
                                 <>
@@ -214,9 +218,17 @@ const MessageSimpleWithContext = <
                                     <div dangerouslySetInnerHTML={{ __html: parsedMessageText }} />
                                 </>
                                 :
-                                <>
+                                <div>
+                                    {(message.is_intro == true) &&
+                                        <div className='px-4 py-2 bg-brand/20 text-white rounded-t-lg -pb-1 flex items-center gap-x-2'>
+                                            <div className='text-sm text-white'>
+                                                <img src="/ce-bubble.png" className="w-6 h-6" />
+                                            </div>
+                                            <div className='text-sm'>Earn CE</div>
+                                        </div>
+                                    }
                                     <MessageText message={message} renderText={renderText} />
-                                </>
+                                </div>
                             }
                         </div>
                     </div>
