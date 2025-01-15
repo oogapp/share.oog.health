@@ -1,5 +1,6 @@
 import { getChatByToken } from "@/api/chats";
 import { ChatBackground } from "@/components/ChatBackground";
+import Ai from "@/components/icons/Ai";
 import ShareMessage from "@/components/ShareMessage";
 
 
@@ -10,10 +11,17 @@ export default async function ShareSearch({ params }: { params: { token: string 
     return (
         <div className='h-dvh relative'>
 
-            <div className="space-y-1 p-5 relative z-10 relative">
-                <div className='text-3xl'>OOG</div>
-                <div className='text-3xl bg-gradient-to-r from-white to-gray-100 font-thin inline-block text-transparent bg-clip-text'>Medical Search</div>
+
+            <div className='flex gap-x-4 p-5 z-10 relative'>
+                <div>
+                    <Ai className='w-12 h-12' />
+                </div>
+                <div className="text-white">
+                    <div className='text-3xl'>OOGpt</div>
+                    <div className='text-3xl font-thin inline-block '>Medical Search</div>
+                </div>
             </div>
+
 
             <div className="flex flex-col z-10 relative">
                 {chat?.messages?.sort((a, b) => {
