@@ -13,6 +13,7 @@ import {
 
 import type { DefaultStreamChatGenerics, MessageUIComponentProps } from 'stream-chat-react';
 import { Attachment as DefaultAttachment, Avatar as DefaultAvatar, EditMessageForm as DefaultEditMessageForm, ReactionsList as DefaultReactionList, MessageContextValue, useChatContext, useComponentContext, useMessageContext, useTranslationContext } from 'stream-chat-react';
+import { useCurrentUser } from './CurrentUserContext';
 import { MessageFooter } from './MessageFooter';
 import { useVideoContext } from './VideoBackgroundContext';
 
@@ -98,6 +99,7 @@ const MessageSimpleWithContext = <
         text: message.text ?? '',
     });
     const { setIsSearching } = useVideoContext()
+    const { user: currentUser } = useCurrentUser()
 
 
     const parsedMessageText = useMemo(() => {
@@ -177,8 +179,6 @@ const MessageSimpleWithContext = <
             setIsSearching(false)
         }
     }, [message.is_streaming]);
-
-    console.log("message=", message)
 
     return (
         <>

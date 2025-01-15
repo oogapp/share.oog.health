@@ -1,6 +1,7 @@
 import { currentUser, getEnvFromCookies } from '@/api/chats';
 import AuthenticatedChat from '@/components/AuthenticatedChat';
 import { ChatBackground } from '@/components/ChatBackground';
+import { CurrentUserContextProvider } from '@/components/CurrentUserContext';
 import { KeyboardOpenContextProvider } from '@/components/KeyboardOpenProvider';
 import { VideoContextProvider } from '@/components/VideoBackgroundContext';
 import { MessageVariant } from '@/lib/utils';
@@ -19,21 +20,23 @@ export default async function ChatDetail({ params }: { params: { token: string }
 
     return (
         <>
-            <KeyboardOpenContextProvider>
-                <VideoContextProvider>
+            <CurrentUserContextProvider user={user}>
+                <KeyboardOpenContextProvider>
+                    <VideoContextProvider>
 
-                    <div className='absolute -top-14 inset-0 pointer-events-none'>
-                        <ChatBackground />
-                    </div>
+                        <div className='absolute -top-14 inset-0 pointer-events-none'>
+                            <ChatBackground />
+                        </div>
 
-                    <AuthenticatedChat
-                        messageVariant={MessageVariant.V2}
-                        apiKey={streamApiKey}
-                        channelId={token}
-                        userId={user.id}
-                        token={user.streamToken!} />
-                </VideoContextProvider>
-            </KeyboardOpenContextProvider>
+                        <AuthenticatedChat
+                            messageVariant={MessageVariant.V2}
+                            apiKey={streamApiKey}
+                            channelId={token}
+                            userId={user.id}
+                            token={user.streamToken!} />
+                    </VideoContextProvider>
+                </KeyboardOpenContextProvider>
+            </CurrentUserContextProvider>
         </>
     )
 }

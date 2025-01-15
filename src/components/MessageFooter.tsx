@@ -6,6 +6,7 @@ import {
     DrawerContent
 } from "@/components/ui/drawer";
 import { OpenEvidenceReference, OpenGraphReference, SparkyMessage } from '@/gql/graphql';
+import { trackAnalytics } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { ListIcon, ShareIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -19,6 +20,7 @@ import {
 import 'stream-chat-react/dist/css/v2/index.css';
 import Citation from './Citation';
 import CitationList from './CitationList';
+import { useCurrentUser } from './CurrentUserContext';
 import Reference from './Reference';
 
 
@@ -47,6 +49,8 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     const [sparkyMessage, setSparkyMessage] = useState<SparkyMessage | null>(null)
     const [showAllCitations, setShowAllCitations] = useState(true)
     const [convertedToReflection, setConvertedToReflection] = useState(false)
+    const { user: currentUser } = useCurrentUser()
+
 
     const handleEvent = (event: any) => {
         if (event.type == "add_citation") {
@@ -69,6 +73,10 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
         if (event.type == "citations_complete") {
             loadCitations()
             setMessageCompleted(true)
+            trackAnalytics("Medical Search - Messaging - Search - Answered", {
+                userId: currentUser.id,
+                query: message.text,
+            })
         }
     }
 
@@ -115,6 +123,11 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     }
 
     async function handleConvertToCE() {
+        trackAnalytics("Medical Search - CE - Tapped", {
+            userId: currentUser.id,
+            messageId: sparkyMessage?.id!,
+            conversationId: sparkyMessage?.conversation?.id!,
+        })
         setConvertedToReflection(true)
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
         // scroll to bottom of window
@@ -124,11 +137,21 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     }
 
     async function handleNotHelpful() {
+        trackAnalytics("Medical Search - Not Helpful - Tapped", {
+            userId: currentUser.id,
+            messageId: sparkyMessage?.id!,
+            conversationId: sparkyMessage?.conversation?.id!,
+        })
         await flagMessageAsNotHelpful(sparkyMessage?.id!)
         loadCitations()
     }
 
     async function handleHelpful() {
+        trackAnalytics("Medical Search - Helpful - Tapped", {
+            userId: currentUser.id,
+            messageId: sparkyMessage?.id!,
+            conversationId: sparkyMessage?.conversation?.id!,
+        })
         await flagMessageAsHelpful(sparkyMessage?.id!)
         loadCitations()
     }

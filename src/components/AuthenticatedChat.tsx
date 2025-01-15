@@ -9,6 +9,7 @@ import {
     DrawerHeader
 } from "@/components/ui/drawer";
 import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@/gql/graphql';
+import { trackAnalytics } from '@/lib/analytics';
 import useOnClickOutside from '@/lib/use-clickoutside';
 import { MessageVariant } from '@/lib/utils';
 import { ClockIcon } from 'lucide-react';
@@ -19,7 +20,6 @@ import {
     Channel,
     Chat,
     DefaultStreamChatGenerics,
-    MessageInput,
     MessageList,
     MessageRenderer,
     Window,
@@ -31,6 +31,8 @@ import {
 } from 'stream-chat-react';
 import 'stream-chat-react/dist/css/v2/index.css';
 import Citation from './Citation';
+import { useCurrentUser } from './CurrentUserContext';
+import { CustomMessageInput } from './CustomMessageInput';
 import Ai from './icons/Ai';
 import Pencil from './icons/Pencil';
 import { useKeyboardOpenContext } from './KeyboardOpenProvider';
@@ -184,7 +186,8 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     const [showOgCitation, setShowOgCitation] = useState(false)
     const [showCitation, setShowCitation] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
-    const { setOpen } = useKeyboardOpenContext()
+    const { user: currentUser } = useCurrentUser()
+
 
     const ref = useRef<any>()
     useOnClickOutside(ref, () => {
@@ -262,10 +265,19 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
             <div className='absolute flex top-14 right-0 left-0 z-50 backdrop-blur-sm	'>
                 <div className='flex items-center gap-x-4 ml-auto p-4'>
                     <Link href={"/chat"}>
-                        <Pencil />
+                        <span onClick={() => {
+                            trackAnalytics("Medical Search - New Search - Tapped", {
+                                userId: currentUser.id,
+                            })
+                        }}>
+                            <Pencil />
+                        </span>
                     </Link>
                     <div className='cursor-pointer' onClick={() => {
                         setShowHistory(true)
+                        trackAnalytics("Medical Search - Previous Searches - Tapped", {
+                            userId: currentUser.id,
+                        })
                     }}>
                         <ClockIcon />
                     </div>
@@ -321,20 +333,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                         ref={ref}
                                         className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6 z-10' />
-                                        <MessageInput
-                                            additionalTextareaProps={{
-                                                placeholder: 'Ask me anything',
-                                                onFocus: () => {
-                                                    setOpen(true)
-                                                    setTimeout(() => {
-                                                        document.querySelector(".str-chat__list")?.scrollTo({ top: 9999999, behavior: 'smooth' })
-                                                    }, 500)
-                                                },
-                                                onBlur: () => {
-                                                    setOpen(false)
-                                                },
-                                            }}
-                                            grow />
+                                        <CustomMessageInput />
 
                                     </div>
                                 </div>

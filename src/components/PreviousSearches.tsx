@@ -1,15 +1,20 @@
 'use client'
 import { getChats } from "@/api/chats";
 import { SparkyConversation } from "@/gql/graphql";
+import { trackAnalytics } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { parseISO } from "date-fns";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useCurrentUser } from "./CurrentUserContext";
 
 export default function PreviousSearches() {
 
     const [chats, setChats] = useState<SparkyConversation[]>([])
+    const { user: currentUser } = useCurrentUser()
+
+
     useEffect(() => {
         getChats().then((chats) => {
             setChats(chats)
@@ -45,7 +50,14 @@ export default function PreviousSearches() {
 
                         return (
                             <Link href={`/chat/v2/${chat.token}`} className="text-white text-sm flex  block py-3 relative" key={chat.id}>
-                                <div className="px-2 space-y-2">
+                                <div
+                                    onClick={() => {
+                                        trackAnalytics("Medical Search - Previous Searches - Search - Selected", {
+                                            userId: currentUser.id,
+                                            conversationId: chat.id,
+                                        })
+                                    }}
+                                    className="px-2 space-y-2">
                                     <div className="flex items-center gap-x-2 hidden">
                                         <div className="text-gray-400">{dateHuman}</div>
                                     </div>
