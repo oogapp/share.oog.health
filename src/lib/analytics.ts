@@ -3,8 +3,11 @@ export function trackAnalytics(event:String, properties?: any) {
     let wk = (window as any).webkit
     if (wk?.messageHandlers?.trackAnalytics) {
         let payload = {
-            type: event,
-            properties: properties || {}
+            type: "trackAnalytics",
+            payload: {
+                event: event,
+                properties: properties || {}
+            }
         }
         wk.messageHandlers.trackAnalytics.postMessage(payload)
     } else {
