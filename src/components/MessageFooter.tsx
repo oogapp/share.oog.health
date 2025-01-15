@@ -22,6 +22,7 @@ import Citation from './Citation';
 import CitationList from './CitationList';
 import { useCurrentUser } from './CurrentUserContext';
 import Reference from './Reference';
+import { useReflectionContext } from './ReflectionProvider';
 
 
 const customRenderText = (text: string) => {
@@ -50,6 +51,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
     const [showAllCitations, setShowAllCitations] = useState(true)
     const [convertedToReflection, setConvertedToReflection] = useState(false)
     const { user: currentUser } = useCurrentUser()
+    const { setIsReflection } = useReflectionContext()
 
 
     const handleEvent = (event: any) => {
@@ -129,6 +131,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             conversationId: sparkyMessage?.conversation?.id!,
         })
         setConvertedToReflection(true)
+        setIsReflection(true)
         await reflectOnConversation(sparkyMessage?.conversation?.id!)
         // scroll to bottom of window
         setTimeout(() => {

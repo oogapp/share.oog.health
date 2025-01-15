@@ -2,16 +2,22 @@ import { trackAnalytics } from "@/lib/analytics";
 import { MessageInput, MessageToSend, useChannelActionContext, useMessageInputContext } from "stream-chat-react";
 import { useCurrentUser } from "./CurrentUserContext";
 import { useKeyboardOpenContext } from "./KeyboardOpenProvider";
+import { useReflectionContext } from "./ReflectionProvider";
+
+
 export const CustomMessageInput = () => {
     const { text, handleChange, handleSubmit } = useMessageInputContext();
     const { setOpen } = useKeyboardOpenContext()
     const { sendMessage } = useChannelActionContext();
     const { user: currentUser } = useCurrentUser()
+    const { isReflection } = useReflectionContext()
+
+    let eventName = isReflection ? "Reflection - Submitted" : "Medical Search - Messaging - Search - Submitted"
 
     return (
         <MessageInput
             overrideSubmitHandler={(message: MessageToSend, cid: string) => {
-                trackAnalytics("Medical Search - Messaging - Search - Submitted", {
+                trackAnalytics(eventName, {
                     userId: currentUser.id,
                     query: message.text,
                 })
