@@ -233,7 +233,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                         setShowAnimation(true)
                         trackAnalytics("Credit - Earned", {
                             userId: currentUser.id,
-                            CreditEarnedReason: "medicalSearchReflection",
+                            reason: "medicalSearchReflection",
                             conversationId: chat?.id!,
                         })
                     }
