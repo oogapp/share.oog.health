@@ -231,6 +231,11 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                     //@ts-ignore
                     if (event.type == "ce_credit_earned") {
                         setShowAnimation(true)
+                        trackAnalytics("Credit - Earned", {
+                            userId: currentUser.id,
+                            CreditEarnedReason: "medicalSearchReflection",
+                            conversationId: chat?.id!,
+                        })
                     }
                     if (event.type == "notification.mark_read") {
                         client.markAllRead()
@@ -334,7 +339,6 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                                         className='p-3 relative pb-6 rounded-t-xl'>
                                         <Ai className='absolute left-8 top-6 z-10' />
                                         <CustomMessageInput />
-
                                     </div>
                                 </div>
                             }
