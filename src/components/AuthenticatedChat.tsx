@@ -235,6 +235,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                             userId: currentUser.id,
                             reason: "medicalSearchReflection",
                             conversationId: chat?.id!,
+                            creditAmount: 0.5,
                         })
                     }
                     if (event.type == "notification.mark_read") {
