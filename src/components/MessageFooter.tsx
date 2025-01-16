@@ -198,7 +198,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
                             // show share sheet with web share api
                             if (navigator.share) {
                                 navigator.share({
-                                    title: 'OOG Medical Search',
+                                    title: 'OOGpt Medical Search',
                                     text: 'Check out this medical search result',
                                     url: `https://share.oog.health/search/` + token
                                 })
