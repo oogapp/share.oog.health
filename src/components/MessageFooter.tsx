@@ -173,6 +173,37 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
         }
     }, [message, citationsLoaded, citationsLoading])
 
+    function handleShare() {
+        let cid = message.cid
+        let token = cid!.split(":")[1]
+        let wk = (window as any).webkit
+        if (wk?.messageHandlers?.medicalSearchShare) {
+            try {
+                let payload = {
+                    type: "medicalSearchShare",
+                    payload: {
+                        token: token
+                    }
+                }
+                wk.messageHandlers.medicalSearchShare.postMessage(payload)
+                return;
+            } catch (e) {
+                console.error(`Error invoking medicalSearchShare: ${e}`)
+            }
+        }
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'OOGpt Medical Search',
+                text: 'Check out this medical search result',
+                url: `https://share.oog.health/search/` + token
+            })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+        }
+    }
+
+
     if (message.user?.id != "sparky_reflection_bot_v1") {
         return null
     }
@@ -193,20 +224,7 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
                 >
                     <Button
                         onClick={() => {
-                            let cid = message.cid
-                            let token = cid!.split(":")[1]
-                            // show share sheet with web share api
-                            if (navigator.share) {
-                                navigator.share({
-                                    title: 'OOGpt Medical Search',
-                                    text: 'Check out this medical search result',
-                                    url: `https://share.oog.health/search/` + token
-                                })
-                                    .then(() => console.log('Successful share'))
-                                    .catch((error) => console.log('Error sharing', error));
-                            } else {
-                                // fallback
-                            }
+                            handleShare()
                         }}
                         disabled={sparkyMessage?.notHelpful}
                         variant={'sparkyv2'} >
