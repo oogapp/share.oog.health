@@ -9,7 +9,7 @@ export default async function ShareSearch({ params }: { params: { token: string 
     let chat = await getChatByToken(params.token);
 
     return (
-        <div className='h-dvh relative overflow-y-scroll pt-16'>
+        <div className='h-dvh relative overflow-y-scroll pt-20'>
 
 
             <div className='flex gap-x-4 p-5 z-10 relative'>

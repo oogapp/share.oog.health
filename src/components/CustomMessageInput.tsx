@@ -12,15 +12,21 @@ export const CustomMessageInput = () => {
     const { user: currentUser } = useCurrentUser()
     const { isReflection } = useReflectionContext()
 
-    let eventName = isReflection ? "Reflection - Submitted" : "Medical Search - Messaging - Search - Submitted"
-
     return (
         <MessageInput
             overrideSubmitHandler={(message: MessageToSend, cid: string) => {
-                trackAnalytics(eventName, {
-                    userId: currentUser.id,
-                    query: message.text,
-                })
+                if (isReflection) {
+                    trackAnalytics("Reflection - Submitted", {
+                        userId: currentUser.id,
+                        query: message.text,
+                        reflectionTargetType: "medicalSearch"
+                    })
+                } else {
+                    trackAnalytics("Medical Search - Messaging - Search - Submitted", {
+                        userId: currentUser.id,
+                        query: message.text,
+                    })
+                }
                 sendMessage(message)
             }}
             additionalTextareaProps={{
