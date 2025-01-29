@@ -18,13 +18,11 @@ export const CustomMessageInput = () => {
                 if (isReflection) {
                     trackAnalytics("Reflection - Submitted", {
                         userId: currentUser.id,
-                        query: message.text,
                         reflectionTargetType: "medicalSearch"
                     })
                 } else {
                     trackAnalytics("Medical Search - Messaging - Search - Submitted", {
                         userId: currentUser.id,
-                        query: message.text,
                     })
                 }
                 sendMessage(message)

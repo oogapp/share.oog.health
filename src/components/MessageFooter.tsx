@@ -77,7 +77,6 @@ export const MessageFooter = ({ showCitationKey }: { showCitationKey: number | n
             setMessageCompleted(true)
             trackAnalytics("Medical Search - Messaging - Search - Answered", {
                 userId: currentUser.id,
-                query: message.text,
             })
         }
     }
