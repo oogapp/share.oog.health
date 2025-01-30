@@ -90,6 +90,7 @@ function SparkyThinking() {
 function EmptyStateIndicator() {
 
     const { channel } = useChannelStateContext();
+    const { user: currentUser } = useCurrentUser()
 
     const suggestions = [
         { id: 1, text: 'What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?' },
@@ -99,6 +100,10 @@ function EmptyStateIndicator() {
 
     async function sendMessage(text: string) {
         await channel.sendMessage({ text });
+        trackAnalytics("Medical Search - Messaging - Search - Submitted", {
+            userId: currentUser.id,
+            type: "fromSuggestion"
+        })
     }
 
     const { isOpen } = useKeyboardOpenContext()
