@@ -193,16 +193,16 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
         })
 
         let wk = (window as any).webkit
-        if (wk?.messageHandlers?.earnCe) {
+        if (wk?.messageHandlers?.ceEarned) {
             try {
                 let payload = {
-                    type: "earnCe",
+                    type: "ceEarned",
                     payload: { credits: 0.5 }
                 }
-                wk.messageHandlers.earnCe.postMessage(payload)
+                wk.messageHandlers.ceEarned.postMessage(payload)
                 return;
             } catch (e) {
-                console.error(`Error invoking earnCe: ${e}`)
+                console.error(`Error invoking ceEarned: ${e}`)
                 setShowAnimation(true)
             }
         } else {
