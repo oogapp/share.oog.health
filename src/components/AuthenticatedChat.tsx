@@ -197,7 +197,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
             try {
                 let payload = {
                     type: "earnCe",
-                    payload: { type: "earnCe", payload: { credits: 0.5 } }
+                    payload: { credits: 0.5 }
                 }
                 wk.messageHandlers.earnCe.postMessage(payload)
                 return;
