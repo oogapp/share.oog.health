@@ -198,7 +198,7 @@ const MessageSimpleWithContext = <
                         <div ref={messageBodyRef} className={cn('str-chat__message-bubble ', {
                             "!bg-transparent": message.is_medical_search,
                             "!bg-white/20": isMyMessage(),
-                            "!bg-[#7FC311]/70": message.is_intro
+                            "!bg-[#7FC311]/70": message.is_icebreaker
                         })}>
                             {message.is_medical_search ?
                                 <>
@@ -219,7 +219,7 @@ const MessageSimpleWithContext = <
                                 </>
                                 :
                                 <div>
-                                    {(message.is_intro == true) &&
+                                    {(message.is_icebreaker == true) &&
                                         <div className='px-4 py-2 bg-brand/20 text-white rounded-t-lg -pb-1 flex items-center gap-x-2'>
                                             <div className='text-sm text-white'>
                                                 <img src="/ce-bubble.png" className="w-6 h-6" />

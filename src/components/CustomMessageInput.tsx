@@ -28,7 +28,7 @@ export const CustomMessageInput = () => {
                 sendMessage(message)
             }}
             additionalTextareaProps={{
-                placeholder: 'Ask me anything',
+                placeholder: isReflection ? "Type your reflection here..." : "Ask me anything",
                 onFocus: () => {
                     setOpen(true)
                     setTimeout(() => {

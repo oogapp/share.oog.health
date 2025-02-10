@@ -225,6 +225,20 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                     if (event.type == "notification.mark_read") {
                         client.markAllRead()
                     }
+                    //@ts-ignore
+                    if (event.type == "reflective_icebreaker_sent") {
+                        trackAnalytics("Reflection - Nudge - Received", {
+                            userId: currentUser.id,
+                            isIcebreaker: true
+                        })
+                    }
+                    //@ts-ignore
+                    if (event.type == "reflective_nudge_sent") {
+                        trackAnalytics("Reflection - Nudge - Received", {
+                            userId: currentUser.id,
+                            isIcebreaker: false
+                        })
+                    }
                 })
                 setChannel(chan)
             } else {
