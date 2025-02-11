@@ -52,9 +52,8 @@ function EmptyStateIndicator() {
     const { user: currentUser } = useCurrentUser()
 
     const suggestions = [
-        { id: 1, text: 'What are health risks associated with GLP-1 Receptor agoinsts like Ozempic and Mounjaro?' },
-        { id: 2, text: 'What is the treatment of choice for necrotizing fasciitis in pediatrics?' },
-        { id: 3, text: 'Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?' },
+        { id: 1, text: 'What is the treatment of choice for necrotizing fasciitis in pediatrics?' },
+        { id: 2, text: 'Is there a connection between testosterone and the risk for myocardial infraction or all -cause morality?' },
     ]
 
     async function sendMessage(text: string) {
