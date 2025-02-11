@@ -229,14 +229,16 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                     if (event.type == "reflective_icebreaker_sent") {
                         trackAnalytics("Reflection - Nudge - Received", {
                             userId: currentUser.id,
-                            isIcebreaker: true
+                            isIcebreaker: true,
+                            reflectionTargetType: "medicalSearch"
                         })
                     }
                     //@ts-ignore
                     if (event.type == "reflective_nudge_sent") {
                         trackAnalytics("Reflection - Nudge - Received", {
                             userId: currentUser.id,
-                            isIcebreaker: false
+                            isIcebreaker: false,
+                            reflectionTargetType: "medicalSearch"
                         })
                     }
                 })
