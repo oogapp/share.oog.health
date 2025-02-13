@@ -219,6 +219,8 @@ function getClient() {
   if(!bearerToken) {
     console.log("No token found in cookies, using default token")
     bearerToken = "aGIiI4EBoYdci37upZJWQQU-VUSY-zb7"
+  } else {
+    console.log("using token from cookies")
   }
 
   let endpoint = process.env.NEXT_PUBLIC_OOG_GRAPHQL_API_ENDPOINT

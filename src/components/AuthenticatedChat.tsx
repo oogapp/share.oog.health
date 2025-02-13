@@ -12,7 +12,7 @@ import { OpenEvidenceReference, OpenGraphReference, SparkyConversation } from '@
 import { trackAnalytics } from '@/lib/analytics';
 import useOnClickOutside from '@/lib/use-clickoutside';
 import { MessageVariant } from '@/lib/utils';
-import { ClockIcon } from 'lucide-react';
+import { ClockIcon, InfoIcon } from 'lucide-react';
 import { motion } from "motion/react";
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -33,6 +33,7 @@ import { useCurrentUser } from './CurrentUserContext';
 import { CustomMessageInput } from './CustomMessageInput';
 import Ai from './icons/Ai';
 import Pencil from './icons/Pencil';
+import Info from './Info';
 import { useKeyboardOpenContext } from './KeyboardOpenProvider';
 import { MessageSimpleV2 } from './MessageV2';
 import PreviousSearches from './PreviousSearches';
@@ -148,6 +149,7 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
     const [showOgCitation, setShowOgCitation] = useState(false)
     const [showCitation, setShowCitation] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
+    const [showHelp, setShowHelp] = useState(false)
     const { user: currentUser } = useCurrentUser()
 
 
@@ -269,6 +271,14 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
 
             <div className='absolute flex top-14 right-0 left-0 z-50 backdrop-blur-sm	'>
                 <div className='flex items-center gap-x-4 ml-auto p-4'>
+                    <div className='cursor-pointer' onClick={() => {
+                        setShowHelp(true)
+                        /*trackAnalytics("Medical Search - Help - Tapped", {
+                            userId: currentUser.id,
+                        })*/
+                    }}>
+                        <InfoIcon />
+                    </div>
                     <Link href={"/chat"}>
                         <span onClick={() => {
                             trackAnalytics("Medical Search - New Search - Tapped", {
@@ -286,10 +296,23 @@ export default function AuthenticatedChat({ userId, token, channelId, apiKey, me
                     }}>
                         <ClockIcon />
                     </div>
+
                 </div>
             </div>
 
             {showAnimation && <Congrats />}
+
+
+            <Drawer
+                open={showHelp}
+                onOpenChange={(open) => setShowHelp(open)}
+                dismissible={true}>
+                <DrawerContent>
+                    <DrawerHeader>Info</DrawerHeader>
+                    <Info />
+                </DrawerContent>
+            </Drawer>
+
 
             <Drawer
                 open={showHistory}
